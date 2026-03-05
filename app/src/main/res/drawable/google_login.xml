@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- thing. Home Furniture Marketplace — Google Login Button -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="144dp"
+    android:height="40dp"
+    android:viewportWidth="144"
+    android:viewportHeight="40">
+
+    <!-- Button outline — white_background style -->
+    <path
+        android:pathData="M3,0.5L141,0.5A2.5,2.5 0,0 1,143.5 3L143.5,37A2.5,2.5 0,0 1,141 39.5L3,39.5A2.5,2.5 0,0 1,0.5 37L0.5,3A2.5,2.5 0,0 1,3 0.5z"
+        android:strokeWidth="1.5"
+        android:fillColor="#F5F8FA"
+        android:strokeColor="#E4EAF0"/>
+
+    <!-- Google "G" icon — colorful -->
+    <path
+        android:pathData="M28,20.18c0,-0.57 -0.05,-1.12 -0.15,-1.65H20v3.12h4.47a3.83 3.83,0 0,1 -1.66,2.51v2.08h2.68C26.89,24.67 28,22.62 28,20.18z"
+        android:fillColor="#4285F4"/>
+    <path
+        android:pathData="M20,28c2.3,0 4.22,-0.76 5.63,-2.06l-2.68,-2.08c-0.76,0.51 -1.73,0.81 -2.95,0.81c-2.27,0 -4.19,-1.53 -4.87,-3.59H12.3v2.15A8,8 0,0 0,20 28z"
+        android:fillColor="#34A853"/>
+    <path
+        android:pathData="M15.13,21.08A4.81,4.81 0,0 1,14.88 20a4.81,4.81 0,0 1,0.25 -1.08V16.77H12.3A8,8 0,0 0,12 20a8,8 0,0 0,0.3 3.23z"
+        android:fillColor="#FBBC05"/>
+    <path
+        android:pathData="M20,15.33a4.32,4.32 0,0 1,3.06 1.19l2.3,-2.3A7.68,7.68 0,0 0,20 12a8,8 0,0 0,-7.7 5.77l2.83,2.2A4.77,4.77 0,0 1,20 15.33z"
+        android:fillColor="#EA4335"/>
+
+    <!-- "Google" label -->
+    <path
+        android:pathData="M40,15h2.5v10H40z"
+        android:fillColor="#00000000"/>
+    <!-- Text rendered as path approximation — use TextView in layout instead -->
+</vector>

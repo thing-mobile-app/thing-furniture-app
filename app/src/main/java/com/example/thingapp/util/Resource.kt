@@ -1,0 +1,12 @@
+package com.example.thingapp.util
+
+// Resource class represents the state of an operation (Loading, Success, Error)
+sealed class Resource <T>(
+    val data : T? = null,
+    val message : String? = null){
+
+    class Success<T>(data : T) : Resource<T>(data)
+    class Error<T>(message : String) : Resource<T>(message = message)
+    class Loading<T> : Resource<T>()
+
+}
