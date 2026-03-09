@@ -73,6 +73,7 @@ dependencies {
 
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.androidx.fragment)
     ksp("com.github.bumptech.glide:compiler:4.16.0")
 
     // Circular Image
@@ -84,6 +85,9 @@ dependencies {
     // Hilt
     implementation("com.google.dagger:hilt-android:2.55")
     ksp("com.google.dagger:hilt-compiler:2.55")
+
+    // CircularButton
+    implementation("com.github.leandroborgesferreira:loading-button-android:2.3.0")
 
     testImplementation("junit:junit:4.13.2")
 }
