@@ -1,7 +1,9 @@
 <table>
 <tr>
-<td width="160">
-<img src="https://raw.githubusercontent.com/thing-mobile-app/.github/main/Assets/thing.png" width="150" height="150" style="object-fit:cover; border-radius:12px;"/>
+<td width="320">
+<p align="center">
+  <img src="assets/thing_logo_320_white.png" width="320" height="320" />
+</p>
 </td>
 <td>
 
@@ -79,6 +81,9 @@ thing-furniture-app/
 │       ├── repository/   # Data access layer
 │       ├── viewmodel/    # MVVM ViewModels
 │       └── ui/           # Fragments & Activities
+├── assets/               # Images & static assets
+│   ├── thing_logo_320.png
+│   └── thing_logo_320_white.png
 ├── ARCHITECTURE.md
 └── README.md
 ```
