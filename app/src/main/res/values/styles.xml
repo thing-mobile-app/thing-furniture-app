@@ -59,4 +59,12 @@
 
     </style>
 
+    <style name="tabLayout_text" parent="TextAppearance.AppCompat">
+        <item name="color">@color/black</item>
+        <item name="fontFamily">@font/inter_18pt_bold</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
 </resources>

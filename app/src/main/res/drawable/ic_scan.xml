@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Sol üst köşe -->
+    <path
+        android:pathData="M2,8 L2,4 Q2,2 4,2 L8,2"
+        android:strokeWidth="1.6"
+        android:fillColor="#00000000"
+        android:strokeColor="#161616"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+
+    <!-- Sağ üst köşe -->
+    <path
+        android:pathData="M16,2 L20,2 Q22,2 22,4 L22,8"
+        android:strokeWidth="1.6"
+        android:fillColor="#00000000"
+        android:strokeColor="#161616"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+
+    <!-- Sol alt köşe -->
+    <path
+        android:pathData="M2,16 L2,20 Q2,22 4,22 L8,22"
+        android:strokeWidth="1.6"
+        android:fillColor="#00000000"
+        android:strokeColor="#161616"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+
+    <!-- Sağ alt köşe -->
+    <path
+        android:pathData="M16,22 L20,22 Q22,22 22,20 L22,16"
+        android:strokeWidth="1.6"
+        android:fillColor="#00000000"
+        android:strokeColor="#161616"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+
+    <!-- Tarama çizgisi -->
+    <path
+        android:pathData="M2,12 L22,12"
+        android:strokeWidth="1.6"
+        android:fillColor="#00000000"
+        android:strokeColor="#161616"
+        android:strokeLineCap="round"/>
+
+</vector>
