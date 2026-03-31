@@ -16,6 +16,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.awaitAll
 import android.app.Activity
 import android.widget.Toast
 import android.content.Intent
@@ -118,25 +119,21 @@ class MainActivity : AppCompatActivity() {
         val offerPercentage = binding.offerPercentage.text.toString().trim()
         val description = binding.edDescription.text.toString().trim()
         val sizes = getSizesList(binding.edSizes.text.toString().trim())
-        val imagesByteArrays = getImagesByteArrays()
-        val images = mutableListOf<String>()
-
         lifecycleScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.Main) {
                 showLoading()
             }
             try {
-                async {
-                    imagesByteArrays.forEach {
+                val imagesByteArrays = getImagesByteArrays()
+                val images = imagesByteArrays.map {
+                    async {
                         val id = java.util.UUID.randomUUID().toString()
-                        launch {
-                            val imageStorage = productsStorage.child("products/images/$id")
-                            val result = imageStorage.putBytes(it).await()
-                            val downloadUrl = result.storage.downloadUrl.await().toString()
-                            images.add(downloadUrl)
-                        }
+                        val imageStorage = productsStorage.child("products/images/$id")
+                        val result = imageStorage.putBytes(it).await()
+                        val downloadUrl = result.storage.downloadUrl.await().toString()
+                        downloadUrl
                     }
-                }.await()
+                }.awaitAll()
 
                 val product = com.example.thingapp.data.Product(
                     java.util.UUID.randomUUID().toString(),
@@ -145,7 +142,7 @@ class MainActivity : AppCompatActivity() {
                     price.toFloat(),
                     if (offerPercentage.isEmpty()) null else offerPercentage.toFloat(),
                     if (description.isEmpty()) null else description,
-                    if (selectedImages.isEmpty()) null else selectedColors,
+                    if (selectedColors.isEmpty()) null else selectedColors,
                     sizes,
                     images
                 )
