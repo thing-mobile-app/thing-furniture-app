@@ -1,21 +1,27 @@
 package com.example.thingapp.activities
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.thingapp.R
+import com.example.thingapp.databinding.ActivityShoppingBinding
+
 
 class ShoppingActivity : AppCompatActivity() {
+
+    // Lazy initialization: binding is created only when it is first used
+    val binding by lazy{
+       ActivityShoppingBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_shopping)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        setContentView(binding.root)
+
+        // It is a component that responsible to navigate between the fragments, control the back stack of the fragments and all of those operations
+        val navController = findNavController(R.id.shoppingHostFragment)
+        binding.bottomNavigation.setupWithNavController(navController)
+
     }
 }

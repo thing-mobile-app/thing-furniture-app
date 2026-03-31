@@ -8,6 +8,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import android.app.Application
+import android.content.Context.MODE_PRIVATE
+import com.example.thingapp.util.Constants.INTRODUCTION_SP
 
 @Module
 // All the dependencies inside this module stay alive as long as app is alive
@@ -23,4 +26,11 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFirebaseStoreDatabase() = Firebase.firestore
+
+    @Provides
+    @Singleton
+    // Provide Shared Preferences for Introduction flow
+    fun provideIntroductionSP(
+        application: Application
+    ) = application.getSharedPreferences(INTRODUCTION_SP, MODE_PRIVATE)
 }

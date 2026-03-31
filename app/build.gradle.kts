@@ -51,9 +51,13 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.8.6")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.0")
 
-    // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.8")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.8")
+    implementation("com.github.leandroborgesferreira:loading-button-android:2.3.0")
+
+    //Navigation component
+    val nav_version = "2.8.8"
+
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
@@ -88,6 +92,9 @@ dependencies {
 
     // CircularButton
     implementation("com.github.leandroborgesferreira:loading-button-android:2.3.0")
+
+    // ColorPicker
+    implementation("com.github.skydoves:colorpickerview:2.3.0")
 
     testImplementation("junit:junit:4.13.2")
 }
