@@ -93,5 +93,8 @@ dependencies {
     // CircularButton
     implementation("com.github.leandroborgesferreira:loading-button-android:2.3.0")
 
+    // ColorPicker
+    implementation("com.github.skydoves:colorpickerview:2.3.0")
+
     testImplementation("junit:junit:4.13.2")
 }
