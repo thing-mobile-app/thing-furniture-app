@@ -17,7 +17,8 @@ class SpecialProductsAdapter : RecyclerView.Adapter<SpecialProductsAdapter.Speci
         fun bind(product: Product) {
             binding.apply {
 
-                Glide.with(itemView).load(product.images[0]).into(imgAd)
+                // Use getOrNull(0) to avoid crashes when the product has no images
+                Glide.with(itemView).load(product.images.getOrNull(0)).into(binding.imgAd)
 
                 tvAdName.text = product.name
                 tvAdPrice.text = product.price.toString()
