@@ -6,7 +6,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.thingapp.R
 import com.example.thingapp.adapters.SpecialProductsAdapter
@@ -15,6 +17,7 @@ import com.example.thingapp.util.Resource
 import com.example.thingapp.viewmodel.MainCategoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
@@ -29,22 +32,25 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
 
         setupSpecialProductsRv()
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.specialProducts.collectLatest { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        showLoading()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.specialProducts.collectLatest { resource ->
+                    when (resource) {
+                        is Resource.Loading -> {
+                            showLoading()
+                        }
+                        is Resource.Success -> {
+                            specialProductsAdapter.differ.submitList(resource.data)
+                            hideLoading()
+                        }
+                        is Resource.Error -> {
+                            hideLoading()
+                            Log.e("MainCategoryFragment", resource.message.toString())
+                            Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                        }
+                        else -> Unit
                     }
-                    is Resource.Success -> {
-                        specialProductsAdapter.differ.submitList(resource.data)
-                        hideLoading()
-                    }
-                    is Resource.Error -> {
-                        hideLoading()
-                        Log.e("MainCategoryFragment", resource.message.toString())
-                        Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
-                    }
-                    else -> Unit
                 }
             }
         }
