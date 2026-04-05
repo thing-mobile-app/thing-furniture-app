@@ -12,14 +12,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSpecialProducts"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -30,11 +30,11 @@
                 android:id="@+id/tvBestDeals"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/inter_18pt_bold"
                 android:text="Best Deals"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                android:fontFamily="@font/inter_18pt_bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rvSpecialProducts" />
@@ -43,31 +43,35 @@
                 android:id="@+id/rvBestDealsProducts"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/rvSpecialProducts"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvBestDeals" />
 
             <TextView
                 android:id="@+id/tvBestProducts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/inter_18pt_bold"
                 android:text="Best Products"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                android:fontFamily="@font/inter_18pt_bold"
-                app:layout_constraintStart_toStartOf="@id/rvSpecialProducts"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rvBestDealsProducts" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBestProducts"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvBestProducts"
@@ -92,7 +96,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="10dp"
                 android:indeterminateTint="@color/g_gray700" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
