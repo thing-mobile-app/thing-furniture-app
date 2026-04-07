@@ -48,8 +48,6 @@ Furniture shopping today is fragmented — users jump between websites and physi
 
 | Document | Link |
 |:---------|:-----|
-| 📋 Project Proposal | [SWE332_Project_Proposal.pdf](./ProjectManagement/Documents/SWE332_Project_Proposal.pdf) |
-| 👤 Persona File | [thingPersonaFile.pdf](./ProjectManagement/Documents/thingPersonaFile.pdf) |
 | 📐 Architecture | [ARCHITECTURE.md](./ARCHITECTURE.md) |
 
 ---
