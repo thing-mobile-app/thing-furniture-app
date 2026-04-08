@@ -30,6 +30,7 @@
 | 3.0 | April 2026 | Team thing. / Hasan Açıkel | Added Process View including thread model, concurrency design, authentication and purchase flow sequence diagrams, and end-to-end activity diagram. |
 | 4.0 | April 2026 | Team thing. / Hasan Açıkel | Added Physical View including deployment diagram, Firebase infrastructure, network communication, and permissions. |
 | 5.0 | April 2026 | Team thing. / Samed Tevin | Added Development View including layered architecture, package diagram, component diagram, and navigation flow. |
+| 6.0 | April 2026 | Team thing. / Kağan Şahin | Added Use Case View including use case overview, end-to-end scenarios (registration to purchase, order tracking, app crash recovery), and corresponding Mermaid sequence and activity diagrams. |
 ---
 
 ## Table of Contents
@@ -520,6 +521,230 @@ All client-to-Firebase traffic is encrypted via **HTTPS / TLS**. Firestore's **l
 ---
 
 ## 9. Scenarios (Use Case View)
+
+The use case view illustrates the architecture through a small set of end-to-end scenarios. These validate the architectural decisions made in the Logical, Process, Development, and Physical views.
+
+### 9.1 Use Case Overview
+
+```mermaid
+graph LR
+    BUYER((Buyer))
+    SYSTEM((System /\nCrashlytics))
+
+    BUYER --> UC01[UC01: Register Account]
+    BUYER --> UC02[UC02: Log In]
+    BUYER --> UC03[UC03: Browse Product Catalogue]
+    BUYER --> UC04[UC04: View Product Detail]
+    BUYER --> UC05[UC05: Add to Cart]
+    BUYER --> UC06[UC06: Place Order]
+    BUYER --> UC07[UC07: Track Order Status]
+    BUYER --> UC08[UC08: Edit Profile]
+
+    SYSTEM --> UC09[UC09: Recover from App Crash]
+```
+
+---
+
+### SC01 — New Buyer: Registration to First Purchase
+
+| Field | Detail |
+|-------|--------|
+| **Scenario ID** | SC01 |
+| **Title** | New Buyer: Registration to First Purchase |
+| **Actors** | Buyer, Firebase Auth (FirebaseUI), Firestore |
+| **Preconditions** | App installed; user has no existing account |
+| **Postconditions** | Order document written to Firestore; buyer sees OrderCompletion screen |
+| **Architectural Views Exercised** | Logical (User, Order, Cart domain), Process (auth sequence, purchase sequence), Physical (Auth service, Firestore) |
+
+**Use Case Diagram:**
+
+```mermaid
+graph LR
+    BUYER((Buyer))
+    FBAUTH((Firebase Auth))
+    FS((Firestore))
+
+    BUYER --> UC01["UC01: Register Account"]
+    BUYER --> UC03["UC03: Browse Product Catalogue"]
+    BUYER --> UC04["UC04: View Product Detail"]
+    BUYER --> UC05["UC05: Add to Cart"]
+    BUYER --> UC06["UC06: Place Order"]
+
+    UC01 --> FBAUTH
+    UC03 --> FS
+    UC06 --> FS
+```
+
+**Use Case Steps:**
+
+| Step | ID | Actor | Action | System Response |
+|------|----|-------|--------|-----------------|
+| 1 | UC01 | Buyer | Opens app for the first time | SplashFragment checks auth state — unauthenticated |
+| 2 | — | System | Detects no session | Launches onboarding: FirstScreenFragment to SecondScreenFragment |
+| 3 | UC01 | Buyer | Taps Get Started | LoginFragment displayed |
+| 4 | UC01 | Buyer | Registers via email or Google | FirebaseUI authenticates — JWT issued — user document created in Firestore |
+| 5 | — | System | Auth confirmed | Navigates to HomeFragment |
+| 6 | UC03 | Buyer | Browses product catalogue | HomeFragment attaches Firestore real-time listener; product grid rendered |
+| 7 | UC04 | Buyer | Taps a product tile | ProductPreviewFragment shown with images, sizes, and colours |
+| 8 | UC05 | Buyer | Selects size and colour, taps Add to Cart | CartItem appended to in-memory cart state in CartViewModel |
+| 9 | UC06 | Buyer | Proceeds to checkout | CartFragment to AddressFragment to BillingFragment |
+| 10 | UC06 | Buyer | Confirms order | Order document written to Firestore; OrderCompletionFragment displayed |
+
+**Sequence Diagram:**
+
+```mermaid
+sequenceDiagram
+    actor Buyer
+    participant App as thing. App
+    participant FBUI as FirebaseUI Auth
+    participant FS as Firestore
+
+    Buyer->>App: Opens app (first time)
+    App->>App: SplashFragment — auth check — unauthenticated
+    App->>Buyer: Onboarding (FirstScreen to SecondScreen)
+    Buyer->>App: Tap Get Started — LoginFragment
+    Buyer->>FBUI: Register via email or Google
+    FBUI->>FS: Create user document
+    FBUI-->>App: Auth token
+    App->>Buyer: HomeFragment
+
+    Buyer->>App: Browse catalogue — tap product
+    App->>FS: addSnapshotListener(products)
+    FS-->>App: Product data (real-time)
+    App->>Buyer: ProductPreviewFragment
+
+    Buyer->>App: Select size and colour — Add to Cart
+    Buyer->>App: Checkout — address — billing
+    App->>FS: setDocument(orders/{orderId})
+    FS-->>App: Write acknowledged
+    App->>Buyer: OrderCompletion
+```
+
+---
+
+### SC02 — Returning Buyer: Track an Existing Order
+
+| Field | Detail |
+|-------|--------|
+| **Scenario ID** | SC02 |
+| **Title** | Returning Buyer: Track an Existing Order |
+| **Actors** | Buyer, Firestore |
+| **Preconditions** | Buyer is authenticated; at least one order exists in Firestore |
+| **Postconditions** | Buyer sees live order status; UI updates automatically if status changes |
+| **Architectural Views Exercised** | Logical (Order state diagram), Process (real-time listener), Physical (Firestore, local cache) |
+
+**Use Case Diagram:**
+
+```mermaid
+graph LR
+    BUYER((Buyer))
+    FS((Firestore))
+    CACHE((Local Cache))
+
+    BUYER --> UC07["UC07: Track Order Status"]
+    UC07 --> DETAIL["View Order Details"]
+
+    UC07 --> FS
+    DETAIL --> FS
+    DETAIL --> CACHE
+```
+
+**Use Case Steps:**
+
+| Step | ID | Actor | Action | System Response |
+|------|----|-------|--------|-----------------|
+| 1 | UC07 | Buyer | Opens the Orders tab | AllOrdersFragment attaches Firestore real-time listener on orders collection |
+| 2 | — | System | Listener fires | Order list rendered with status badges |
+| 3 | UC07 | Buyer | Taps an order row | OrderDetailsFragment shown: items, quantities, total, shipping address, status |
+| 4 | — | System | Buyer loses network | Firestore local cache serves last-known data; offline indicator may appear |
+| 5 | — | System | Network restored | Listener re-syncs; any status change reflected immediately |
+
+**Sequence Diagram:**
+
+```mermaid
+sequenceDiagram
+    actor Buyer
+    participant SA as ShoppingActivity
+    participant VM as OrderViewModel
+    participant FS as Firestore
+    participant CACHE as Local Cache
+
+    Buyer->>SA: Open Orders tab
+    SA->>VM: loadOrders(userUid)
+    VM->>FS: addSnapshotListener(orders where uid == userUid)
+    FS-->>VM: Order list
+    VM-->>SA: LiveData update
+    SA-->>Buyer: AllOrdersFragment — order list rendered
+
+    Buyer->>SA: Tap order row
+    SA-->>Buyer: OrderDetailsFragment — order detail
+
+    Note over SA,CACHE: Network lost
+    FS--xVM: No network
+    VM->>CACHE: Read last cached data
+    CACHE-->>VM: Cached order data
+    VM-->>SA: UI continues serving cached state
+```
+
+---
+
+### SC03 — App Crash Recovery
+
+| Field | Detail |
+|-------|--------|
+| **Scenario ID** | SC03 |
+| **Title** | App Crash Recovery via Crashlytics |
+| **Actors** | User, Crashlytics, Developer |
+| **Preconditions** | App running in production; Crashlytics SDK initialised at startup |
+| **Postconditions** | Full crash report visible in Crashlytics dashboard; developer can triage and fix |
+| **Architectural Views Exercised** | Process (crash capture flow), Physical (Crashlytics node, DataTransport via JobScheduler) |
+
+**Use Case Diagram:**
+
+```mermaid
+graph LR
+    USER((User))
+    DEV((Developer))
+    CRASH((Crashlytics))
+
+    USER --> UC09A["Trigger Unhandled Exception"]
+    UC09A --> CAPTURE["Capture Stack Trace and Metadata"]
+    CAPTURE --> QUEUE["Queue Report in DataTransport"]
+    QUEUE --> UPLOAD["Upload via JobScheduler"]
+    UPLOAD --> CRASH
+
+    DEV --> UC09B["Review Crash Report"]
+    UC09B --> CRASH
+    DEV --> UC09C["Deploy Fix"]
+```
+
+**Use Case Steps:**
+
+| Step | ID | Actor | Action | System Response |
+|------|----|-------|--------|-----------------|
+| 1 | UC09 | User | Triggers an unhandled exception | Crashlytics SDK captures stack trace, device metadata, and session context |
+| 2 | — | System | Exception propagates | Android terminates the process; user sees system crash dialog |
+| 3 | — | System | App restarts | Crashlytics SDK queues crash report in DataTransport buffer |
+| 4 | — | System | Next network window available | JobScheduler fires DataTransport job; batch upload sent over HTTPS/TLS |
+| 5 | UC09 | Developer | Opens Crashlytics dashboard | Full crash report visible: stack trace, OS version, device model, affected user count |
+| 6 | UC09 | Developer | Prioritises and fixes defect | Hot fix deployed; Crashlytics monitors recurrence rate |
+
+**Activity Diagram:**
+
+```mermaid
+flowchart TD
+    A([User Triggers Exception]) --> B[Crashlytics SDK\nCaptures Stack Trace and Metadata]
+    B --> C[Android Terminates Process]
+    C --> D[App Restarts]
+    D --> E[Crash Report Queued\nin DataTransport Buffer]
+    E --> F{Network Available?}
+    F -->|No| G[Wait — JobScheduler\nMonitors Connectivity]
+    G --> F
+    F -->|Yes| H[Batch Upload via HTTPS/TLS\nto Crashlytics Service]
+    H --> I[Report Visible in Dashboard]
+    I --> J[Developer Triages Issue]
+    J --> K([Fix Deployed])
+```
 ---
 
 ## 10. Size & Performance
