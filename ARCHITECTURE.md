@@ -137,6 +137,120 @@ Within the Android client, the **AndroidX Navigation Component** manages a singl
 ---
 
 ## 5. Logical View
+The logical view describes the functionality of the system from an end-user perspective, using class diagrams and state diagrams to show the structure of key domain objects.
+
+### 5.1 Design Rationale — Object-Oriented Model
+
+The logical view follows an **object-oriented design** using the core OOP principles of **abstraction**, **encapsulation**, and **inheritance** as its foundation.
+
+**Abstraction** is applied by modelling only the attributes and operations each domain entity needs to fulfil its role in the system. `Product` exposes `isAvailable()` rather than leaking stock-count logic to callers; `Order` exposes `calculateTotal()` and `updateStatus()` instead of letting UI code manipulate fields directly.
+
+**Encapsulation** is enforced through the MVVM pattern: domain model classes (`User`, `Product`, `Order`, `CartItem`, `Cart`) hold their own state and behaviour, ViewModels mediate all mutations, and Fragments observe results through `LiveData` without directly touching the model fields. This ensures that, for example, cart state cannot be corrupted by concurrent Fragment interactions because all write operations are funnelled through `CartViewModel`.
+
+**Inheritance and composition** are used selectively. `CartItem` is composed inside `Cart` (aggregation) and references a `Product` (association), rather than inheriting from it — because a cart item is not a product, it is a line-item that holds a product reference alongside quantity and selection metadata. The `Category` enumeration is modelled as a closed type so that category-based filtering logic in the UI and Firestore queries remains exhaustive and type-safe.
+
+This model was chosen — rather than an anemic domain model or a flat data-transfer structure — because it keeps business rules co-located with the data they protect, which simplifies testing and reduces the risk of invalid state propagating into Firestore.
+
+### 5.2 Domain Class Diagram
+
+The class diagram below represents the main domain entities, their attributes, and relationships in the thing. system.
+
+```mermaid
+classDiagram
+    class User {
+        +String uid
+        +String name
+        +String email
+        +String address
+        +String phone
+        +String profileImage
+        +updateProfile()
+        +getOrders()
+    }
+
+    class Product {
+        +String productId
+        +String name
+        +String category
+        +float price
+        +List~String~ sizes
+        +List~String~ colors
+        +int stock
+        +List~String~ images
+        +isAvailable() bool
+    }
+
+    class Order {
+        +String orderId
+        +String userUid
+        +float totalPrice
+        +String status
+        +String shippingAddress
+        +Timestamp createdAt
+        +calculateTotal() float
+        +updateStatus(status)
+    }
+
+    class CartItem {
+        +String productId
+        +int quantity
+        +String selectedSize
+        +String selectedColor
+        +float price
+        +subtotal() float
+    }
+
+    class Cart {
+        +List~CartItem~ items
+        +addItem(CartItem)
+        +removeItem(productId)
+        +clear()
+        +totalPrice() float
+    }
+
+    class Category {
+        <<enumeration>>
+        CHAIR
+        CUPBOARD
+        TABLE
+        FURNITURE
+        ACCESSORY
+    }
+
+    User "1" --> "0..*" Order : places
+    Order "1" *-- "1..*" CartItem : contains
+    CartItem "0..*" --> "1" Product : references
+    Cart "1" *-- "0..*" CartItem : holds
+    User "1" --> "1" Cart : owns
+    Product "1" --> "1" Category : belongs to
+```
+
+### 5.3 Order State Diagram
+
+The state diagram captures all valid states of an Order entity and the transitions between them.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Pending : Buyer confirms checkout\n(Order written to Firestore)
+
+    Pending --> Cancelled : Buyer cancels
+
+    Cancelled --> [*]
+
+    note right of Pending
+        v1.0: Order is created\nand visible to buyer
+    end note
+```
+
+### 5.4 Product Categories
+
+| Category | Description |
+|----------|-------------|
+| **Chair** | Seating — dining chairs, armchairs, sofas |
+| **Cupboard** | Storage units, wardrobes, sideboards |
+| **Table** | Dining, coffee, and work tables |
+| **Furniture** | General / mixed furniture listings |
+| **Accessory** | Decorative and functional home accessories |
 ---
 
 ## 6. Process View
