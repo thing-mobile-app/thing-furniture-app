@@ -31,7 +31,10 @@
 | 4.0 | April 2026 | Team thing. / Hasan Açıkel | Added Physical View including deployment diagram, Firebase infrastructure, network communication, and permissions. |
 | 5.0 | April 2026 | Team thing. / Samed Tevin | Added Development View including layered architecture, package diagram, component diagram, and navigation flow. |
 | 6.0 | April 2026 | Team thing. / Kağan Şahin | Added Use Case View including use case overview, end-to-end scenarios (registration to purchase, order tracking, app crash recovery), and corresponding Mermaid sequence and activity diagrams. |
-| 7.0 | April 2026 | Team thing. / Doğukan Süme | Added Logical View  aligned with the logical view, including core user journeys (registration, browsing, cart management, checkout, order tracking) and corresponding UML diagrams.
+| 7.0 | April 2026 | Team thing. / Doğukan Süme | Added Logical View aligned with the logical view, including core user journeys (registration, browsing, cart management, checkout, order tracking) and corresponding UML diagrams. |
+| 8.0 | April 2026 | Team thing. | Document finalized. All architectural views reviewed and validated. Figures added and captioned across all sections. Documentation updated and overall layout redesigned for consistency. |
+
+
 ---
 
 ## Table of Contents
@@ -57,8 +60,6 @@
 
 ## 1. Scope
 
-## Scope
-
 **thing.** is a mobile-first Android application designed to provide a platform for browsing and purchasing high-quality home furniture products such as chairs, cupboards, tables, and accessories.
 
 The system enables users to explore product listings, view detailed information, manage a shopping cart, and complete purchase operations.
@@ -66,26 +67,27 @@ The system enables users to explore product listings, view detailed information,
 The application emphasizes a simple, responsive, and user-friendly experience, supported by real-time data updates and modern Android design principles.
 
 This document follows the 4+1 architectural view model proposed by Philippe Kruchten.
+
 ---
 
+ 
 ## 2. References
-
+ 
 | ID | Title / Source | Link | Relevance |
 |----|----------------|------|-----------|
-| R1 | Android Developer Documentation — Activity & Fragment Lifecycle | [developer.android.com](https://developer.android.com/guide/components/activities/activity-lifecycle) | Navigation & lifecycle architecture |
-| R2 | Firebase Documentation — Firestore | [firebase.google.com/docs/firestore](https://firebase.google.com/docs/firestore) | Primary database service |
-| R3 | Firebase Documentation — Authentication | [firebase.google.com/docs/auth](https://firebase.google.com/docs/auth) | Identity management |
-| R4 | Firebase Documentation — Storage | [firebase.google.com/docs/storage](https://firebase.google.com/docs/storage) | Image and media file storage |
-| R5 | AndroidX Navigation Component Docs | [developer.android.com/guide/navigation](https://developer.android.com/guide/navigation) | In-app navigation graph |
-| R6 | Material Design 3 Guidelines | [m3.material.io](https://m3.material.io) | UI component library |
-| R7 | Firebase Crashlytics SDK Docs | [firebase.google.com/docs/crashlytics](https://firebase.google.com/docs/crashlytics) | Crash reporting integration |
-| R8 | Glide Image Loading Library | [github.com/bumptech/glide](https://github.com/bumptech/glide) | Image caching and loading |
-| R9 | Kotlin Coroutines Guide | [kotlinlang.org/docs/coroutines-guide.html](https://kotlinlang.org/docs/coroutines-guide.html) | Async background operations |
-| R10 | AndroidX Lifecycle — ViewModel & LiveData | [developer.android.com/topic/libraries/architecture/viewmodel](https://developer.android.com/topic/libraries/architecture/viewmodel) | MVVM state management |
-| R11 | 4+1 Architectural View Model — Wikipedia | [en.wikipedia.org/wiki/4%2B1_architectural_view_model](https://en.wikipedia.org/wiki/4%2B1_architectural_view_model) | Architecture viewpoint framework overview |
-| R12 | Architectural Blueprints — The "4+1" View Model of Software Architecture, Philippe Kruchten | [cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf](https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf) | Primary architecture viewpoint framework |
+| R1 | Android Developer Documentation — Activity & Fragment Lifecycle | [Android Activity Lifecycle Docs](https://developer.android.com/guide/components/activities/activity-lifecycle) | Navigation & lifecycle architecture |
+| R2 | Firebase Documentation — Firestore | [Firebase Firestore Docs](https://firebase.google.com/docs/firestore) | Primary database service |
+| R3 | Firebase Documentation — Authentication | [Firebase Authentication Docs](https://firebase.google.com/docs/auth) | Identity management |
+| R4 | Firebase Documentation — Storage | [Firebase Storage Docs](https://firebase.google.com/docs/storage) | Image and media file storage |
+| R5 | AndroidX Navigation Component Docs | [AndroidX Navigation Docs](https://developer.android.com/guide/navigation) | In-app navigation graph |
+| R6 | Material Design 3 Guidelines | [Material Design 3 Guidelines](https://m3.material.io) | UI component library |
+| R7 | Firebase Crashlytics SDK Docs | [Firebase Crashlytics Docs](https://firebase.google.com/docs/crashlytics) | Crash reporting integration |
+| R8 | Glide Image Loading Library | [Glide on GitHub](https://github.com/bumptech/glide) | Image caching and loading |
+| R9 | Kotlin Coroutines Guide | [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html) | Async background operations |
+| R10 | AndroidX Lifecycle — ViewModel & LiveData | [ViewModel & LiveData Docs](https://developer.android.com/topic/libraries/architecture/viewmodel) | MVVM state management |
+| R11 | 4+1 Architectural View Model — Wikipedia | [4+1 Architectural View Model (Wikipedia)](https://en.wikipedia.org/wiki/4%2B1_architectural_view_model) | Architecture viewpoint framework overview |
+| R12 | Architectural Blueprints — The "4+1" View Model of Software Architecture, Philippe Kruchten | [4+1 View Model — Philippe Kruchten (PDF)](https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf) | Primary architecture viewpoint framework |
 | R13 | SWE332 Course Slides — Altinbas University, Spring 2026 | — | Architecture viewpoint framework |
-
 ---
 
 ## 3. Software Architecture
@@ -103,17 +105,27 @@ The system is structured around the **4+1 Architectural View Model** (R11, R12):
 | **Development** | Software organisation — packages, components | Developers, project managers |
 | **Physical** | Deployment topology — nodes, connectors | System engineers, DevOps |
 | **Scenarios** | Use cases — end-to-end walkthroughs | All stakeholders |
+
+<img src="assets/architecture.png" alt="thing. — High-Level System Overview" width="700"/>
+
+*Figure 1 — High-level system overview of the thing. application and its Firebase backend.*
+
 ---
+
 ### 3.2 Architectural Style
 
 The system follows a **client-cloud** architecture. The Android client contains all UI and local business logic, while Firebase acts as the serverless backend for data persistence, identity management, and file storage. There is no custom application server — all backend communication happens through Firebase SDKs embedded in the client.
 
 Within the Android client, the **AndroidX Navigation Component** manages a single Fragment back stack per Activity host, keeping screen transitions decoupled and the back stack predictable.
 
+<img src="assets/arch_style.png" alt="thing. — Architectural Style" width="700"/>
+
+*Figure 2 — Client-cloud architectural style: Android client communicating with Firebase services over HTTPS/TLS.*
+
 ---
 
 ## 4. Architectural Goals & Constraints
----
+
 ### 4.1 Goals
 
 | Goal | Description |
@@ -124,7 +136,7 @@ Within the Android client, the **AndroidX Navigation Component** manages a singl
 | **Reliability** | Firebase Crashlytics captures uncaught exceptions in production from day one. |
 | **Offline Tolerance** | Firestore's local cache allows read access during intermittent connectivity. |
 | **Extensibility** | Architecture is designed to accommodate new merchant and admin features in future releases without restructuring the core. |
----
+
 ### 4.2 Constraints
 
 | Constraint | Impact |
@@ -135,9 +147,14 @@ Within the Android client, the **AndroidX Navigation Component** manages a singl
 | **Google Play Services required** | Google Sign-In requires Play Services on device. |
 | **Academic scope** | Package `com.example.*` marks this as a prototype build, not a production-signed release. |
 
+<img src="assets/goals_constraints.png" alt="thing. — Architectural Goals and Constraints" width="700"/>
+
+*Figure 3 — Summary of key architectural goals and constraints for the thing. system.*
+
 ---
 
 ## 5. Logical View
+
 The logical view describes the functionality of the system from an end-user perspective, using class diagrams and state diagrams to show the structure of key domain objects.
 
 ### 5.1 Design Rationale — Object-Oriented Model
@@ -226,6 +243,8 @@ classDiagram
     Product "1" --> "1" Category : belongs to
 ```
 
+*Figure 4 — Domain class diagram showing core entities and their relationships.*
+
 ### 5.3 Order State Diagram
 
 The state diagram captures all valid states of an Order entity and the transitions between them.
@@ -243,6 +262,8 @@ stateDiagram-v2
     end note
 ```
 
+*Figure 5 — Order state diagram showing valid states and transitions.*
+
 ### 5.4 Product Categories
 
 | Category | Description |
@@ -252,11 +273,13 @@ stateDiagram-v2
 | **Table** | Dining, coffee, and work tables |
 | **Furniture** | General / mixed furniture listings |
 | **Accessory** | Decorative and functional home accessories |
+
 ---
 
 ## 6. Process View
+
 The process view deals with the dynamic aspects of the system — runtime concurrency, communication, and control flow.
----
+
 ### 6.1 Thread Model & Concurrency
 
 thing. runs multiple concurrent execution contexts, each with a clearly defined responsibility. Understanding which work happens on which thread — and why — is essential to evaluating the system's responsiveness and correctness.
@@ -280,7 +303,9 @@ During checkout, the following operations may run concurrently:
 - Crashlytics DataTransport flushing any buffered telemetry via JobScheduler, independent of both.
 
 This separation ensures that a slow network write to Firestore does not freeze the UI, and that background telemetry work never competes with foreground user interactions on the Main thread.
+
 ---
+
 ### 6.2 Authentication Sequence Diagram
 
 ```mermaid
@@ -312,7 +337,11 @@ sequenceDiagram
     LA->>SA: Navigate to ShoppingActivity
     SA-->>User: HomeFragment displayed
 ```
+
+*Figure 6 — Authentication sequence diagram showing both new and returning user flows.*
+
 ---
+
 ### 6.3 Buyer Purchase Flow Sequence Diagram
 
 ```mermaid
@@ -344,7 +373,11 @@ sequenceDiagram
     VM-->>SA: Order confirmed
     SA-->>Buyer: OrderCompletion screen
 ```
+
+*Figure 7 — Purchase flow sequence diagram from product browsing to order confirmation.*
+
 ---
+
 ### 6.4 Activity Diagram — End-to-End Buyer Journey
 
 ```mermaid
@@ -371,10 +404,18 @@ flowchart TD
     N -->|Yes| O[Write Order to Firestore]
     O --> P([Order Completion])
 ```
+
+*Figure 8 — End-to-end activity diagram covering the full buyer journey from app launch to order completion.*
+
 ---
 
 ## 7. Development View
+
 The development view illustrates the system from a programmer's perspective — how the software is organised into packages and components.
+
+<img src="assets/dev_view.png" alt="thing. — Development View Overview" width="700"/>
+
+*Figure 9 — Development view overview showing the overall software organisation of the thing. application.*
 
 ## 7.1 Layered Architecture
 
@@ -382,7 +423,7 @@ The system follows a strict **layered architecture**, where each layer depends o
 
 <img src="assets/android_architecture_layered.png" alt="thing. — Android Layered Architecture" width="600"/>
 
-*Android Layered Architecture*
+*Figure 10 — Android layered architecture: UI → ViewModel → Data → Firebase.*
 
 ---
 
@@ -484,6 +525,8 @@ graph TD
     App --> CSDK
 ```
 
+*Figure 11 — Package diagram showing the internal structure of the `com.example.thingapp` package and its dependencies on Firebase SDKs.*
+
 ### 7.3 Component Diagram
 
 ```mermaid
@@ -523,6 +566,8 @@ graph LR
     UILayer -->|"telemetry"| CRASH_SVC
 ```
 
+*Figure 12 — Component diagram illustrating the interactions between UI, ViewModel, Data, and Firebase layers.*
+
 ### 7.4 Navigation Flow
 
 ```mermaid
@@ -558,6 +603,8 @@ flowchart TD
     PROFILE --> HELP[HelpFragment]
 ```
 
+*Figure 13 — Navigation flow diagram showing all Fragment-to-Fragment transitions managed by the AndroidX Navigation Component.*
+
 ### 7.5 Key Libraries & Dependencies
 
 | Library | Purpose |
@@ -575,6 +622,10 @@ flowchart TD
 | **Glide** | Image loading and caching into ImageViews |
 | **Kotlin Coroutines** | Background async operations |
 
+<img src="assets/tech_stack.png" alt="thing. — Technology Stack" width="700"/>
+
+*Figure 14 — Technology stack overview showing all key libraries and SDKs used in the thing. application.*
+
 ### 7.6 Build Configuration
 
 | Property | Value |
@@ -591,6 +642,7 @@ flowchart TD
 ---
 
 ## 8. Physical View
+
 The physical view depicts the deployment topology — how software artefacts are distributed across physical or virtual nodes.
 
 ### 8.1 Deployment Diagram
@@ -625,6 +677,8 @@ graph TD
     FSCACHE <-->|"Sync on reconnect"| FS
 ```
 
+*Figure 15 — Deployment diagram showing the Android device node and Google Cloud Platform / Firebase node with all communication channels.*
+
 ### 8.2 Network & Permissions
 
 | Permission | Purpose |
@@ -633,6 +687,7 @@ graph TD
 | `ACCESS_NETWORK_STATE` | Detect connectivity; fall back to Firestore local cache |
 
 All client-to-Firebase traffic is encrypted via **HTTPS / TLS**. Firestore's **local persistence cache** serves reads during network loss. Firebase DataTransport batches Crashlytics payloads via `JobScheduler` to preserve battery life.
+
 ---
 
 ## 9. Scenarios (Use Case View)
@@ -657,6 +712,8 @@ graph LR
 
     SYSTEM --> UC09[UC09: Recover from App Crash]
 ```
+
+*Figure 16 — Use case overview diagram showing all supported use cases and their actors.*
 
 ---
 
@@ -689,6 +746,8 @@ graph LR
     UC03 --> FS
     UC06 --> FS
 ```
+
+*Figure 17 — SC01 use case diagram: new buyer registration to first purchase.*
 
 **Use Case Steps:**
 
@@ -735,6 +794,8 @@ sequenceDiagram
     App->>Buyer: OrderCompletion
 ```
 
+*Figure 18 — SC01 sequence diagram: full flow from registration to order confirmation.*
+
 ---
 
 ### SC02 — Returning Buyer: Track an Existing Order
@@ -763,6 +824,8 @@ graph LR
     DETAIL --> FS
     DETAIL --> CACHE
 ```
+
+*Figure 19 — SC02 use case diagram: returning buyer tracking an existing order.*
 
 **Use Case Steps:**
 
@@ -801,6 +864,8 @@ sequenceDiagram
     VM-->>SA: UI continues serving cached state
 ```
 
+*Figure 20 — SC02 sequence diagram: order tracking with offline fallback to Firestore local cache.*
+
 ---
 
 ### SC03 — App Crash Recovery
@@ -833,6 +898,8 @@ graph LR
     DEV --> UC09C["Deploy Fix"]
 ```
 
+*Figure 21 — SC03 use case diagram: crash capture and recovery flow involving Crashlytics.*
+
 **Use Case Steps:**
 
 | Step | ID | Actor | Action | System Response |
@@ -860,6 +927,9 @@ flowchart TD
     I --> J[Developer Triages Issue]
     J --> K([Fix Deployed])
 ```
+
+*Figure 22 — SC03 activity diagram: end-to-end crash capture, upload, and developer triage flow.*
+
 ---
 
 ## 10. Size & Performance
