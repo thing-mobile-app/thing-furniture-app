@@ -27,6 +27,7 @@
 | 1.0 | March 2026 | Team thing. | Initial document created |
 | 2.0 | April 2026 | Team thing. | Refined and expanded non-architectural sections, including Scope, References, Goals & Constraints, Size & Performance, and Quality attributes.|
 | 3.0 | April 2026 | Team thing. | Added Process View including thread model, concurrency design, authentication and purchase flow sequence diagrams, and end-to-end activity diagram. |
+| 4.0 | April 2026 | Team thing. | Added Physical View including deployment diagram, Firebase infrastructure, network communication, and permissions. |
 ---
 
 ## Table of Contents
@@ -258,6 +259,48 @@ flowchart TD
 ---
 
 ## 8. Physical View
+The physical view depicts the deployment topology — how software artefacts are distributed across physical or virtual nodes.
+
+### 8.1 Deployment Diagram
+
+```mermaid
+graph TD
+    subgraph Device["Node: Android Device — API 21+"]
+        APP["artifact: thing. APK\ncom.example.thing"]
+        GPS["component: Google Play Services"]
+        NAVCMP["component: Navigation Component"]
+        VMCMP["component: ViewModel / LiveData"]
+        FSCACHE["component: Firestore Local Cache"]
+        APP --> GPS
+        APP --> NAVCMP
+        APP --> VMCMP
+        APP --> FSCACHE
+    end
+
+    subgraph GCloud["Node: Google Cloud Platform"]
+        subgraph Firebase["Firebase Project"]
+            FS[("database: Firestore\nNoSQL Document Store")]
+            AUTH["service: Firebase Auth\nIdentity Provider"]
+            STG["service: Firebase Storage\nImage and Media Files"]
+            CRASH["service: Crashlytics\nCrash Dashboard"]
+        end
+    end
+
+    APP <-->|"HTTPS / TLS\nRead and Write"| FS
+    APP <-->|"HTTPS / TLS\nToken Exchange"| AUTH
+    APP <-->|"HTTPS / TLS\nImage Upload and Download"| STG
+    APP -->|"Crash Telemetry\nAsync Batch via JobScheduler"| CRASH
+    FSCACHE <-->|"Sync on reconnect"| FS
+```
+
+### 8.2 Network & Permissions
+
+| Permission | Purpose |
+|------------|---------|
+| `INTERNET` | All Firebase communication |
+| `ACCESS_NETWORK_STATE` | Detect connectivity; fall back to Firestore local cache |
+
+All client-to-Firebase traffic is encrypted via **HTTPS / TLS**. Firestore's **local persistence cache** serves reads during network loss. Firebase DataTransport batches Crashlytics payloads via `JobScheduler` to preserve battery life.
 ---
 
 ## 9. Scenarios (Use Case View)
