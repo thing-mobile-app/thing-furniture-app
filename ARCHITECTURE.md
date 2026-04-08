@@ -26,6 +26,7 @@
 |---------|------|--------|-------------|
 | 1.0 | March 2026 | Team thing. | Initial document created |
 | 2.0 | April 2026 | Team thing. | Refined and expanded non-architectural sections, including Scope, References, Goals & Constraints, Size & Performance, and Quality attributes.|
+| 3.0 | April 2026 | Team thing. | Added Process View including thread model, concurrency design, authentication and purchase flow sequence diagrams, and end-to-end activity diagram. |
 ---
 
 ## Table of Contents
@@ -135,6 +136,122 @@ Within the Android client, the **AndroidX Navigation Component** manages a singl
 ---
 
 ## 6. Process View
+The process view deals with the dynamic aspects of the system — runtime concurrency, communication, and control flow.
+
+### 6.1 Thread Model & Concurrency
+
+thing. runs multiple concurrent execution contexts, each with a clearly defined responsibility. Understanding which work happens on which thread — and why — is essential to evaluating the system's responsiveness and correctness.
+
+| Thread / Context | Responsibility | Parallelism Role |
+|------------------|----------------|------------------|
+| **Main (UI) Thread** | Fragment rendering, user input, Navigation Component transitions | Single-threaded; all UI mutations must occur here |
+| **Firebase SDK Thread Pool** | Firestore network I/O, Auth token refresh, Storage transfers | Runs in parallel with the UI thread; results are posted back via callbacks or Tasks |
+| **WorkManager / JobScheduler** | DataTransport batch jobs — Crashlytics upload, analytics | Background; scheduled by OS; runs concurrently with user sessions |
+| **Kotlin Coroutines (ViewModel scope)** | Async wrappers over Firebase Tasks inside ViewModel lifecycles | Structured concurrency; coroutines are cancelled when ViewModel is cleared |
+
+**Why Kotlin Coroutines?**
+
+Firebase's Java SDK exposes asynchronous results via `Task<T>` callbacks. Coroutines allow ViewModels to `await()` these Tasks using `suspendCancellableCoroutine`, transforming callback-style code into linear, readable suspend functions — without blocking the Main thread. Coroutines launched in `viewModelScope` are automatically cancelled when the Fragment that owns the ViewModel is destroyed, preventing memory leaks and stale UI updates.
+
+**Parallel operations in the purchase flow:**
+
+During checkout, the following operations may run concurrently:
+- Firestore's real-time snapshot listener (background thread) continuing to push catalogue updates while the user edits their address.
+- The `placeOrder` coroutine writing the order document to Firestore (Firebase thread pool), while the Main thread renders the BillingFragment confirmation UI.
+- Crashlytics DataTransport flushing any buffered telemetry via JobScheduler, independent of both.
+
+This separation ensures that a slow network write to Firestore does not freeze the UI, and that background telemetry work never competes with foreground user interactions on the Main thread.
+
+### 6.2 Authentication Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant LA as LunchActivity
+    participant FBAUTH as Firebase Auth
+    participant FBUI as FirebaseUI Auth
+    participant FS as Firestore
+    participant SA as ShoppingActivity
+
+    User->>LA: App Launch
+    LA->>FBAUTH: Check auth state
+
+    alt Not authenticated
+        FBAUTH-->>LA: Unauthenticated
+        LA->>FBUI: Launch KickoffActivity
+        User->>FBUI: Enter credentials (Email / Google / Phone)
+        FBUI->>FBAUTH: Authenticate
+        FBAUTH-->>FBUI: JWT Token issued
+        FBUI->>FS: Create or fetch user document
+        FS-->>FBUI: User record
+    else Already authenticated
+        FBAUTH-->>LA: Valid token
+        LA->>FS: Fetch user profile
+        FS-->>LA: User document
+    end
+
+    LA->>SA: Navigate to ShoppingActivity
+    SA-->>User: HomeFragment displayed
+```
+
+### 6.3 Buyer Purchase Flow Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    actor Buyer
+    participant SA as ShoppingActivity
+    participant VM as ViewModel
+    participant FS as Firestore
+
+    Buyer->>SA: Browse catalogue (HomeFragment)
+    SA->>VM: requestProducts(category)
+    VM->>FS: addSnapshotListener(products)
+    FS-->>VM: Product list (real-time)
+    VM-->>SA: LiveData update - UI render
+
+    Buyer->>SA: Open product (ProductPreviewFragment)
+    Buyer->>SA: Select size and colour - Add to Cart
+    SA->>VM: addToCart(CartItem)
+    VM->>VM: Update cart state (in-memory)
+
+    Buyer->>SA: Proceed to Checkout (CartFragment)
+    SA-->>Buyer: Display cart summary
+
+    Buyer->>SA: Confirm address (AddressFragment)
+    Buyer->>SA: Confirm order (BillingFragment)
+    SA->>VM: placeOrder(cart, address)
+    VM->>FS: setDocument(orders/{orderId})
+    FS-->>VM: Write acknowledged
+    VM-->>SA: Order confirmed
+    SA-->>Buyer: OrderCompletion screen
+```
+
+### 6.4 Activity Diagram — End-to-End Buyer Journey
+
+```mermaid
+flowchart TD
+    A([App Launch]) --> B{Auth State?}
+    B -->|Not authenticated| C[Show Onboarding]
+    C --> D[Login / Register]
+    D --> E{Success?}
+    E -->|No| D
+    E -->|Yes| F[HomeFragment]
+    B -->|Authenticated| F
+
+    F --> G[Browse Category / Search]
+    G --> H[View Product Detail]
+    H --> I{Add to Cart?}
+    I -->|No| G
+    I -->|Yes| J[CartFragment]
+    J --> K{Checkout?}
+    K -->|No - continue shopping| G
+    K -->|Yes| L[Enter Address]
+    L --> M[Review Billing]
+    M --> N{Confirm Order?}
+    N -->|No| J
+    N -->|Yes| O[Write Order to Firestore]
+    O --> P([Order Completion])
+```
 ---
 
 ## 7. Development View
