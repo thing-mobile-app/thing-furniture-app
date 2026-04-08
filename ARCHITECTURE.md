@@ -31,6 +31,7 @@
 | 4.0 | April 2026 | Team thing. / Hasan Açıkel | Added Physical View including deployment diagram, Firebase infrastructure, network communication, and permissions. |
 | 5.0 | April 2026 | Team thing. / Samed Tevin | Added Development View including layered architecture, package diagram, component diagram, and navigation flow. |
 | 6.0 | April 2026 | Team thing. / Kağan Şahin | Added Use Case View including use case overview, end-to-end scenarios (registration to purchase, order tracking, app crash recovery), and corresponding Mermaid sequence and activity diagrams. |
+| 7.0 | April 2026 | Team thing. / Doğukan Süme | Added Use Case View aligned with the logical view, including core user journeys (registration, browsing, cart management, checkout, order tracking) and corresponding UML diagrams.
 ---
 
 ## Table of Contents
