@@ -33,6 +33,7 @@
 | 6.0 | April 2026 | Team thing. / Kağan Şahin | Added Use Case View including use case overview, end-to-end scenarios (registration to purchase, order tracking, app crash recovery), and corresponding Mermaid sequence and activity diagrams. |
 | 7.0 | April 2026 | Team thing. / Doğukan Süme | Added Logical View aligned with the logical view, including core user journeys (registration, browsing, cart management, checkout, order tracking) and corresponding UML diagrams. |
 | 8.0 | April 2026 | Team thing. | Document finalized. All architectural views reviewed and validated. Figures added and captioned across all sections. Documentation updated and overall layout redesigned for consistency. |
+| 9.0 | April 2026 | Team thing. / Samed Tevin | Appendix C expanded with MVVM, SRP, DRY and Clean Code design principles. System Overview diagram added to Section 3. All large diagrams made clickable for full-resolution viewing. Figure captions and numbering updated for consistency across all sections. |
 
 
 ---
@@ -107,8 +108,8 @@ The system is structured around the **4+1 Architectural View Model** (R11, R12):
 | **Scenarios** | Use cases — end-to-end walkthroughs | All stakeholders |
 
 <div align="center">
-<a href="assets/diagrams/system_overview.png" target="_blank">
-  <img src="assets/diagrams/system_overview.png" alt="thing. — System Overview" width="700"/>
+<a href="assets/system_overview.png" target="_blank">
+  <img src="assets/system_overview.png" alt="thing. — System Overview" width="700"/>
 </a>
 
 *Figure 1 — 4+1 Architectural View Model overview and primary stakeholder mapping.*
@@ -364,8 +365,11 @@ This four-tier layering was chosen over a flat structure because it enforces the
 ### 7.4 Navigation Flow
 
 <div align="center">
+<a href="assets/diagrams/navigation_flow_diagram.png" target="_blank">
+  <img src="assets/diagrams/navigation_flow_diagram.png" alt="thing. — Navigation Flow" width="2000"/>
+</a>
 
-<img src="assets/diagrams/navigation_flow_diagram.png" alt="thing. — Navigation Flow" width="400"/>
+*Click on the image to enlarge.*
 
 *Figure 14 — Navigation flow diagram showing all Fragment-to-Fragment transitions managed by the AndroidX Navigation Component.*
 </div>
@@ -597,7 +601,7 @@ The use case view illustrates the architecture through a small set of end-to-end
 
 | Metric | Value |
 |--------|-------|
-| Raw APK size | Unknown |
+| Raw APK size | ~12.6 MB |
 | Min SDK coverage | API 24+ (~99% of active Android devices) |
 | Permissions required | 2 |
 
