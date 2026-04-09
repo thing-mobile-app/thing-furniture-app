@@ -6,6 +6,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    id("kotlin-kapt")
 }
 
 android {
@@ -78,7 +79,8 @@ dependencies {
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation(libs.androidx.fragment)
-    ksp("com.github.bumptech.glide:compiler:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+
 
     // Circular Image
     implementation("de.hdodenhof:circleimageview:3.1.0")
