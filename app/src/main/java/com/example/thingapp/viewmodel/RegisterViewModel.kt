@@ -1,6 +1,7 @@
 package com.example.thingapp.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.thingapp.data.User
 import com.example.thingapp.util.Constants.USER_COLLECTION
 import com.example.thingapp.util.RegisterFieldsState
@@ -16,6 +17,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -37,7 +39,9 @@ class RegisterViewModel @Inject constructor(
     // Creating a new account in Firebase Auth
     fun createAccountWithEmailAndPassword(user : User, password : String){
         if(checkValidation(user, password)){
-            runBlocking {
+            // viewModelScope.launch is used instead of runBlocking to avoid
+            // blocking the main thread which causes UI freezes and skipped frames.
+            viewModelScope.launch {
                 _register.emit(Resource.Loading())
             }
             firebaseAuth.createUserWithEmailAndPassword(user.email, password)
@@ -56,7 +60,8 @@ class RegisterViewModel @Inject constructor(
         else {
             val registerFieldsState = RegisterFieldsState(validateEmail(user.email), validatePassword(password))
 
-            runBlocking {
+            // viewModelScope.launch is used instead of runBlocking to avoid
+            viewModelScope.launch {
                 _validation.send(registerFieldsState)
             }
         }
