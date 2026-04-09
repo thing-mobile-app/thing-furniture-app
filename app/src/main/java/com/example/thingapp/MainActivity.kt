@@ -22,6 +22,7 @@ import android.widget.Toast
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.WindowCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -40,8 +41,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        
-        window.statusBarColor = android.graphics.Color.parseColor("#3700B3")
+
+        // No need to set statusBarColor, handled via layout
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         binding.buttonColorPicker.setOnClickListener {
             ColorPickerDialog.Builder(this)
@@ -222,4 +224,6 @@ class MainActivity : AppCompatActivity() {
 
         return true
     }
+
+
 }

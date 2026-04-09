@@ -6,8 +6,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.thingapp.R
 import com.example.thingapp.databinding.ActivityShoppingBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class ShoppingActivity : AppCompatActivity() {
 
     // Lazy initialization: binding is created only when it is first used
