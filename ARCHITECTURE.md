@@ -106,9 +106,23 @@ The system is structured around the **4+1 Architectural View Model** (R11, R12):
 | **Physical** | Deployment topology — nodes, connectors | System engineers, DevOps |
 | **Scenarios** | Use cases — end-to-end walkthroughs | All stakeholders |
 
-<img src="assets/architecture.png" alt="thing. — High-Level System Overview" width="700"/>
+<div align="center">
+<a href="assets/diagrams/system_overview.png" target="_blank">
+  <img src="assets/diagrams/system_overview.png" alt="thing. — System Overview" width="700"/>
+</a>
 
-*Figure 1 — High-level system overview of the thing. application and its Firebase backend.*
+*Figure 1 — 4+1 Architectural View Model overview and primary stakeholder mapping.*
+</div>
+
+---
+
+<div align="center">
+<a href="assets/system_.png" target="_blank">
+  <img src="assets/architecture.png" alt="thing. — High-Level System Overview" width="700"/>
+</a>
+
+*Figure 2 — High-level system overview of the thing. application and its Firebase backend.*
+</div>
 
 ---
 
@@ -118,9 +132,13 @@ The system follows a **client-cloud** architecture. The Android client contains 
 
 Within the Android client, the **AndroidX Navigation Component** manages a single Fragment back stack per Activity host, keeping screen transitions decoupled and the back stack predictable.
 
-<img src="assets/arch_style.png" alt="thing. — Architectural Style" width="700"/>
+<div align="center">
+<a href="assets/arch_style.png" target="_blank">
+  <img src="assets/arch_style.png" alt="thing. — Architectural Style" width="700"/>
+</a>
 
-*Figure 2 — Client-cloud architectural style: Android client communicating with Firebase services over HTTPS/TLS.*
+*Figure 3 — Client-cloud architectural style: Android client communicating with Firebase services over HTTPS/TLS.*
+</div>
 
 ---
 
@@ -147,9 +165,13 @@ Within the Android client, the **AndroidX Navigation Component** manages a singl
 | **Google Play Services required** | Google Sign-In requires Play Services on device. |
 | **Academic scope** | Package `com.example.*` marks this as a prototype build, not a production-signed release. |
 
-<img src="assets/goals_constraints.png" alt="thing. — Architectural Goals and Constraints" width="700"/>
+<div align="center">
+<a href="assets/goals_constraints.png" target="_blank">
+  <img src="assets/goals_constraints.png" alt="thing. — Architectural Goals and Constraint" width="700"/>
+</a>
 
-*Figure 3 — Summary of key architectural goals and constraints for the thing. system.*
+*Figure 4 — Summary of key architectural goals and constraints for the thing. system.*
+</div>
 
 ---
 
@@ -173,96 +195,29 @@ This model was chosen — rather than an anemic domain model or a flat data-tran
 
 The class diagram below represents the main domain entities, their attributes, and relationships in the thing. system.
 
-```mermaid
-classDiagram
-    class User {
-        +String uid
-        +String name
-        +String email
-        +String address
-        +String phone
-        +String profileImage
-        +updateProfile()
-        +getOrders()
-    }
+<div align="center">
 
-    class Product {
-        +String productId
-        +String name
-        +String category
-        +float price
-        +List~String~ sizes
-        +List~String~ colors
-        +int stock
-        +List~String~ images
-        +isAvailable() bool
-    }
+<img src="assets/diagrams/domain_class_diagram.png" alt="thing. — Domain Class Diagram" width="400"/>
 
-    class Order {
-        +String orderId
-        +String userUid
-        +float totalPrice
-        +String status
-        +String shippingAddress
-        +Timestamp createdAt
-        +calculateTotal() float
-        +updateStatus(status)
-    }
+*Figure 5 — Domain class diagram showing core entities and their relationships.*
 
-    class CartItem {
-        +String productId
-        +int quantity
-        +String selectedSize
-        +String selectedColor
-        +float price
-        +subtotal() float
-    }
+</div>
 
-    class Cart {
-        +List~CartItem~ items
-        +addItem(CartItem)
-        +removeItem(productId)
-        +clear()
-        +totalPrice() float
-    }
-
-    class Category {
-        <<enumeration>>
-        CHAIR
-        CUPBOARD
-        TABLE
-        FURNITURE
-        ACCESSORY
-    }
-
-    User "1" --> "0..*" Order : places
-    Order "1" *-- "1..*" CartItem : contains
-    CartItem "0..*" --> "1" Product : references
-    Cart "1" *-- "0..*" CartItem : holds
-    User "1" --> "1" Cart : owns
-    Product "1" --> "1" Category : belongs to
-```
-
-*Figure 4 — Domain class diagram showing core entities and their relationships.*
+---
 
 ### 5.3 Order State Diagram
 
 The state diagram captures all valid states of an Order entity and the transitions between them.
 
-```mermaid
-stateDiagram-v2
-    [*] --> Pending : Buyer confirms checkout\n(Order written to Firestore)
+<div align="center">
 
-    Pending --> Cancelled : Buyer cancels
+<img src="assets/diagrams/order_state_diagram.png" alt="thing. — Order State Diagram" width="400"/>
 
-    Cancelled --> [*]
+*Figure 6 — Order state diagram showing valid states and transitions.*
 
-    note right of Pending
-        v1.0: Order is created\nand visible to buyer
-    end note
-```
+</div>
 
-*Figure 5 — Order state diagram showing valid states and transitions.*
+---
 
 ### 5.4 Product Categories
 
@@ -308,104 +263,34 @@ This separation ensures that a slow network write to Firestore does not freeze t
 
 ### 6.2 Authentication Sequence Diagram
 
-```mermaid
-sequenceDiagram
-    actor User
-    participant LA as LunchActivity
-    participant FBAUTH as Firebase Auth
-    participant FBUI as FirebaseUI Auth
-    participant FS as Firestore
-    participant SA as ShoppingActivity
+<div align="center">
 
-    User->>LA: App Launch
-    LA->>FBAUTH: Check auth state
+<img src="assets/diagrams/order_state_diagram.png" alt="thing. — Authentication Sequence Diagram" width="400"/>
 
-    alt Not authenticated
-        FBAUTH-->>LA: Unauthenticated
-        LA->>FBUI: Launch KickoffActivity
-        User->>FBUI: Enter credentials (Email / Google / Phone)
-        FBUI->>FBAUTH: Authenticate
-        FBAUTH-->>FBUI: JWT Token issued
-        FBUI->>FS: Create or fetch user document
-        FS-->>FBUI: User record
-    else Already authenticated
-        FBAUTH-->>LA: Valid token
-        LA->>FS: Fetch user profile
-        FS-->>LA: User document
-    end
-
-    LA->>SA: Navigate to ShoppingActivity
-    SA-->>User: HomeFragment displayed
-```
-
-*Figure 6 — Authentication sequence diagram showing both new and returning user flows.*
+*Figure 7 — Authentication sequence diagram showing both new and returning user flows.*
+</div>
 
 ---
 
 ### 6.3 Buyer Purchase Flow Sequence Diagram
 
-```mermaid
-sequenceDiagram
-    actor Buyer
-    participant SA as ShoppingActivity
-    participant VM as ViewModel
-    participant FS as Firestore
+<div align="center">
 
-    Buyer->>SA: Browse catalogue (HomeFragment)
-    SA->>VM: requestProducts(category)
-    VM->>FS: addSnapshotListener(products)
-    FS-->>VM: Product list (real-time)
-    VM-->>SA: LiveData update - UI render
+<img src="assets/diagrams/buyer_purchase_flow_diagram.png" alt="thing. — Buyer Purchase Flow Sequence Diagram" width="2000"/>
 
-    Buyer->>SA: Open product (ProductPreviewFragment)
-    Buyer->>SA: Select size and colour - Add to Cart
-    SA->>VM: addToCart(CartItem)
-    VM->>VM: Update cart state (in-memory)
-
-    Buyer->>SA: Proceed to Checkout (CartFragment)
-    SA-->>Buyer: Display cart summary
-
-    Buyer->>SA: Confirm address (AddressFragment)
-    Buyer->>SA: Confirm order (BillingFragment)
-    SA->>VM: placeOrder(cart, address)
-    VM->>FS: setDocument(orders/{orderId})
-    FS-->>VM: Write acknowledged
-    VM-->>SA: Order confirmed
-    SA-->>Buyer: OrderCompletion screen
-```
-
-*Figure 7 — Purchase flow sequence diagram from product browsing to order confirmation.*
+*Figure 8 — Purchase flow sequence diagram from product browsing to order confirmation.*
+</div>
 
 ---
 
 ### 6.4 Activity Diagram — End-to-End Buyer Journey
 
-```mermaid
-flowchart TD
-    A([App Launch]) --> B{Auth State?}
-    B -->|Not authenticated| C[Show Onboarding]
-    C --> D[Login / Register]
-    D --> E{Success?}
-    E -->|No| D
-    E -->|Yes| F[HomeFragment]
-    B -->|Authenticated| F
+<div align="center">
 
-    F --> G[Browse Category / Search]
-    G --> H[View Product Detail]
-    H --> I{Add to Cart?}
-    I -->|No| G
-    I -->|Yes| J[CartFragment]
-    J --> K{Checkout?}
-    K -->|No - continue shopping| G
-    K -->|Yes| L[Enter Address]
-    L --> M[Review Billing]
-    M --> N{Confirm Order?}
-    N -->|No| J
-    N -->|Yes| O[Write Order to Firestore]
-    O --> P([Order Completion])
-```
+<img src="assets/diagrams/activity_diagram.png" alt="thing. — Activity Diagram — End-to-End Buyer Journey" width="400"/>
 
-*Figure 8 — End-to-end activity diagram covering the full buyer journey from app launch to order completion.*
+*Figure 9 — End-to-end activity diagram covering the full buyer journey from app launch to order completion.*
+</div>
 
 ---
 
@@ -413,17 +298,26 @@ flowchart TD
 
 The development view illustrates the system from a programmer's perspective — how the software is organised into packages and components.
 
-<img src="assets/dev_view.png" alt="thing. — Development View Overview" width="700"/>
+<div align="center">
+<a href="assets/dev_view.png" target="_blank">
+  <img src="assets/dev_view.png" alt="thing. — Development View Overview" width="700"/>
+</a>
 
-*Figure 9 — Development view overview showing the overall software organisation of the thing. application.*
+*Figure 10 — Development view overview showing the overall software organisation of the thing. application.*
+</div>
+
 
 ## 7.1 Layered Architecture
 
 The system follows a strict **layered architecture**, where each layer depends only on the layer directly below it and never on layers above. This enforces a clean separation of concerns, makes individual layers independently testable, and allows Firebase to be substituted in future versions without touching the UI or ViewModel layers.
 
-<img src="assets/android_architecture_layered.png" alt="thing. — Android Layered Architecture" width="600"/>
+<div align="center">
+<a href="assets/android_architecture_layered.png" target="_blank">
+  <img src="assets/android_architecture_layered.png" alt="thing. — Android Layered Architecture" width="700"/>
+</a>
 
-*Figure 10 — Android layered architecture: UI → ViewModel → Data → Firebase.*
+*Figure 11 — Android layered architecture: UI → ViewModel → Data → Firebase.*
+</div>
 
 ---
 
@@ -438,172 +332,45 @@ The system follows a strict **layered architecture**, where each layer depends o
 
 This four-tier layering was chosen over a flat structure because it enforces the Dependency Inversion Principle: the UI and ViewModel layers depend on abstractions (LiveData, repository interfaces), not on concrete Firebase SDK calls. This is what allows the ViewModel layer to be unit-tested with mock repositories without spinning up an emulator.
 
+---
+
 ### 7.2 Package Diagram
+<div align="center">
+<a href="assets/diagrams/package_diagram.png" target="_blank">
+  <img src="assets/diagrams/package_diagram.png" alt="thing. — Package Diagram" width="3000"/>
+</a>
 
-```mermaid
-graph TD
-    subgraph App["com.example.thingapp"]
-        subgraph ACT["activities"]
-            LA[LunchActivity]
-            SA[ShoppingActivity]
-        end
+*Click on the image to enlarge.*
 
-        subgraph FRAG["fragments"]
-            subgraph AUTH_FRAG["auth"]
-                SP[SplashFragment]
-                FS1[FirstScreenFragment]
-                FS2[SecondScreenFragment]
-                LF[LoginFragment]
-                RF[RegisterFragment]
-            end
-            subgraph SHOP_FRAG["shopping"]
-                HF[HomeFragment]
-                CF[ChairFragment]
-                CPF[CupboardFragment]
-                TF[TableFragment]
-                FF[FurnitureFragment]
-                AF[AccessoryFragment]
-                PPF[ProductPreviewFragment]
-                CARTF[CartFragment]
-                BF[BillingFragment]
-                ADDRF[AddressFragment]
-                OCF[OrderCompletionFragment]
-                AOF[AllOrdersFragment]
-                ODF[OrderDetailsFragment]
-            end
-            subgraph PROFILE_FRAG["profile"]
-                PF[ProfileFragment]
-                EUF[EditUserInformationFragment]
-                LangF[LanguageFragment]
-                HelpF[HelpFragment]
-            end
-        end
+*Figure 12 — Package diagram showing the internal structure of the `com.example.thingapp` package and its dependencies on Firebase SDKs.*
+</div>
 
-        subgraph VM["viewmodel"]
-            PVM[ProductViewModel]
-            OVM[OrderViewModel]
-            UVM[UserViewModel]
-            CVM[CartViewModel]
-        end
-
-        subgraph MODEL["model"]
-            PM[Product]
-            OM[Order]
-            UM[User]
-            CIM[CartItem]
-        end
-
-        subgraph ADAPT["adapters"]
-            PA[ProductAdapter]
-            OA[OrderAdapter]
-            CA[CartAdapter]
-        end
-
-        subgraph UTILS["utils"]
-            IMG[ImageLoader]
-            VAL[Validator]
-            FMT[Formatter]
-        end
-    end
-
-    subgraph Firebase["Firebase SDKs"]
-        FSDK[Firestore SDK]
-        ASDK[Auth SDK]
-        STGSDK[Storage SDK]
-        CSDK[Crashlytics SDK]
-    end
-
-    ACT --> FRAG
-    FRAG --> VM
-    VM --> MODEL
-    FRAG --> ADAPT
-    ADAPT --> MODEL
-    FRAG --> UTILS
-    VM --> FSDK
-    ACT --> ASDK
-    FRAG --> STGSDK
-    App --> CSDK
-```
-
-*Figure 11 — Package diagram showing the internal structure of the `com.example.thingapp` package and its dependencies on Firebase SDKs.*
+---
 
 ### 7.3 Component Diagram
+<div align="center">
+<a href="assets/diagrams/component_diagram.png" target="_blank">
+  <img src="assets/diagrams/component_diagram.png" alt="thing. — Component Diagram" width="3000"/>
+</a>
 
-```mermaid
-graph LR
-    subgraph UILayer["UI Layer"]
-        ACTS[Activities\nNavigation Hosts]
-        FRAGS[Fragments\nUI Screens]
-        ADAPTS[RecyclerView\nAdapters]
-    end
+*Click on the image to enlarge.*
 
-    subgraph VMLayer["ViewModel Layer"]
-        VMS[ViewModels\nLifecycle-Aware State]
-        LDATA[LiveData\nObservables]
-    end
+*Figure 13 — Component diagram illustrating the interactions between UI, ViewModel, Data, and Firebase layers.*
+</div>
 
-    subgraph DataLayer["Data Layer"]
-        REPO[Firestore\nRepository]
-        CACHE[Local\nPersistence Cache]
-        STG[Firebase\nStorage]
-    end
+---
 
-    subgraph FirebaseLayer["Firebase (Remote)"]
-        AUTH_SVC[Auth Service]
-        FS_SVC[Firestore Service]
-        STG_SVC[Storage Service]
-        CRASH_SVC[Crashlytics Service]
-    end
-
-    FRAGS -->|"observes"| LDATA
-    LDATA -->|"owned by"| VMS
-    FRAGS -->|"populates"| ADAPTS
-    VMS -->|"queries/writes"| REPO
-    REPO <-->|"sync"| CACHE
-    REPO <-->|"HTTPS/TLS"| FS_SVC
-    STG <-->|"HTTPS/TLS"| STG_SVC
-    ACTS <-->|"tokens"| AUTH_SVC
-    UILayer -->|"telemetry"| CRASH_SVC
-```
-
-*Figure 12 — Component diagram illustrating the interactions between UI, ViewModel, Data, and Firebase layers.*
 
 ### 7.4 Navigation Flow
 
-```mermaid
-flowchart TD
-    SPLASH[SplashFragment] --> AUTH{Authenticated?}
-    AUTH -->|No| ONBOARD[FirstScreenFragment]
-    ONBOARD --> SECOND[SecondScreenFragment]
-    SECOND --> LOGIN[LoginFragment]
-    LOGIN --> REGISTER[RegisterFragment]
-    LOGIN --> HOME
-    REGISTER --> HOME
+<div align="center">
 
-    AUTH -->|Yes| HOME[HomeFragment]
+<img src="assets/diagrams/navigation_flow_diagram.png" alt="thing. — Navigation Flow" width="400"/>
 
-    HOME --> CHAIR[ChairFragment]
-    HOME --> CUPBOARD[CupboardFragment]
-    HOME --> TABLE[TableFragment]
-    HOME --> FURNITURE[FurnitureFragment]
-    HOME --> ACCESSORY[AccessoryFragment]
+*Figure 14 — Navigation flow diagram showing all Fragment-to-Fragment transitions managed by the AndroidX Navigation Component.*
+</div>
 
-    CHAIR & CUPBOARD & TABLE & FURNITURE & ACCESSORY --> PREVIEW[ProductPreviewFragment]
-    PREVIEW --> CART[CartFragment]
-    CART --> BILLING[BillingFragment]
-    BILLING --> ADDRESS[AddressFragment]
-    ADDRESS --> COMPLETION[OrderCompletionFragment]
-
-    HOME --> ORDERS[AllOrdersFragment]
-    ORDERS --> DETAIL[OrderDetailsFragment]
-
-    HOME --> PROFILE[ProfileFragment]
-    PROFILE --> EDIT[EditUserInformationFragment]
-    PROFILE --> LANG[LanguageFragment]
-    PROFILE --> HELP[HelpFragment]
-```
-
-*Figure 13 — Navigation flow diagram showing all Fragment-to-Fragment transitions managed by the AndroidX Navigation Component.*
+---
 
 ### 7.5 Key Libraries & Dependencies
 
@@ -622,9 +389,13 @@ flowchart TD
 | **Glide** | Image loading and caching into ImageViews |
 | **Kotlin Coroutines** | Background async operations |
 
-<img src="assets/tech_stack.png" alt="thing. — Technology Stack" width="700"/>
+<div align="center">
+<a href="assets/tech_stack.png" target="_blank">
+  <img src="assets/tech_stack.png" alt="thing. — Technology Stac" width="700"/>
+</a>
 
-*Figure 14 — Technology stack overview showing all key libraries and SDKs used in the thing. application.*
+*Figure 15 — Technology stack overview showing all key libraries and SDKs used in the thing. application.*
+</div>
 
 ### 7.6 Build Configuration
 
@@ -646,38 +417,17 @@ flowchart TD
 The physical view depicts the deployment topology — how software artefacts are distributed across physical or virtual nodes.
 
 ### 8.1 Deployment Diagram
+<div align="center">
+<a href="assets/diagrams/deployment_diagram.png" target="_blank">
+  <img src="assets/diagrams/deployment_diagram.png" alt="thing. — Deployment diagram" width="2000"/>
+</a>
 
-```mermaid
-graph TD
-    subgraph Device["Node: Android Device — API 24+"]
-        APP["artifact: thingapp APK\ncom.example.thingapp"]
-        GPS["component: Google Play Services"]
-        NAVCMP["component: Navigation Component"]
-        VMCMP["component: ViewModel / LiveData"]
-        FSCACHE["component: Firestore Local Cache"]
-        APP --> GPS
-        APP --> NAVCMP
-        APP --> VMCMP
-        APP --> FSCACHE
-    end
+*Click on the image to enlarge.*
 
-    subgraph GCloud["Node: Google Cloud Platform"]
-        subgraph Firebase["Firebase Project"]
-            FS[("database: Firestore\nNoSQL Document Store")]
-            AUTH["service: Firebase Auth\nIdentity Provider"]
-            STG["service: Firebase Storage\nImage and Media Files"]
-            CRASH["service: Crashlytics\nCrash Dashboard"]
-        end
-    end
+*Figure 16 — Deployment diagram showing the Android device node and Google Cloud Platform / Firebase node with all communication channels.*
+</div>
 
-    APP <-->|"HTTPS / TLS\nRead and Write"| FS
-    APP <-->|"HTTPS / TLS\nToken Exchange"| AUTH
-    APP <-->|"HTTPS / TLS\nImage Upload and Download"| STG
-    APP -->|"Crash Telemetry\nAsync Batch via JobScheduler"| CRASH
-    FSCACHE <-->|"Sync on reconnect"| FS
-```
-
-*Figure 15 — Deployment diagram showing the Android device node and Google Cloud Platform / Firebase node with all communication channels.*
+---
 
 ### 8.2 Network & Permissions
 
@@ -696,24 +446,12 @@ The use case view illustrates the architecture through a small set of end-to-end
 
 ### 9.1 Use Case Overview
 
-```mermaid
-graph LR
-    BUYER((Buyer))
-    SYSTEM((System /\nCrashlytics))
+<div align="center">
 
-    BUYER --> UC01[UC01: Register Account]
-    BUYER --> UC02[UC02: Log In]
-    BUYER --> UC03[UC03: Browse Product Catalogue]
-    BUYER --> UC04[UC04: View Product Detail]
-    BUYER --> UC05[UC05: Add to Cart]
-    BUYER --> UC06[UC06: Place Order]
-    BUYER --> UC07[UC07: Track Order Status]
-    BUYER --> UC08[UC08: Edit Profile]
+<img src="assets/diagrams/use_case_overview_diagram.png" alt="thing. — Use case overview diagram" width="400"/>
 
-    SYSTEM --> UC09[UC09: Recover from App Crash]
-```
-
-*Figure 16 — Use case overview diagram showing all supported use cases and their actors.*
+*Figure 17 — Use case overview diagram showing all supported use cases and their actors.*
+</div>
 
 ---
 
@@ -730,24 +468,14 @@ graph LR
 
 **Use Case Diagram:**
 
-```mermaid
-graph LR
-    BUYER((Buyer))
-    FBAUTH((Firebase Auth))
-    FS((Firestore))
+<div align="center">
 
-    BUYER --> UC01["UC01: Register Account"]
-    BUYER --> UC03["UC03: Browse Product Catalogue"]
-    BUYER --> UC04["UC04: View Product Detail"]
-    BUYER --> UC05["UC05: Add to Cart"]
-    BUYER --> UC06["UC06: Place Order"]
+<img src="assets/diagrams/sc01_use_case_diagram.png" alt="thing. — SC01 use case diagram" width="500"/>
 
-    UC01 --> FBAUTH
-    UC03 --> FS
-    UC06 --> FS
-```
+*Figure 18 — SC01 use case diagram: new buyer registration to first purchase.*
+</div>
 
-*Figure 17 — SC01 use case diagram: new buyer registration to first purchase.*
+---
 
 **Use Case Steps:**
 
@@ -766,35 +494,12 @@ graph LR
 
 **Sequence Diagram:**
 
-```mermaid
-sequenceDiagram
-    actor Buyer
-    participant App as thing. App
-    participant FBUI as FirebaseUI Auth
-    participant FS as Firestore
+<div align="center">
 
-    Buyer->>App: Opens app (first time)
-    App->>App: SplashFragment — auth check — unauthenticated
-    App->>Buyer: Onboarding (FirstScreen to SecondScreen)
-    Buyer->>App: Tap Get Started — LoginFragment
-    Buyer->>FBUI: Register via email or Google
-    FBUI->>FS: Create user document
-    FBUI-->>App: Auth token
-    App->>Buyer: HomeFragment
+<img src="assets/diagrams/sc01_sequence_diagram.png" alt="thing. — SC01 sequence diagram" width="2000"/>
 
-    Buyer->>App: Browse catalogue — tap product
-    App->>FS: addSnapshotListener(products)
-    FS-->>App: Product data (real-time)
-    App->>Buyer: ProductPreviewFragment
-
-    Buyer->>App: Select size and colour — Add to Cart
-    Buyer->>App: Checkout — address — billing
-    App->>FS: setDocument(orders/{orderId})
-    FS-->>App: Write acknowledged
-    App->>Buyer: OrderCompletion
-```
-
-*Figure 18 — SC01 sequence diagram: full flow from registration to order confirmation.*
+*Figure 19 — SC01 sequence diagram: full flow from registration to order confirmation.*
+</div>
 
 ---
 
@@ -811,21 +516,14 @@ sequenceDiagram
 
 **Use Case Diagram:**
 
-```mermaid
-graph LR
-    BUYER((Buyer))
-    FS((Firestore))
-    CACHE((Local Cache))
+<div align="center">
 
-    BUYER --> UC07["UC07: Track Order Status"]
-    UC07 --> DETAIL["View Order Details"]
+<img src="assets/diagrams/sc02_use_case_diagram.png" alt="thing. — SC02 use case diagram" width="500"/>
 
-    UC07 --> FS
-    DETAIL --> FS
-    DETAIL --> CACHE
-```
+*Figure 20 — SC02 use case diagram: returning buyer tracking an existing order.*
+</div>
 
-*Figure 19 — SC02 use case diagram: returning buyer tracking an existing order.*
+---
 
 **Use Case Steps:**
 
@@ -839,32 +537,12 @@ graph LR
 
 **Sequence Diagram:**
 
-```mermaid
-sequenceDiagram
-    actor Buyer
-    participant SA as ShoppingActivity
-    participant VM as OrderViewModel
-    participant FS as Firestore
-    participant CACHE as Local Cache
+<div align="center">
 
-    Buyer->>SA: Open Orders tab
-    SA->>VM: loadOrders(userUid)
-    VM->>FS: addSnapshotListener(orders where uid == userUid)
-    FS-->>VM: Order list
-    VM-->>SA: LiveData update
-    SA-->>Buyer: AllOrdersFragment — order list rendered
+<img src="assets/diagrams/sc02_sequence_diagram.png" alt="thing. — SC02 sequence diagram" width="2000"/>
 
-    Buyer->>SA: Tap order row
-    SA-->>Buyer: OrderDetailsFragment — order detail
-
-    Note over SA,CACHE: Network lost
-    FS--xVM: No network
-    VM->>CACHE: Read last cached data
-    CACHE-->>VM: Cached order data
-    VM-->>SA: UI continues serving cached state
-```
-
-*Figure 20 — SC02 sequence diagram: order tracking with offline fallback to Firestore local cache.*
+*Figure 21 — SC02 sequence diagram: order tracking with offline fallback to Firestore local cache.*
+</div>
 
 ---
 
@@ -881,24 +559,14 @@ sequenceDiagram
 
 **Use Case Diagram:**
 
-```mermaid
-graph LR
-    USER((User))
-    DEV((Developer))
-    CRASH((Crashlytics))
+<div align="center">
 
-    USER --> UC09A["Trigger Unhandled Exception"]
-    UC09A --> CAPTURE["Capture Stack Trace and Metadata"]
-    CAPTURE --> QUEUE["Queue Report in DataTransport"]
-    QUEUE --> UPLOAD["Upload via JobScheduler"]
-    UPLOAD --> CRASH
+<img src="assets/diagrams/sc03_use_case_diagram.png" alt="thing. — SC03 use case diagram" width="900"/>
 
-    DEV --> UC09B["Review Crash Report"]
-    UC09B --> CRASH
-    DEV --> UC09C["Deploy Fix"]
-```
+*Figure 22 — SC03 use case diagram: crash capture and recovery flow involving Crashlytics.*
+</div>
 
-*Figure 21 — SC03 use case diagram: crash capture and recovery flow involving Crashlytics.*
+---
 
 **Use Case Steps:**
 
@@ -913,22 +581,13 @@ graph LR
 
 **Activity Diagram:**
 
-```mermaid
-flowchart TD
-    A([User Triggers Exception]) --> B[Crashlytics SDK\nCaptures Stack Trace and Metadata]
-    B --> C[Android Terminates Process]
-    C --> D[App Restarts]
-    D --> E[Crash Report Queued\nin DataTransport Buffer]
-    E --> F{Network Available?}
-    F -->|No| G[Wait — JobScheduler\nMonitors Connectivity]
-    G --> F
-    F -->|Yes| H[Batch Upload via HTTPS/TLS\nto Crashlytics Service]
-    H --> I[Report Visible in Dashboard]
-    I --> J[Developer Triages Issue]
-    J --> K([Fix Deployed])
-```
 
-*Figure 22 — SC03 activity diagram: end-to-end crash capture, upload, and developer triage flow.*
+<div align="center">
+
+<img src="assets/diagrams/sc03_activity_diagram.png" alt="thing. — SC03 activity diagram" width="400"/>
+
+*Figure 23 — SC03 activity diagram: end-to-end crash capture, upload, and developer triage flow.*
+</div>
 
 ---
 
@@ -938,7 +597,7 @@ flowchart TD
 
 | Metric | Value |
 |--------|-------|
-| Raw APK size | ~12.6 MB |
+| Raw APK size | Unknown |
 | Min SDK coverage | API 24+ (~99% of active Android devices) |
 | Permissions required | 2 |
 
@@ -1019,6 +678,10 @@ flowchart TD
 | **Fail-Safe Monitoring** | Crashlytics integrated from the first release, not added retrospectively |
 | **Progressive Disclosure** | Onboarding screens introduce the marketplace before requesting registration |
 | **Layered Architecture** | UI → ViewModel → Data → Firebase; each layer depends only on the layer below it, enabling independent testability and future substitution of Firebase services |
+| **MVVM** | ViewModels hold and transform state; Fragments observe LiveData without directly touching model fields; ensures UI is driven by data, not imperative calls |
+| **Single Responsibility Principle (SRP)** | Each class has one reason to change — Fragments handle rendering, ViewModels handle logic, repositories handle data access |
+| **Don't Repeat Yourself (DRY)** | Shared UI components (e.g. product cards, order rows) are implemented once as reusable RecyclerView adapters and referenced across multiple screens |
+| **Clean Code** | Descriptive naming, small focused functions, and no magic numbers — improves readability and reduces onboarding time for new contributors |
 
 ---
 
