@@ -63,29 +63,29 @@
 
 | No | Figure | Section |
 |----|--------|---------|
-| 1 | 4+1 Architectural View Model Overview | [§3 Software Architecture](#3-software-architecture) — `overview diagram` |
-| 2 | High-Level System Overview | [§3 Software Architecture](#3-software-architecture) — `system diagram` |
-| 3 | Client-Cloud Architectural Style | [§3 Software Architecture](#3-software-architecture) — `architecture diagram` |
-| 4 | Architectural Goals & Constraints Summary | [§4 Architectural Goals & Constraints](#4-architectural-goals--constraints) — `summary diagram` |
-| 5 | Domain Class Diagram | [§5 Logical View](#5-logical-view) — `class diagram` |
-| 6 | Order State Diagram | [§5 Logical View](#5-logical-view) — `state diagram` |
-| 7 | Authentication Sequence Diagram | [§6 Process View](#6-process-view) — `sequence diagram` |
-| 8 | Purchase Flow Sequence Diagram | [§6 Process View](#6-process-view) — `sequence diagram` |
-| 9 | End-to-End Buyer Journey Activity Diagram | [§6 Process View](#6-process-view) — `activity diagram` |
-| 10 | Development View Overview | [§7 Development View](#7-development-view) — `overview diagram` |
-| 11 | Android Layered Architecture | [§7 Development View](#7-development-view) — `layered architecture` |
-| 12 | Package Diagram | [§7 Development View](#7-development-view) — `package diagram` |
-| 13 | Component Diagram | [§7 Development View](#7-development-view) — `component diagram` |
-| 14 | Navigation Flow Diagram | [§7 Development View](#7-development-view) — `navigation flow` |
-| 15 | Technology Stack Overview | [§7 Development View](#7-development-view) — `stack diagram` |
-| 16 | Deployment Diagram | [§8 Physical View](#8-physical-view) — `deployment diagram` |
-| 17 | Use Case Overview Diagram | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `use case diagram` |
-| 18 | SC01 — Use Case Diagram | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `use case diagram` |
-| 19 | SC01 — Sequence Diagram | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `sequence diagram` |
-| 20 | SC02 — Use Case Diagram | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `use case diagram` |
-| 21 | SC02 — Sequence Diagram | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `sequence diagram` |
-| 22 | SC03 — Use Case Diagram | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `use case diagram` |
-| 23 | SC03 — Activity Diagram | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `activity diagram` |
+| 1 | 4+1 Architectural View Model Overview | [3.1 — Overview of 4+1 architectural model](#figure-1) |
+| 2 | High-Level System Overview | [3.1 — System context and overall structure](#figure-2) |
+| 3 | Client-Cloud Architectural Style | [3.2 — Client-server interaction via Firebase](#figure-3) |
+| 4 | Architectural Goals & Constraints Summary | [4.2 — Key goals and system limitations](#figure-4) |
+| 5 | Domain Class Diagram | [5.2 — Core entities and relationships](#figure-5) |
+| 6 | Order State Diagram | [5.3 — Order lifecycle and transitions](#figure-6) |
+| 7 | Authentication Sequence Diagram | [6.2 — User login and registration flow](#figure-7) |
+| 8 | Purchase Flow Sequence Diagram | [6.3 — End-to-end purchase interaction](#figure-8) |
+| 9 | End-to-End Buyer Journey Activity Diagram | [6.4 — Full user journey workflow](#figure-9) |
+| 10 | Development View Overview | [7 — Software structure overview](#figure-10) |
+| 11 | Android Layered Architecture | [7.1 — UI, ViewModel, Data layers](#figure-11) |
+| 12 | Package Diagram | [7.2 — Internal package organization](#figure-12) |
+| 13 | Component Diagram | [7.3 — System component interactions](#figure-13) |
+| 14 | Navigation Flow Diagram | [7.4 — Fragment navigation structure](#figure-14) |
+| 15 | Technology Stack Overview | [7.5 — Libraries and technologies used](#figure-15) |
+| 16 | Deployment Diagram | [8.1 — Physical deployment structure](#figure-16) |
+| 17 | Use Case Overview Diagram | [9.1 — All system use cases and actors](#figure-17) |
+| 18 | SC01 — Use Case Diagram | [9.1 — New buyer registration scenario](#figure-18) |
+| 19 | SC01 — Sequence Diagram | [9.1 — SC01 interaction flow](#figure-19) |
+| 20 | SC02 — Use Case Diagram | [9.1 — Returning buyer tracking scenario](#figure-20) |
+| 21 | SC02 — Sequence Diagram | [9.1 — SC02 runtime flow](#figure-21) |
+| 22 | SC03 — Use Case Diagram | [9.1 — Crash recovery use case](#figure-22) |
+| 23 | SC03 — Activity Diagram | [9.1 — Crash reporting workflow](#figure-23) |
 
 ---
 
