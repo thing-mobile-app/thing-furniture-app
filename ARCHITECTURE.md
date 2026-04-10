@@ -59,6 +59,36 @@
 
 ---
 
+## List of Figures
+
+| No | Figure | Section |
+|----|--------|---------|
+| 1 | [4+1 Architectural View Model Overview](#figure-1) | [§3 Software Architecture](#3-software-architecture) — `overview diagram` |
+| 2 | [High-Level System Overview](#figure-2) | [§3 Software Architecture](#3-software-architecture) — `system diagram` |
+| 3 | [Client-Cloud Architectural Style](#figure-3) | [§3 Software Architecture](#3-software-architecture) — `architecture diagram` |
+| 4 | [Architectural Goals & Constraints Summary](#figure-4) | [§4 Architectural Goals & Constraints](#4-architectural-goals--constraints) — `summary diagram` |
+| 5 | [Domain Class Diagram](#figure-5) | [§5 Logical View](#5-logical-view) — `class diagram` |
+| 6 | [Order State Diagram](#figure-6) | [§5 Logical View](#5-logical-view) — `state diagram` |
+| 7 | [Authentication Sequence Diagram](#figure-7) | [§6 Process View](#6-process-view) — `sequence diagram` |
+| 8 | [Purchase Flow Sequence Diagram](#figure-8) | [§6 Process View](#6-process-view) — `sequence diagram` |
+| 9 | [End-to-End Buyer Journey Activity Diagram](#figure-9) | [§6 Process View](#6-process-view) — `activity diagram` |
+| 10 | [Development View Overview](#figure-10) | [§7 Development View](#7-development-view) — `overview diagram` |
+| 11 | [Android Layered Architecture](#figure-11) | [§7 Development View](#7-development-view) — `layered architecture` |
+| 12 | [Package Diagram](#figure-12) | [§7 Development View](#7-development-view) — `package diagram` |
+| 13 | [Component Diagram](#figure-13) | [§7 Development View](#7-development-view) — `component diagram` |
+| 14 | [Navigation Flow Diagram](#figure-14) | [§7 Development View](#7-development-view) — `navigation flow` |
+| 15 | [Technology Stack Overview](#figure-15) | [§7 Development View](#7-development-view) — `stack diagram` |
+| 16 | [Deployment Diagram](#figure-16) | [§8 Physical View](#8-physical-view) — `deployment diagram` |
+| 17 | [Use Case Overview Diagram](#figure-17) | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `use case diagram` |
+| 18 | [SC01 — Use Case Diagram](#figure-18) | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `use case diagram` |
+| 19 | [SC01 — Sequence Diagram](#figure-19) | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `sequence diagram` |
+| 20 | [SC02 — Use Case Diagram](#figure-20) | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `use case diagram` |
+| 21 | [SC02 — Sequence Diagram](#figure-21) | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `sequence diagram` |
+| 22 | [SC03 — Use Case Diagram](#figure-22) | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `use case diagram` |
+| 23 | [SC03 — Activity Diagram](#figure-23) | [§9 Scenarios (Use Case View)](#9-scenarios-use-case-view) — `activity diagram` |
+
+---
+
 ## 1. Scope
 
 **thing.** is a mobile-first Android application designed to provide a platform for browsing and purchasing high-quality home furniture products such as chairs, cupboards, tables, and accessories.
