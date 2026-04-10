@@ -138,6 +138,7 @@ The system is structured around the **4+1 Architectural View Model** (R11, R12):
 | **Scenarios** | Use cases — end-to-end walkthroughs | All stakeholders |
 
 <div align="center">
+ <a id="figure-1"></a>
 <a href="assets/system_overview.png" target="_blank">
   <img src="assets/system_overview.png" alt="thing. — System Overview" width="700"/>
 </a>
@@ -148,6 +149,7 @@ The system is structured around the **4+1 Architectural View Model** (R11, R12):
 ---
 
 <div align="center">
+ <a id="figure-2"></a>
 <a href="assets/system_.png" target="_blank">
   <img src="assets/architecture.png" alt="thing. — High-Level System Overview" width="700"/>
 </a>
@@ -164,6 +166,7 @@ The system follows a **client-cloud** architecture. The Android client contains 
 Within the Android client, the **AndroidX Navigation Component** manages a single Fragment back stack per Activity host, keeping screen transitions decoupled and the back stack predictable.
 
 <div align="center">
+ <a id="figure-3"></a>
 <a href="assets/arch_style.png" target="_blank">
   <img src="assets/arch_style.png" alt="thing. — Architectural Style" width="700"/>
 </a>
@@ -197,6 +200,7 @@ Within the Android client, the **AndroidX Navigation Component** manages a singl
 | **Academic scope** | Package `com.example.*` marks this as a prototype build, not a production-signed release. |
 
 <div align="center">
+ <a id="figure-4"></a>
 <a href="assets/goals_constraints.png" target="_blank">
   <img src="assets/goals_constraints.png" alt="thing. — Architectural Goals and Constraint" width="700"/>
 </a>
@@ -227,7 +231,7 @@ This model was chosen — rather than an anemic domain model or a flat data-tran
 The class diagram below represents the main domain entities, their attributes, and relationships in the thing. system.
 
 <div align="center">
-
+<a id="figure-5"></a>
 <img src="assets/diagrams/domain_class_diagram.png" alt="thing. — Domain Class Diagram" width="400"/>
 
 *Figure 5 — Domain class diagram showing core entities and their relationships.*
@@ -241,7 +245,7 @@ The class diagram below represents the main domain entities, their attributes, a
 The state diagram captures all valid states of an Order entity and the transitions between them.
 
 <div align="center">
-
+<a id="figure-6"></a>
 <img src="assets/diagrams/order_state_diagram.png" alt="thing. — Order State Diagram" width="400"/>
 
 *Figure 6 — Order state diagram showing valid states and transitions.*
@@ -295,7 +299,7 @@ This separation ensures that a slow network write to Firestore does not freeze t
 ### 6.2 Authentication Sequence Diagram
 
 <div align="center">
-
+<a id="figure-7"></a>
 <img src="assets/diagrams/order_state_diagram.png" alt="thing. — Authentication Sequence Diagram" width="400"/>
 
 *Figure 7 — Authentication sequence diagram showing both new and returning user flows.*
@@ -306,7 +310,7 @@ This separation ensures that a slow network write to Firestore does not freeze t
 ### 6.3 Buyer Purchase Flow Sequence Diagram
 
 <div align="center">
-
+<a id="figure-8"></a>
 <img src="assets/diagrams/buyer_purchase_flow_diagram.png" alt="thing. — Buyer Purchase Flow Sequence Diagram" width="2000"/>
 
 *Figure 8 — Purchase flow sequence diagram from product browsing to order confirmation.*
@@ -317,7 +321,7 @@ This separation ensures that a slow network write to Firestore does not freeze t
 ### 6.4 Activity Diagram — End-to-End Buyer Journey
 
 <div align="center">
-
+<a id="figure-9"></a>
 <img src="assets/diagrams/activity_diagram.png" alt="thing. — Activity Diagram — End-to-End Buyer Journey" width="400"/>
 
 *Figure 9 — End-to-end activity diagram covering the full buyer journey from app launch to order completion.*
@@ -330,6 +334,7 @@ This separation ensures that a slow network write to Firestore does not freeze t
 The development view illustrates the system from a programmer's perspective — how the software is organised into packages and components.
 
 <div align="center">
+<a id="figure-10"></a>
 <a href="assets/dev_view.png" target="_blank">
   <img src="assets/dev_view.png" alt="thing. — Development View Overview" width="700"/>
 </a>
@@ -343,6 +348,7 @@ The development view illustrates the system from a programmer's perspective — 
 The system follows a strict **layered architecture**, where each layer depends only on the layer directly below it and never on layers above. This enforces a clean separation of concerns, makes individual layers independently testable, and allows Firebase to be substituted in future versions without touching the UI or ViewModel layers.
 
 <div align="center">
+<a id="figure-11"></a>
 <a href="assets/android_architecture_layered.png" target="_blank">
   <img src="assets/android_architecture_layered.png" alt="thing. — Android Layered Architecture" width="700"/>
 </a>
@@ -367,6 +373,7 @@ This four-tier layering was chosen over a flat structure because it enforces the
 
 ### 7.2 Package Diagram
 <div align="center">
+<a id="figure-12"></a>
 <a href="assets/diagrams/package_diagram.png" target="_blank">
   <img src="assets/diagrams/package_diagram.png" alt="thing. — Package Diagram" width="3000"/>
 </a>
@@ -380,6 +387,7 @@ This four-tier layering was chosen over a flat structure because it enforces the
 
 ### 7.3 Component Diagram
 <div align="center">
+<a id="figure-13"></a>
 <a href="assets/diagrams/component_diagram.png" target="_blank">
   <img src="assets/diagrams/component_diagram.png" alt="thing. — Component Diagram" width="3000"/>
 </a>
@@ -395,6 +403,7 @@ This four-tier layering was chosen over a flat structure because it enforces the
 ### 7.4 Navigation Flow
 
 <div align="center">
+<a id="figure-14"></a>
 <a href="assets/diagrams/navigation_flow_diagram.png" target="_blank">
   <img src="assets/diagrams/navigation_flow_diagram.png" alt="thing. — Navigation Flow" width="2000"/>
 </a>
@@ -424,6 +433,7 @@ This four-tier layering was chosen over a flat structure because it enforces the
 | **Kotlin Coroutines** | Background async operations |
 
 <div align="center">
+<a id="figure-15"></a>
 <a href="assets/tech_stack.png" target="_blank">
   <img src="assets/tech_stack.png" alt="thing. — Technology Stac" width="700"/>
 </a>
@@ -452,6 +462,7 @@ The physical view depicts the deployment topology — how software artefacts are
 
 ### 8.1 Deployment Diagram
 <div align="center">
+<a id="figure-16"></a>
 <a href="assets/diagrams/deployment_diagram.png" target="_blank">
   <img src="assets/diagrams/deployment_diagram.png" alt="thing. — Deployment diagram" width="2000"/>
 </a>
@@ -481,7 +492,8 @@ The use case view illustrates the architecture through a small set of end-to-end
 ### 9.1 Use Case Overview
 
 <div align="center">
-
+<a id="figure-17"></a>
+ 
 <img src="assets/diagrams/use_case_overview_diagram.png" alt="thing. — Use case overview diagram" width="400"/>
 
 *Figure 17 — Use case overview diagram showing all supported use cases and their actors.*
@@ -503,7 +515,7 @@ The use case view illustrates the architecture through a small set of end-to-end
 **Use Case Diagram:**
 
 <div align="center">
-
+<a id="figure-18"></a>
 <img src="assets/diagrams/sc01_use_case_diagram.png" alt="thing. — SC01 use case diagram" width="500"/>
 
 *Figure 18 — SC01 use case diagram: new buyer registration to first purchase.*
@@ -529,7 +541,7 @@ The use case view illustrates the architecture through a small set of end-to-end
 **Sequence Diagram:**
 
 <div align="center">
-
+<a id="figure-19"></a>
 <img src="assets/diagrams/sc01_sequence_diagram.png" alt="thing. — SC01 sequence diagram" width="2000"/>
 
 *Figure 19 — SC01 sequence diagram: full flow from registration to order confirmation.*
@@ -551,7 +563,7 @@ The use case view illustrates the architecture through a small set of end-to-end
 **Use Case Diagram:**
 
 <div align="center">
-
+<a id="figure-20"></a>
 <img src="assets/diagrams/sc02_use_case_diagram.png" alt="thing. — SC02 use case diagram" width="500"/>
 
 *Figure 20 — SC02 use case diagram: returning buyer tracking an existing order.*
@@ -572,7 +584,7 @@ The use case view illustrates the architecture through a small set of end-to-end
 **Sequence Diagram:**
 
 <div align="center">
-
+<a id="figure-21"></a>
 <img src="assets/diagrams/sc02_sequence_diagram.png" alt="thing. — SC02 sequence diagram" width="2000"/>
 
 *Figure 21 — SC02 sequence diagram: order tracking with offline fallback to Firestore local cache.*
@@ -594,7 +606,7 @@ The use case view illustrates the architecture through a small set of end-to-end
 **Use Case Diagram:**
 
 <div align="center">
-
+<a id="figure-22"></a>
 <img src="assets/diagrams/sc03_use_case_diagram.png" alt="thing. — SC03 use case diagram" width="900"/>
 
 *Figure 22 — SC03 use case diagram: crash capture and recovery flow involving Crashlytics.*
@@ -617,7 +629,7 @@ The use case view illustrates the architecture through a small set of end-to-end
 
 
 <div align="center">
-
+<a id="figure-23"></a>
 <img src="assets/diagrams/sc03_activity_diagram.png" alt="thing. — SC03 activity diagram" width="400"/>
 
 *Figure 23 — SC03 activity diagram: end-to-end crash capture, upload, and developer triage flow.*
