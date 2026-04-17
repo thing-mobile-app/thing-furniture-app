@@ -17,7 +17,8 @@ class FirebaseCommon(
     private val auth: FirebaseAuth
 ) {
 
-    private val cartCollection = firestore.collection("user").document(auth.uid!!).collection("cart")
+    private val cartCollection 
+    get() = firestore.collection("user").document(auth.uid!!).collection("cart")
 
     /**
      * Adds a [CartProduct] to the user's cart collection in Firestore.
