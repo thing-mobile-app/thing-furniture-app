@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.fragment.findNavController
 import com.example.thingapp.R
 import com.example.thingapp.adapters.BestDealsAdapter
 import com.example.thingapp.adapters.BestProductsAdapter
@@ -22,6 +23,7 @@ import com.example.thingapp.viewmodel.MainCategoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.example.thingapp.util.showBottomNavigationView
 
 @AndroidEntryPoint
 class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
@@ -111,6 +113,29 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
                 viewModel.fetchBestProducts()
             }
         })
+
+        // Handle click on special products to navigate to details
+        specialProductsAdapter.onClick = {
+            val bundle = Bundle().apply { putParcelable("product", it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+
+        // Handle click on best deals to navigate to details
+        bestDealsAdapter.onClick = {
+            val bundle = Bundle().apply { putParcelable("product", it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+
+        // Handle click on best products to navigate to details
+        bestProductsAdapter.onClick = {
+            val bundle = Bundle().apply { putParcelable("product", it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showBottomNavigationView()
     }
 
     private fun setupSpecialProductsRv() {
