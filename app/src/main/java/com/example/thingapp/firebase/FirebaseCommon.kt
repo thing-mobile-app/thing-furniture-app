@@ -61,5 +61,45 @@ class FirebaseCommon(
         }
     }
 
+    /**
+     * Decreases the quantity of a specific product in the cart using a Firestore transaction.
+     *
+     * Similar to [increaseQuantity], this method performs an atomic update to ensure
+     * data consistency. It reads the current quantity, decrements it by one, and updates
+     * the document in a single operation.
+     *
+     * @param documentId The unique ID of the document to be updated in the cart collection.
+     * @param onResult A callback function that returns the updated [documentId] on success,
+     * or an [Exception] on failure.
+     */
+    fun decreaseQuantity(documentId: String, onResult: (String?, Exception?) -> Unit){
+        firestore.runTransaction { transaction ->
+            val documentRef = cartCollection.document(documentId)
+            val document = transaction.get(documentRef)
+            val productObject = document.toObject(CartProduct::class.java)
+            productObject?.let { cartProduct ->
+                val newQuantity = cartProduct.quantity - 1
+                val newProductObject = cartProduct.copy(quantity = newQuantity)
+                transaction.set(documentRef,newProductObject)
+            }
+        }.addOnSuccessListener {
+            onResult(documentId,null)
+        }.addOnFailureListener {
+            onResult(null,it)
+        }
+    }
+
+    /**
+     * Represents the type of action to be performed on product quantity.
+     *
+     * Used to distinguish between increasing and decreasing item counts in the UI or database.
+     */
+    enum class QuantityChanging{
+        /** Indicates the quantity should be incremented. */
+        INCREASE,
+        /** Indicates the quantity should be decremented. */
+        DECREASE
+    }
+
 
 }
