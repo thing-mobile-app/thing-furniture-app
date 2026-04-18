@@ -51,8 +51,15 @@ class CartViewModel @Inject constructor(
      * Updates [_cartProducts] and [cartProductDocuments] whenever the remote data changes.
      */
     private fun getCartProducts(){
+        val uid = auth.uid
+        if (uid == null) {
+            viewModelScope.launch { _cartProducts.emit(Resource.Error("User not authenticated")) }
+            return
+        }
+
         viewModelScope.launch { _cartProducts.emit(Resource.Unspecified()) }
-        firestore.collection("user").document(auth.uid!!).collection("cart")
+
+        firestore.collection("user").document(uid).collection("cart")
             .addSnapshotListener { value, error ->
                 if (error != null || value == null){
                     viewModelScope.launch { _cartProducts.emit(Resource.Error(error?.message.toString())) }
@@ -80,10 +87,9 @@ class CartViewModel @Inject constructor(
         val index = cartProducts.value.data?.indexOf(cartProduct)
 
         /**
-         * Index could be equal to -1 if the function [getCartProducts] delays which will also delay the result we except to be inside the [_cartProducts]
-         * and to prevent the app from crashing we make a check.
+         * Check index to prevent IndexOutOfBoundsException if the local list
+         * hasn't synced with the Firestore documents yet.
          */
-
         if (index != null && index != -1) {
             val documentId = cartProductDocuments[index].id
             when(quantityChanging){
@@ -102,8 +108,8 @@ class CartViewModel @Inject constructor(
      * @param documentId The unique ID of the document in Firestore.
      */
     private fun decreaseQuantity(documentId: String) {
-        firebaseCommon.decreaseQuantity(documentId){ result, exception ->
-            if (exception!=null)
+        firebaseCommon.decreaseQuantity(documentId){ _, exception ->
+            if (exception != null)
                 viewModelScope.launch { _cartProducts.emit(Resource.Error(exception.message.toString())) }
         }
     }
@@ -113,10 +119,9 @@ class CartViewModel @Inject constructor(
      * @param documentId The unique ID of the document in Firestore.
      */
     private fun increaseQuantity(documentId: String) {
-        firebaseCommon.increaseQuantity(documentId){ result, exception ->
-            if (exception!=null)
+        firebaseCommon.increaseQuantity(documentId){ _, exception ->
+            if (exception != null)
                 viewModelScope.launch { _cartProducts.emit(Resource.Error(exception.message.toString())) }
         }
     }
-
 }
