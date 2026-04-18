@@ -3,56 +3,78 @@ package com.example.thingapp.adapters
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.thingapp.data.CartProduct
-import com.example.thingapp.data.Product
 import com.example.thingapp.databinding.CartProductItemBinding
 import com.example.thingapp.helper.getProductPrice
 
 /**
- * Adapter for managing and displaying a list of [CartProduct] items in a [RecyclerView].
- *
- * It utilizes [AsyncListDiffer] for efficient list updates and provides multiple
- * click listeners to handle user interactions such as quantity changes and item navigation.
+ * Adapter class for managing and displaying a list of [CartProduct] items in the shopping cart.
+ * * This adapter handles real-time updates via [AsyncListDiffer], item visibility based on
+ * user selections (color/size), and provides callbacks for quantity adjustments and navigation.
  */
 class CartProductAdapter : RecyclerView.Adapter<CartProductAdapter.CartProductsViewHolder>() {
 
     /**
-     * ViewHolder class that binds cart product data to the UI components.
-     *
-     * Handles image loading with Glide, color/size overlays, and price calculations
-     * including discount offers via [getProductPrice].
+     * ViewHolder for cart items.
+     * Responsible for binding product data, calculating discounted prices, and managing attribute visibility.
      */
-    inner class CartProductsViewHolder( val binding: CartProductItemBinding) :
+    inner class CartProductsViewHolder(val binding: CartProductItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         /**
-         * Binds the specific [cartProduct] data to the layout views.
-         *
-         * @param cartProduct The cart item containing product details and user selections.
+         * Binds the [CartProduct] data to the layout views.
+         * * @param cartProduct The data object containing product details, selected attributes, and quantity.
          */
         fun bind(cartProduct: CartProduct) {
             binding.apply {
-                Glide.with(itemView).load(cartProduct.product.images[0]).into(imageCartProduct)
+                // Load product image efficiently using Glide
+                Glide.with(itemView)
+                    .load(cartProduct.product.images.getOrNull(0))
+                    .into(imageCartProduct)
+
+                // Display basic product information
                 tvProductCartName.text = cartProduct.product.name
                 tvCartProductQuantity.text = cartProduct.quantity.toString()
 
+                /**
+                 * Price calculation considering the offer percentage.
+                 * Formula used: $P_{final} = P_{original} \times (1 - offer)$
+                 */
                 val priceAfterPercentage = cartProduct.product.offerPercentage.getProductPrice(cartProduct.product.price)
                 tvProductCartPrice.text = "$ ${String.format("%.2f", priceAfterPercentage)}"
 
-                imageCartProductColor.setImageDrawable(ColorDrawable(cartProduct.selectedColor?: Color.TRANSPARENT))
-                tvCartProductSize.text = cartProduct.selectedsize?: "".also { imageCartProductSize.setImageDrawable(ColorDrawable(Color.TRANSPARENT)) }
+                // Manage Color Indicator visibility
+                if (cartProduct.selectedColor != null) {
+                    imageCartProductColor.visibility = View.VISIBLE
+                    imageCartProductColor.setImageDrawable(ColorDrawable(cartProduct.selectedColor))
+                } else {
+                    imageCartProductColor.visibility = View.GONE
+                }
+
+                /**
+                 * Manage Size Indicator visibility.
+                 * Note: Using 'selectedsize' as defined in the Data Class.
+                 */
+                if (cartProduct.selectedsize != null) {
+                    tvCartProductSize.visibility = View.VISIBLE
+                    imageCartProductSize.visibility = View.VISIBLE
+                    tvCartProductSize.text = cartProduct.selectedsize
+                } else {
+                    tvCartProductSize.visibility = View.GONE
+                    imageCartProductSize.visibility = View.GONE
+                }
             }
         }
     }
 
     /**
-     * Callback for calculating the diff between two non-null items in a list.
-     * Used by [differ] to optimize UI updates.
+     * DiffUtil callback implementation to optimize list updates by identifying changes.
      */
     private val diffCallback = object : DiffUtil.ItemCallback<CartProduct>() {
         override fun areItemsTheSame(oldItem: CartProduct, newItem: CartProduct): Boolean {
@@ -65,7 +87,7 @@ class CartProductAdapter : RecyclerView.Adapter<CartProductAdapter.CartProductsV
     }
 
     /**
-     * Helper to compute the difference between two lists on a background thread.
+     * Public access to the AsyncListDiffer for submitting new lists.
      */
     val differ = AsyncListDiffer(this, diffCallback)
 
@@ -79,32 +101,30 @@ class CartProductAdapter : RecyclerView.Adapter<CartProductAdapter.CartProductsV
         val cartProduct = differ.currentList[position]
         holder.bind(cartProduct)
 
+        // Navigation to product details
         holder.itemView.setOnClickListener {
             onProductClick?.invoke(cartProduct)
         }
+
+        // Increase quantity listener
         holder.binding.imagePlus.setOnClickListener {
             onPlusClick?.invoke(cartProduct)
         }
+
+        // Decrease quantity listener
         holder.binding.imageMinus.setOnClickListener {
             onMinusClick?.invoke(cartProduct)
         }
     }
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
+    override fun getItemCount(): Int = differ.currentList.size
 
-    /**
-     * Called when the user clicks on the entire item view.
-     */
+    /** Callback triggered when the entire product item is clicked. */
     var onProductClick: ((CartProduct) -> Unit)? = null
-    /**
-     * Called when the user clicks the plus (+) button to increase quantity.
-     */
-    var onPlusClick: ((CartProduct) -> Unit)? = null
-    /**
-     * Called when the user clicks the minus (-) button to decrease quantity.
-     */
-    var onMinusClick: ((CartProduct) -> Unit)? = null
 
+    /** Callback triggered when the plus (+) button is clicked. */
+    var onPlusClick: ((CartProduct) -> Unit)? = null
+
+    /** Callback triggered when the minus (-) button is clicked. */
+    var onMinusClick: ((CartProduct) -> Unit)? = null
 }

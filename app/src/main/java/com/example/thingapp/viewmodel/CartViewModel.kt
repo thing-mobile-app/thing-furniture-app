@@ -11,8 +11,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+// BU İMPORTU EKLEMEYİ UNUTMA:
+import com.example.thingapp.helper.getProductPrice
 
 /**
  * ViewModel responsible for managing the user's shopping cart items.
@@ -41,6 +44,16 @@ class CartViewModel @Inject constructor(
      * Local cache of Firestore [DocumentSnapshot]s to map data objects to their respective document IDs.
      */
     private var cartProductDocuments = emptyList<DocumentSnapshot>()
+
+    /**
+     * A StateFlow that transforms the list of cart products into a total price.
+     * It automatically updates whenever the [_cartProducts] content changes.
+     */
+    val totalPrice = _cartProducts.map { resource ->
+        resource.data?.let {
+            calculatePrice(it)
+        }
+    }
 
     init {
         getCartProducts()
@@ -74,9 +87,6 @@ class CartViewModel @Inject constructor(
     /**
      * Orchestrates the quantity change for a specific cart item.
      *
-     * It identifies the document ID using the product's index and triggers the appropriate
-     * update method based on the [quantityChanging] type.
-     *
      * @param cartProduct The product whose quantity is being changed.
      * @param quantityChanging The direction of the change (INCREASE or DECREASE).
      */
@@ -86,27 +96,19 @@ class CartViewModel @Inject constructor(
     ){
         val index = cartProducts.value.data?.indexOf(cartProduct)
 
-        /**
-         * Check index to prevent IndexOutOfBoundsException if the local list
-         * hasn't synced with the Firestore documents yet.
-         */
         if (index != null && index != -1) {
             val documentId = cartProductDocuments[index].id
             when(quantityChanging){
-                FirebaseCommon.QuantityChanging.INCREASE ->{
+                FirebaseCommon.QuantityChanging.INCREASE -> {
                     increaseQuantity(documentId)
                 }
-                FirebaseCommon.QuantityChanging.DECREASE ->{
+                FirebaseCommon.QuantityChanging.DECREASE -> {
                     decreaseQuantity(documentId)
                 }
             }
         }
     }
 
-    /**
-     * Triggers the decrement operation for a specific document via [firebaseCommon].
-     * @param documentId The unique ID of the document in Firestore.
-     */
     private fun decreaseQuantity(documentId: String) {
         firebaseCommon.decreaseQuantity(documentId){ _, exception ->
             if (exception != null)
@@ -114,14 +116,41 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Triggers the increment operation for a specific document via [firebaseCommon].
-     * @param documentId The unique ID of the document in Firestore.
-     */
     private fun increaseQuantity(documentId: String) {
         firebaseCommon.increaseQuantity(documentId){ _, exception ->
             if (exception != null)
                 viewModelScope.launch { _cartProducts.emit(Resource.Error(exception.message.toString())) }
+        }
+    }
+
+    /**
+     * Calculates the total price of all items in the cart, considering discounts.
+     * Formula: $$ P = \sum_{i=1}^{n} (Price_{discounted, i} \times Quantity_i) $$
+     *
+     * @param data The list of products currently in the user's cart.
+     * @return The calculated total price as a Float.
+     */
+    private fun calculatePrice(data: List<CartProduct>): Float {
+        return data.sumOf { cartProduct ->
+            val priceAfterOffer = cartProduct.product.offerPercentage.getProductPrice(cartProduct.product.price)
+            (priceAfterOffer * cartProduct.quantity).toDouble()
+        }.toFloat()
+    }
+
+    /**
+     * Deletes a specific product from the user's cart in Firestore.
+     * Uses a safe UID check to prevent NullPointerException.
+     *
+     * @param cartProduct The product object to be removed.
+     */
+    fun deleteCartProduct(cartProduct: CartProduct) {
+        val uid = auth.uid
+        val index = _cartProducts.value.data?.indexOf(cartProduct)
+
+        if (uid != null && index != null && index != -1) {
+            val documentId = cartProductDocuments[index].id
+            firestore.collection("user").document(uid).collection("cart")
+                .document(documentId).delete()
         }
     }
 }
