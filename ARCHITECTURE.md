@@ -101,9 +101,9 @@ This document follows the 4+1 architectural view model proposed by Philippe Kruc
 
 ---
 
- 
+
 ## 2. References
- 
+
 | ID | Title / Source | Link | Relevance |
 |----|----------------|------|-----------|
 | R1 | Android Developer Documentation — Activity & Fragment Lifecycle | [Android Activity Lifecycle Docs](https://developer.android.com/guide/components/activities/activity-lifecycle) | Navigation & lifecycle architecture |
@@ -137,7 +137,7 @@ The system is structured around the **4+1 Architectural View Model** (R11, R12):
 | **Physical** | Deployment topology — nodes, connectors | System engineers, DevOps |
 | **Scenarios** | Use cases — end-to-end walkthroughs | All stakeholders |
 
- <a id="figure-1"></a>
+<a id="figure-1"></a>
 <div align="center">
 <a href="assets/system_overview.png" target="_blank">
   <img src="assets/system_overview.png" alt="thing. — System Overview" width="700"/>
@@ -340,7 +340,7 @@ The development view illustrates the system from a programmer's perspective — 
 
 <a id="figure-10"></a>
 <div align="center">
- 
+
 <a href="assets/dev_view.png" target="_blank">
   <img src="assets/dev_view.png" alt="thing. — Development View Overview" width="700"/>
 </a>
@@ -355,7 +355,7 @@ The system follows a strict **layered architecture**, where each layer depends o
 
 <a id="figure-11"></a>
 <div align="center">
- 
+
 <a href="assets/android_architecture_layered.png" target="_blank">
   <img src="assets/android_architecture_layered.png" alt="thing. — Android Layered Architecture" width="700"/>
 </a>

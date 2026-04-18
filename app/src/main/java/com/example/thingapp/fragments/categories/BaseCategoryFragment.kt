@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.thingapp.R
 import com.example.thingapp.adapters.BestProductsAdapter
 import com.example.thingapp.databinding.FragmentBaseCategoryBinding
+import androidx.navigation.fragment.findNavController
+import com.example.thingapp.util.showBottomNavigationView
 
 // To extend this class, we have put open keyword (base class)
 
@@ -47,6 +49,21 @@ open class BaseCategoryFragment : Fragment(R.layout.fragment_base_category) {
             }
         })
 
+        bestProductsAdapter.onClick = {
+            val b = Bundle().apply { putParcelable("product", it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, b)
+        }
+
+        offerAdapter.onClick = {
+            val b = Bundle().apply { putParcelable("product", it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, b)
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showBottomNavigationView()
     }
 
     fun showOfferLoading(){
