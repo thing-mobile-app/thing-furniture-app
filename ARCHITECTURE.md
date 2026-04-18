@@ -232,7 +232,7 @@ The class diagram below represents the main domain entities, their attributes, a
 
 <a id="figure-5"></a>
 <div align="center">
-
+ 
 <img src="assets/diagrams/domain_class_diagram.png" alt="thing. — Domain Class Diagram" width="400"/>
 
 *Figure 5 — Domain class diagram showing core entities and their relationships.*
@@ -314,7 +314,7 @@ This separation ensures that a slow network write to Firestore does not freeze t
 
 <a id="figure-8"></a>
 <div align="center">
-
+ 
 <img src="assets/diagrams/buyer_purchase_flow_diagram.png" alt="thing. — Buyer Purchase Flow Sequence Diagram" width="2000"/>
 
 *Figure 8 — Purchase flow sequence diagram from product browsing to order confirmation.*
@@ -326,7 +326,7 @@ This separation ensures that a slow network write to Firestore does not freeze t
 
 <a id="figure-9"></a>
 <div align="center">
-
+ 
 <img src="assets/diagrams/activity_diagram.png" alt="thing. — Activity Diagram — End-to-End Buyer Journey" width="400"/>
 
 *Figure 9 — End-to-end activity diagram covering the full buyer journey from app launch to order completion.*
