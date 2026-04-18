@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.thingapp.adapters.ColorsAdapter
 import com.example.thingapp.adapters.SizesAdapter
@@ -22,6 +25,7 @@ import com.example.thingapp.util.hideBottomNavigationView
 import com.example.thingapp.viewmodel.DetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProductDetailsFragment: Fragment() {
@@ -76,24 +80,31 @@ class ProductDetailsFragment: Fragment() {
             viewModel.addUpdateProductInCart(CartProduct(product,1,selectedColor,selectedSize))
         }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.addToCart.collectLatest {
-                when(it){
-                    is Resource.Loading ->{
-                        binding.buttonAddToCart.startAnimation()
+
+        // Collect flow only when UI is started
+        // Replaced deprecated launchWhenStarted with repeatOnLifecycle
+        viewLifecycleOwner.lifecycleScope.launch{
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.addToCart.collectLatest {
+                    when(it){
+                        is Resource.Loading ->{
+                            binding.buttonAddToCart.startAnimation()
+                        }
+                        is Resource.Success ->{
+                            binding.buttonAddToCart.revertAnimation()
+                            // Replaced deprecated getColor with ContextCompat
+                            binding.buttonAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.black))
+                        }
+                        is Resource.Error ->{
+                            binding.buttonAddToCart.stopAnimation()
+                            Toast.makeText(requireContext(),it.message, Toast.LENGTH_SHORT).show()
+                        }
+                        else -> Unit
                     }
-                    is Resource.Success ->{
-                        binding.buttonAddToCart.revertAnimation()
-                        binding.buttonAddToCart.setBackgroundColor(resources.getColor(R.color.black))
-                    }
-                    is Resource.Error ->{
-                        binding.buttonAddToCart.stopAnimation()
-                        Toast.makeText(requireContext(),it.message, Toast.LENGTH_SHORT).show()
-                    }
-                    else -> Unit
                 }
             }
         }
+
 
         binding.apply {
             tvProductName.text = product.name
