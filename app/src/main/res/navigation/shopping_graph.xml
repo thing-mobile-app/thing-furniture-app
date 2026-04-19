@@ -30,6 +30,9 @@
         android:name="com.example.thingapp.fragments.shopping.CartFragment"
         android:label="CartFragment"
         tools:layout="@layout/fragment_cart"/>
+    <action
+        android:id="@+id/action_cartFragment_to_productDetailsFragment"
+        app:destination="@id/productDetailsFragment" />
 
     <fragment
         android:id="@+id/profileFragment"

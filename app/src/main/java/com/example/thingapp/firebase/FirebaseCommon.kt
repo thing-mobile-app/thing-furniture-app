@@ -6,7 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 /**
  * A utility class providing common Firebase Firestore operations for the application.
- * * This class handles database interactions related to the user's shopping cart,
+ * This class handles database interactions related to the user's shopping cart,
  * including adding new products and managing item quantities.
  *
  * @property firestore The [FirebaseFirestore] instance for database operations.
@@ -17,8 +17,11 @@ class FirebaseCommon(
     private val auth: FirebaseAuth
 ) {
 
-    private val cartCollection 
-    get() = firestore.collection("user").document(auth.uid!!).collection("cart")
+    /**
+     * Safely gets the cart collection reference. Returns null if the user is not authenticated.
+     */
+    private val cartCollection
+        get() = auth.uid?.let { firestore.collection("user").document(it).collection("cart") }
 
     /**
      * Adds a [CartProduct] to the user's cart collection in Firestore.
@@ -28,7 +31,13 @@ class FirebaseCommon(
      * or an [Exception] on failure.
      */
     fun addProductToCart(cartProduct: CartProduct, onResult: (CartProduct?, Exception?) -> Unit ){
-        cartCollection.document().set(cartProduct).addOnSuccessListener {
+        val collection = cartCollection
+        if (collection == null) {
+            onResult(null, Exception("User is not authenticated (auth.uid is null)"))
+            return
+        }
+
+        collection.document().set(cartProduct).addOnSuccessListener {
             onResult(cartProduct,null)
         }.addOnFailureListener {
             onResult(null,it)
@@ -37,16 +46,19 @@ class FirebaseCommon(
 
     /**
      * Increases the quantity of a specific product in the cart using a Firestore transaction.
-     * * This method ensures data atomicity by reading the current quantity and incrementing it
-     * within a single transaction block.
-     *
-     * @param documentId The unique ID of the document in the cart collection.
+     * * @param documentId The unique ID of the document in the cart collection.
      * @param onResult A callback function that returns the [documentId] on success,
      * or an [Exception] on failure.
      */
     fun increaseQuantity(documentId: String, onResult: (String?, Exception?) -> Unit){
+        val collection = cartCollection
+        if (collection == null) {
+            onResult(null, Exception("User is not authenticated (auth.uid is null)"))
+            return
+        }
+
         firestore.runTransaction { transaction ->
-            val documentRef = cartCollection.document(documentId)
+            val documentRef = collection.document(documentId)
             val document = transaction.get(documentRef)
             val productObject = document.toObject(CartProduct::class.java)
             productObject?.let { cartProduct ->
@@ -63,24 +75,30 @@ class FirebaseCommon(
 
     /**
      * Decreases the quantity of a specific product in the cart using a Firestore transaction.
-     *
-     * Similar to [increaseQuantity], this method performs an atomic update to ensure
-     * data consistency. It reads the current quantity, decrements it by one, and updates
-     * the document in a single operation.
-     *
-     * @param documentId The unique ID of the document to be updated in the cart collection.
-     * @param onResult A callback function that returns the updated [documentId] on success,
-     * or an [Exception] on failure.
+     * Prevents negative quantities by deleting the item if the count is 1.
+     * * @param documentId The unique ID of the document to be updated.
+     * @param onResult A callback function that returns the [documentId] on success.
      */
     fun decreaseQuantity(documentId: String, onResult: (String?, Exception?) -> Unit){
+        val collection = cartCollection
+        if (collection == null) {
+            onResult(null, Exception("User is not authenticated (auth.uid is null)"))
+            return
+        }
+
         firestore.runTransaction { transaction ->
-            val documentRef = cartCollection.document(documentId)
+            val documentRef = collection.document(documentId)
             val document = transaction.get(documentRef)
             val productObject = document.toObject(CartProduct::class.java)
             productObject?.let { cartProduct ->
-                val newQuantity = cartProduct.quantity - 1
-                val newProductObject = cartProduct.copy(quantity = newQuantity)
-                transaction.set(documentRef,newProductObject)
+                if (cartProduct.quantity > 1) {
+                    val newQuantity = cartProduct.quantity - 1
+                    val newProductObject = cartProduct.copy(quantity = newQuantity)
+                    transaction.set(documentRef,newProductObject)
+                } else {
+                    // If quantity is 1, delete the item from the cart instead of decreasing to 0
+                    transaction.delete(documentRef)
+                }
             }
         }.addOnSuccessListener {
             onResult(documentId,null)
@@ -91,15 +109,9 @@ class FirebaseCommon(
 
     /**
      * Represents the type of action to be performed on product quantity.
-     *
-     * Used to distinguish between increasing and decreasing item counts in the UI or database.
      */
     enum class QuantityChanging{
-        /** Indicates the quantity should be incremented. */
         INCREASE,
-        /** Indicates the quantity should be decremented. */
         DECREASE
     }
-
-
 }
