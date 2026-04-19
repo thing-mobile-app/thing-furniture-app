@@ -13,53 +13,53 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * ViewModel responsible for handling address operations.
- * It takes the user's input and securely saves it to Firestore under the user's profile.
+ * ViewModel responsible for managing address-related operations.
+ * Handles adding new addresses to Firestore with safety checks.
  */
 @HiltViewModel
 class AddressViewModel @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth
-): ViewModel() {
+) : ViewModel() {
 
     private val _addNewAddress = MutableStateFlow<Resource<Address>>(Resource.Unspecified())
     val addNewAddress = _addNewAddress.asStateFlow()
 
     /**
-     * Saves a new address to the Firestore database.
-     * @param address The [Address] data object containing user inputs.
+     * Adds a new address to the user's sub-collection in Firestore.
+     * @param address The address data to be saved.
      */
     fun addAddress(address: Address) {
-        val validateInputs = validateInputs(address)
-
-        if (validateInputs) {
+        if (validateInputs(address)) {
             viewModelScope.launch { _addNewAddress.emit(Resource.Loading()) }
 
-            // Kullanıcının kendi dokümanının altına "address" koleksiyonu açıp kaydediyoruz
-            firestore.collection("user").document(auth.uid!!).collection("address").document()
+            // Review Fix: Avoid using '!!' by providing a safe fallback or early return
+            val userId = auth.uid ?: run {
+                viewModelScope.launch { _addNewAddress.emit(Resource.Error("Authentication failed")) }
+                return
+            }
+
+            firestore.collection("user").document(userId).collection("address").document()
                 .set(address)
                 .addOnSuccessListener {
                     viewModelScope.launch { _addNewAddress.emit(Resource.Success(address)) }
                 }
-                .addOnFailureListener {
-                    viewModelScope.launch { _addNewAddress.emit(Resource.Error(it.message.toString())) }
+                .addOnFailureListener { e ->
+                    viewModelScope.launch { _addNewAddress.emit(Resource.Error(e.message.toString())) }
                 }
         } else {
             viewModelScope.launch {
-                _addNewAddress.emit(Resource.Error("All fields are required"))
+                _addNewAddress.emit(Resource.Error("Please fill all fields correctly"))
             }
         }
     }
 
-    /**
-     * Validates if all the required address fields are filled.
-     */
     private fun validateInputs(address: Address): Boolean {
         return address.addressTitle.trim().isNotEmpty() &&
-                address.city.trim().isNotEmpty() &&
-                address.phone.trim().isNotEmpty() &&
-                address.state.trim().isNotEmpty() &&
                 address.fullName.trim().isNotEmpty() &&
-                address.street.trim().isNotEmpty()
+                address.street.trim().isNotEmpty() &&
+                address.phone.trim().isNotEmpty() &&
+                address.city.trim().isNotEmpty() &&
+                address.state.trim().isNotEmpty()
     }
 }
