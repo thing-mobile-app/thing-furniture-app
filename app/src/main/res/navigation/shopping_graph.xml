@@ -29,10 +29,14 @@
         android:id="@+id/cartFragment"
         android:name="com.example.thingapp.fragments.shopping.CartFragment"
         android:label="CartFragment"
-        tools:layout="@layout/fragment_cart"/>
-    <action
-        android:id="@+id/action_cartFragment_to_productDetailsFragment"
-        app:destination="@id/productDetailsFragment" />
+        tools:layout="@layout/fragment_cart">
+        <action
+            android:id="@+id/action_cartFragment_to_billingFragment"
+            app:destination="@id/billingFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileFragment"
@@ -53,9 +57,29 @@
             android:name="product"
             app:argType="com.example.thingapp.data.Product" />
     </fragment>
+
     <fragment
         android:id="@+id/addressFragment"
         android:name="com.example.thingapp.fragments.shopping.AddressFragment"
         android:label="AddressFragment"
         tools:layout="@layout/fragment_address"/>
+
+    <fragment
+        android:id="@+id/billingFragment"
+        android:name="com.example.thingapp.fragments.shopping.BillingFragment"
+        android:label="BillingFragment"
+        tools:layout="@layout/fragment_billing">
+
+        <argument
+            android:name="products"
+            app:argType="com.example.thingapp.data.CartProduct[]" />
+
+        <argument
+            android:name="totalPrice"
+            app:argType="float" />
+
+        <action
+            android:id="@+id/action_billingFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
 </navigation>

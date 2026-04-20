@@ -1,5 +1,8 @@
 package com.example.thingapp.data
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * Represents a product added to the shopping cart.
  *
@@ -11,15 +14,16 @@ package com.example.thingapp.data
  * @property selectedColor The ARGB color code selected by the user, if applicable.
  * @property selectedsize The size (e.g., "M", "L", "XL") selected by the user, if applicable.
  */
+@Parcelize
 data class CartProduct(
     val product: Product,
     val quantity: Int,
-    val selectedColor:Int? = null,
+    val selectedColor: Int? = null,
     val selectedsize: String? = null
-){
+) : Parcelable {
     /**
      * No-argument constructor required for Firebase Firestore serialization.
      * Initializes the object with default values.
      */
-    constructor(): this(Product(),1,null,null)
+    constructor(): this(Product(), 1, null, null)
 }
