@@ -121,7 +121,7 @@ class BillingFragment : Fragment() {
             .setTitle("Order items")
             .setMessage("Do you want to order your cart items?")
             .setPositiveButton("Confirm") { dialog, _ ->
-                orderViewModel.placeHolder(order)
+                orderViewModel.placeOrder(order)
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
