@@ -1,5 +1,6 @@
 package com.example.thingapp.fragments.shopping
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +17,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.thingapp.R
 import com.example.thingapp.adapters.AddressAdapter
 import com.example.thingapp.adapters.BillingProductsAdapter
+import com.example.thingapp.data.Address
+import com.example.thingapp.data.order.Order
+import com.example.thingapp.data.order.OrderStatus
 import com.example.thingapp.databinding.FragmentBillingBinding
 import com.example.thingapp.util.Resource
 import com.example.thingapp.viewmodel.BillingViewModel
+import com.example.thingapp.viewmodel.OrderViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,7 +45,9 @@ class BillingFragment : Fragment() {
     private val billingProductsAdapter by lazy { BillingProductsAdapter() }
     private val addressAdapter by lazy { AddressAdapter() }
 
-    private val viewModel by viewModels<BillingViewModel>()
+    private val billingViewModel by viewModels<BillingViewModel>()
+    private var selectedAddress: Address?=null
+    private val orderViewModel by viewModels<OrderViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,6 +64,7 @@ class BillingFragment : Fragment() {
         setupAddressRecyclerView()
         setupBillingProductsRecyclerView()
         observeAddressState()
+        observeOrderState()
 
         // Bind the data received from CartFragment to the UI
         binding.tvTotalPrice.text = "$ ${String.format("%.2f", args.totalPrice)}"
@@ -71,11 +80,54 @@ class BillingFragment : Fragment() {
             findNavController().navigate(R.id.action_billingFragment_to_addressFragment)
         }
 
-        // Capture the selected address for final order placement
-        addressAdapter.onClick = { selectedAddress ->
-            // Todo: Store this address in a variable to use when "Place Order" is clicked
-            Toast.makeText(requireContext(), "Selected: ${selectedAddress.addressTitle}", Toast.LENGTH_SHORT).show()
+        binding.buttonPlaceOrder.setOnClickListener {
+            if(selectedAddress == null){
+                Toast.makeText(requireContext(),"Please select an address", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
+            showOrderConfirmationDialog()
         }
+
+        // Capture the selected address for final order placement
+        addressAdapter.onClick = { address ->
+            selectedAddress = address
+            Toast.makeText(
+                requireContext(),
+                "Selected: ${address.addressTitle}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+    }
+
+    /**
+     * Displays an [AlertDialog] to confirm the purchase.
+     *
+     * If confirmed, it creates an [Order] object with the selected address
+     * and triggers [orderViewModel.placeHolder].
+     */
+    private fun showOrderConfirmationDialog() {
+        val address = selectedAddress ?: return
+
+        val order = Order(
+            orderStatus = OrderStatus.Ordered.status,
+            totalPrice = args.totalPrice,
+            products = args.products.toList(),
+            address = address
+        )
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Order items")
+            .setMessage("Do you want to order your cart items?")
+            .setPositiveButton("Confirm") { dialog, _ ->
+                orderViewModel.placeOrder(order)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     /**
@@ -104,7 +156,7 @@ class BillingFragment : Fragment() {
     private fun observeAddressState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.address.collectLatest { resource ->
+                billingViewModel.address.collectLatest { resource ->
                     when (resource) {
                         is Resource.Loading -> {
                             // Optionally handle loading state (e.g., show a progress bar)
@@ -121,4 +173,48 @@ class BillingFragment : Fragment() {
             }
         }
     }
+
+    /**
+     * Observes order placement status and updates button state and navigation.
+     *
+     * - **Loading:** Disables button and shows progress text.
+     * - **Success:** Resets button, shows [Snackbar], and navigates back.
+     * - **Error:** Resets button and shows [Toast] with the error.
+     */
+    private fun observeOrderState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                orderViewModel.order.collectLatest { resource ->
+                    when (resource) {
+                        is Resource.Loading -> {
+                            binding.buttonPlaceOrder.isEnabled = false
+                            binding.buttonPlaceOrder.text = "Placing..."
+                        }
+                        is Resource.Success -> {
+                            binding.buttonPlaceOrder.isEnabled = true
+                            binding.buttonPlaceOrder.text = "Place Order"
+                            Snackbar.make(
+                                requireView(),
+                                "Your order was placed",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            findNavController().navigateUp()
+                        }
+                        is Resource.Error -> {
+                            binding.buttonPlaceOrder.isEnabled = true
+                            binding.buttonPlaceOrder.text = "Place Order"
+                            Toast.makeText(
+                                requireContext(),
+                                "Error ${resource.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        else -> Unit
+                    }
+                }
+            }
+        }
+    }
+
+
 }
