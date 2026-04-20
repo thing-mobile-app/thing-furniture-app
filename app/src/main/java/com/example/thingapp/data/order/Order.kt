@@ -10,8 +10,8 @@ import com.example.thingapp.data.CartProduct
  * and the designated shipping address.
  */
 data class Order(
-    val orderStatus: String,
-    val totalPrice: Float,
-    val products: List<CartProduct>,
-    val address: Address
+    val orderStatus: String = "",
+    val totalPrice: Float = 0f,
+    val products: List<CartProduct> = emptyList(),
+    val address: Address = Address()
 )

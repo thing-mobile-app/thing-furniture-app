@@ -27,50 +27,66 @@ class OrderViewModel @Inject constructor(
     private val auth: FirebaseAuth
 ): ViewModel() {
     private val _order = MutableStateFlow<Resource<Order>>(Resource.Unspecified())
+
     /** StateFlow providing updates on the order placement status (Loading, Success, or Error). */
     val order = _order.asStateFlow()
 
     /**
-     * Executes the order placement process.
+     * Processes a purchase using a Firestore batch to ensure data consistency.
      *
-     * Saves the [order] to user-specific and global order collections, and clears
-     * the user's shopping cart. Emits [Resource.Success] upon completion of all tasks.
+     * Atomically performs three actions:
+     * 1. Saves the order to the user's private orders.
+     * 2. Saves the order to the global order collection.
+     * 3. Clears the user's shopping cart.
      *
-     * @param order The [Order] object containing product and shipping details.
+     * @param order The [Order] object containing purchase details.
      */
-    fun placeHolder(order: Order) {
+    fun placeOrder(order: Order) {
+        val uid = auth.uid
+        if (uid == null) {
+            viewModelScope.launch {
+                _order.emit(Resource.Error("User session expired."))
+            }
+            return
+        }
+
         viewModelScope.launch {
             _order.emit(Resource.Loading())
-        }
-        firestore.runBatch { batch ->
-            // TODO: Add the order into user-orders collection
-            // TODO: Add the order into orders collection
-            // TODO: Delete the products from user-cart collection
 
-            firestore.collection("user")
-                .document(auth.uid!!)
-                .collection("orders")
-                .document()
-                .set(order)
+            val userCartRef = firestore.collection("user").document(uid).collection("cart")
+            val userOrdersRef = firestore.collection("user").document(uid).collection("orders").document()
+            val globalOrdersRef = firestore.collection("orders").document()
 
-            firestore.collection("orders").document().set(order)
+            // Fetching the cart before starting the batch to avoid race conditions
+            userCartRef.get().addOnSuccessListener { cartSnapshot ->
 
-            firestore.collection("user").document(auth.uid!!).collection("cart").get()
-                .addOnSuccessListener {
-                    it.documents.forEach {
-                        it.reference.delete()
+                firestore.runBatch { batch ->
+                    // 1. Add order to user-specific collection
+                    batch.set(userOrdersRef, order)
+
+                    // 2. Add order to general orders collection
+                    batch.set(globalOrdersRef, order)
+
+                    // 3. Delete products from cart atomically
+                    for (document in cartSnapshot.documents) {
+                        batch.delete(document.reference)
+                    }
+
+                }.addOnSuccessListener {
+                    viewModelScope.launch {
+                        _order.emit(Resource.Success(order))
+                    }
+                }.addOnFailureListener { exception ->
+                    viewModelScope.launch {
+                        _order.emit(Resource.Error(exception.message.toString()))
                     }
                 }
 
-        }.addOnSuccessListener {
-            viewModelScope.launch {
-                _order.emit(Resource.Success(order))
-            }
-        }.addOnFailureListener {
-            viewModelScope.launch {
-                _order.emit(Resource.Error(it.message.toString()))
+            }.addOnFailureListener { exception ->
+                viewModelScope.launch {
+                    _order.emit(Resource.Error("Failed to fetch cart: ${exception.message}"))
+                }
             }
         }
-
     }
 }

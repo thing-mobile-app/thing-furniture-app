@@ -14,4 +14,18 @@ sealed class OrderStatus(val status: String) {
     object Delivered: OrderStatus("Delivered")
     object Returned: OrderStatus("Returned")
 
+    companion object {
+        fun fromString(status: String): OrderStatus {
+            return when (status) {
+                "Ordered" -> Ordered
+                "Canceled" -> Canceled
+                "Confirmed" -> Confirmed
+                "Shipped" -> Shipped
+                "Delivered" -> Delivered
+                "Returned" -> Returned
+                else -> Ordered
+            }
+        }
+    }
+
 }
