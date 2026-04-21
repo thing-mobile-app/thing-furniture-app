@@ -64,7 +64,13 @@
         <item name="fontFamily">@font/inter_18pt_bold</item>
         <item name="textAllCaps">false</item>
         <item name="android:textStyle">bold</item>
+    </style>
 
+    <style name="MediumTextViewThin">
+        <item name="android:textColor">#4b4f60</item>
+        <item name="android:textSize">15sp</item>
+        <item name="fontFamily">@font/inter_18pt_regular</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

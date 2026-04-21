@@ -1,31 +1,38 @@
 package com.example.thingapp.data.order
 
 /**
- * Represents the various lifecycle stages of a product order.
- *
- * Each state is associated with a string value for Firestore storage and UI display.
+ * Sealed class representing the possible statuses of an order.
  */
 sealed class OrderStatus(val status: String) {
-
     object Ordered: OrderStatus("Ordered")
     object Canceled: OrderStatus("Canceled")
     object Confirmed: OrderStatus("Confirmed")
     object Shipped: OrderStatus("Shipped")
     object Delivered: OrderStatus("Delivered")
     object Returned: OrderStatus("Returned")
+}
 
-    companion object {
-        fun fromString(status: String): OrderStatus {
-            return when (status) {
-                "Ordered" -> Ordered
-                "Canceled" -> Canceled
-                "Confirmed" -> Confirmed
-                "Shipped" -> Shipped
-                "Delivered" -> Delivered
-                "Returned" -> Returned
-                else -> Ordered
-            }
+/**
+ * Converts a status string to its corresponding [OrderStatus] object.
+ * Defaults to [OrderStatus.Returned] if the string doesn't match any known status.
+ */
+fun getOrderStatus(status: String): OrderStatus {
+    return when (status) {
+        "Ordered" -> {
+            OrderStatus.Ordered
         }
+        "Canceled" -> {
+            OrderStatus.Canceled
+        }
+        "Confirmed" -> {
+            OrderStatus.Confirmed
+        }
+        "Shipped" -> {
+            OrderStatus.Shipped
+        }
+        "Delivered" -> {
+            OrderStatus.Delivered
+        }
+        else -> OrderStatus.Returned
     }
-
 }

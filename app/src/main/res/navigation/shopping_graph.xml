@@ -52,6 +52,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/allOrdersFragment"
+        android:name="com.example.thingapp.fragments.settings.AllOrdersFragment"
+        android:label="AllOrdersFragment"
+        tools:layout="@layout/fragment_orders" />
+
+    <fragment
         android:id="@+id/userAccountFragment"
         android:name="com.example.thingapp.fragments.settings.UserAccountFragment"
         android:label="UserAccountFragment"
