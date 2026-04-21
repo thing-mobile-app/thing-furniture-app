@@ -10,6 +10,7 @@ import com.example.thingapp.data.order.OrderStatus
 import com.example.thingapp.data.order.getOrderStatus
 import com.example.thingapp.databinding.OrderItemBinding
 import android.graphics.drawable.ColorDrawable
+import androidx.core.content.ContextCompat
 import com.example.thingapp.R
 
 /**
@@ -31,26 +32,26 @@ class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.OrdersViewHolder>() {
             binding.apply {
                 tvOrderId.text = order.orderId.toString()
                 tvOrderDate.text = order.date
-                val resources = itemView.resources
+                val context = itemView.context
 
                 val colorDrawable = when (getOrderStatus(order.orderStatus)) {
                     is OrderStatus.Ordered -> {
-                        ColorDrawable(resources.getColor(R.color.g_orange_yellow))
+                        ColorDrawable(ContextCompat.getColor(context, R.color.g_orange_yellow))
                     }
                     is OrderStatus.Confirmed -> {
-                        ColorDrawable(resources.getColor(R.color.g_green))
+                        ColorDrawable(ContextCompat.getColor(context, R.color.g_green))
                     }
                     is OrderStatus.Delivered -> {
-                        ColorDrawable(resources.getColor(R.color.g_green))
+                        ColorDrawable(ContextCompat.getColor(context, R.color.g_green))
                     }
                     is OrderStatus.Shipped -> {
-                        ColorDrawable(resources.getColor(R.color.g_green))
+                        ColorDrawable(ContextCompat.getColor(context, R.color.g_green))
                     }
                     is OrderStatus.Canceled -> {
-                        ColorDrawable(resources.getColor(R.color.g_red))
+                        ColorDrawable(ContextCompat.getColor(context, R.color.g_red))
                     }
                     is OrderStatus.Returned -> {
-                        ColorDrawable(resources.getColor(R.color.g_red))
+                        ColorDrawable(ContextCompat.getColor(context, R.color.g_red))
                     }
                 }
 
@@ -61,7 +62,7 @@ class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.OrdersViewHolder>() {
 
     private val diffUtil = object : DiffUtil.ItemCallback<Order>() {
         override fun areItemsTheSame(oldItem: Order, newItem: Order): Boolean {
-            return oldItem.products == newItem.products
+            return oldItem.orderId == newItem.orderId
         }
 
         override fun areContentsTheSame(oldItem: Order, newItem: Order): Boolean {

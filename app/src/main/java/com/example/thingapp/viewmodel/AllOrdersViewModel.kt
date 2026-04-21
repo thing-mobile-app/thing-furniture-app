@@ -51,6 +51,8 @@ class AllOrdersViewModel @Inject constructor(
                         _allOrders.emit(Resource.Error(it.message.toString()))
                     }
                 }
+        } ?: viewModelScope.launch {
+            _allOrders.emit(Resource.Error("User not authenticated"))
         }
     }
 }
