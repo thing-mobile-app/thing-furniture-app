@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import android.net.Uri
 import android.provider.MediaStore
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
 import java.io.ByteArrayOutputStream
 import java.util.UUID
 import kotlinx.coroutines.tasks.await
@@ -50,20 +52,22 @@ class UserAccountViewModel @Inject constructor(
      * Emits [Resource.Loading], then either [Resource.Success] or [Resource.Error].
      */
     fun getUser() {
-        viewModelScope.launch {
-            _user.emit(Resource.Loading())
-            firestore.collection(com.example.thingapp.util.Constants.USER_COLLECTION)
-                .document(auth.uid!!)
-                .get()
-                .addOnSuccessListener { 
-                    val user = it.toObject(User::class.java)
-                    user?.let {
-                        viewModelScope.launch { _user.emit(Resource.Success(it)) }
-                    } ?: viewModelScope.launch { _user.emit(Resource.Error("User information not found")) }
-                }
-                .addOnFailureListener {
-                    viewModelScope.launch { _user.emit(Resource.Error(it.message.toString())) }
-                }
+        auth.uid?.let { uid ->
+            viewModelScope.launch {
+                _user.emit(Resource.Loading())
+                firestore.collection(com.example.thingapp.util.Constants.USER_COLLECTION)
+                    .document(uid)
+                    .get()
+                    .addOnSuccessListener {
+                        val user = it.toObject(User::class.java)
+                        user?.let {
+                            viewModelScope.launch { _user.emit(Resource.Success(it)) }
+                        } ?: viewModelScope.launch { _user.emit(Resource.Error("User information not found")) }
+                    }
+                    .addOnFailureListener {
+                        viewModelScope.launch { _user.emit(Resource.Error(it.message.toString())) }
+                    }
+            }
         }
     }
 
@@ -79,7 +83,7 @@ class UserAccountViewModel @Inject constructor(
 
         if (!areInputsValid) {
             viewModelScope.launch {
-                _user.emit(Resource.Error("Check your inputs"))
+                _updateInfo.emit(Resource.Error("Check your inputs"))
             }
             return
         }
@@ -101,23 +105,33 @@ class UserAccountViewModel @Inject constructor(
      * @param imageUri The new image [Uri].
      */
     private fun saveUserInformationWithNewImage(user: User, imageUri: Uri) {
-        viewModelScope.launch {
-            try {
-                val imageBitmap = MediaStore.Images.Media.getBitmap(
-                    getApplication<ThingApplication>().contentResolver,
-                    imageUri
-                )
-                val byteArrayOutputStream = ByteArrayOutputStream()
-                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 96, byteArrayOutputStream)
-                val imageByteArray = byteArrayOutputStream.toByteArray()
-                val imageDirectory =
-                    storage.child("profileImages/${auth.uid}/${UUID.randomUUID()}")
-                val result = imageDirectory.putBytes(imageByteArray).await()
-                val imageUrl = result.storage.downloadUrl.await().toString()
-                saveUserInformation(user.copy(imagePath = imageUrl), false)
-            } catch (e: Exception) {
-                viewModelScope.launch {
-                    _updateInfo.emit(Resource.Error(e.message.toString()))
+        auth.uid?.let { uid ->
+            viewModelScope.launch {
+                try {
+                    val imageBitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        val source = ImageDecoder.createSource(
+                            getApplication<ThingApplication>().contentResolver,
+                            imageUri
+                        )
+                        ImageDecoder.decodeBitmap(source)
+                    } else {
+                        MediaStore.Images.Media.getBitmap(
+                            getApplication<ThingApplication>().contentResolver,
+                            imageUri
+                        )
+                    }
+                    val byteArrayOutputStream = ByteArrayOutputStream()
+                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 96, byteArrayOutputStream)
+                    val imageByteArray = byteArrayOutputStream.toByteArray()
+                    val imageDirectory =
+                        storage.child("profileImages/$uid/${UUID.randomUUID()}")
+                    val result = imageDirectory.putBytes(imageByteArray).await()
+                    val imageUrl = result.storage.downloadUrl.await().toString()
+                    saveUserInformation(user.copy(imagePath = imageUrl), false)
+                } catch (e: Exception) {
+                    viewModelScope.launch {
+                        _updateInfo.emit(Resource.Error(e.message.toString()))
+                    }
                 }
             }
         }
@@ -129,22 +143,24 @@ class UserAccountViewModel @Inject constructor(
      * @param shouldRetrievedOldImage Whether to preserve the current image path if a new one isn't provided.
      */
     private fun saveUserInformation(user: User, shouldRetrievedOldImage: Boolean) {
-        firestore.runTransaction { transaction ->
-            val documentRef = firestore.collection("user").document(auth.uid!!)
-            if (shouldRetrievedOldImage) {
-                val currentUser = transaction.get(documentRef).toObject(User::class.java)
-                val newUser = user.copy(imagePath = currentUser?.imagePath ?: "")
-                transaction.set(documentRef, newUser)
-            } else {
-                transaction.set(documentRef, user)
-            }
-        }.addOnSuccessListener {
-            viewModelScope.launch {
-                _updateInfo.emit(Resource.Success(user))
-            }
-        }.addOnFailureListener {
-            viewModelScope.launch {
-                _updateInfo.emit(Resource.Error(it.message.toString()))
+        auth.uid?.let { uid ->
+            firestore.runTransaction { transaction ->
+                val documentRef = firestore.collection("user").document(uid)
+                if (shouldRetrievedOldImage) {
+                    val currentUser = transaction.get(documentRef).toObject(User::class.java)
+                    val newUser = user.copy(imagePath = currentUser?.imagePath ?: "")
+                    transaction.set(documentRef, newUser)
+                } else {
+                    transaction.set(documentRef, user)
+                }
+            }.addOnSuccessListener {
+                viewModelScope.launch {
+                    _updateInfo.emit(Resource.Success(user))
+                }
+            }.addOnFailureListener {
+                viewModelScope.launch {
+                    _updateInfo.emit(Resource.Error(it.message.toString()))
+                }
             }
         }
     }
