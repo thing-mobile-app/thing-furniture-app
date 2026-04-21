@@ -13,21 +13,31 @@ import androidx.lifecycle.lifecycleScope
 import com.example.thingapp.viewmodel.IntroductionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import android.content.Intent
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.thingapp.activities.ShoppingActivity
 import com.example.thingapp.viewmodel.IntroductionViewModel.Companion.ACCOUNT_OPTIONS_FRAGMENT
 import com.example.thingapp.viewmodel.IntroductionViewModel.Companion.SHOPPING_ACTIVITY
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
+/**
+ * Introduction screen fragment.
+ *
+ * Observes navigation events from the ViewModel, navigates to the
+ * shopping activity or account options screen, and handles start button actions.
+ */
 class IntroductionFragment : Fragment(R.layout.fragment_introduction) {
-    private  lateinit var binding : FragmentIntroductionBinding
+    private lateinit var binding: FragmentIntroductionBinding
+
     // Delegate for lazy initialization of IntroductionViewModel
     private val viewModel by viewModels<IntroductionViewModel>()
 
     override fun onCreateView(
-        inflater : LayoutInflater,
-        container : ViewGroup?,
-        saveInstanceState : Bundle?
-    ) : View{
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        saveInstanceState: Bundle?
+    ): View {
         binding = FragmentIntroductionBinding.inflate(inflater)
         return binding.root
     }
@@ -36,32 +46,34 @@ class IntroductionFragment : Fragment(R.layout.fragment_introduction) {
         super.onViewCreated(view, savedInstanceState)
 
         // Observe navigation flow from the ViewModel and react on changes
-        lifecycleScope.launchWhenStarted {
-            viewModel.navigate.collect {
-                when(it){
-                    SHOPPING_ACTIVITY -> {
-                         // Go to Shopping Activity
-                         Intent(requireActivity(), ShoppingActivity::class.java).also{ intent ->
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.navigate.collect {
+                    when (it) {
+                        SHOPPING_ACTIVITY -> {
+                            // Go to Shopping Activity
+                            Intent(requireActivity(), ShoppingActivity::class.java).also { intent ->
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
 
+                            }
                         }
-                    }
 
-                    ACCOUNT_OPTIONS_FRAGMENT -> {
+                        ACCOUNT_OPTIONS_FRAGMENT -> {
                             // Go to Account Options Screen
-                            findNavController().navigate(it) 
-                    }
+                            findNavController().navigate(it)
+                        }
 
-                    else -> Unit
+                        else -> Unit
+                    }
                 }
             }
         }
 
-        binding.buttonStart.setOnClickListener{
-            // Update status and navigate
-            viewModel.startButtonClick()
-            findNavController().navigate(R.id.action_introductionFragment_to_accountOptionsFragment)
+            binding.buttonStart.setOnClickListener {
+                // Update status and navigate
+                viewModel.startButtonClick()
+                findNavController().navigate(R.id.action_introductionFragment_to_accountOptionsFragment)
+            }
         }
     }
-}

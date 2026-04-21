@@ -21,6 +21,7 @@ import android.app.Activity
 import android.widget.Toast
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
+import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.WindowCompat
 import com.google.firebase.firestore.ktx.firestore
@@ -177,8 +178,19 @@ class MainActivity : AppCompatActivity() {
         val imagesByteArray = mutableListOf<ByteArray>()
         selectedImages.forEach {
             val stream = java.io.ByteArrayOutputStream()
-            val imageBmp = android.provider.MediaStore.Images.Media.getBitmap(contentResolver, it)
-            if (imageBmp.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, stream)) {
+
+            // Use ImageDecoder instead of deprecated getBitmap() then convert selected image URIs to ByteArrays for Firebase upload
+            val imageBmp = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                android.graphics.ImageDecoder.decodeBitmap(
+                    android.graphics.ImageDecoder.createSource(contentResolver, it)
+                )
+            } else {
+                contentResolver.openInputStream(it)?.use { input ->
+                    android.graphics.BitmapFactory.decodeStream(input)
+                }
+            }
+
+            if (imageBmp?.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, stream) ?: false) {
                 imagesByteArray.add(stream.toByteArray())
             }
         }
