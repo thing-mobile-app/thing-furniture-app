@@ -16,7 +16,7 @@ import com.example.thingapp.R
 /**
  * RecyclerView adapter for displaying a list of user orders.
  */
-class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.OrdersViewHolder>() {
+class AllOrdersAdapter : RecyclerView.Adapter<AllOrdersAdapter.OrdersViewHolder>() {
 
     /**
      * ViewHolder that binds [Order] data to the order item layout.
@@ -86,6 +86,12 @@ class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.OrdersViewHolder>() {
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
         val order = differ.currentList[position]
         holder.bind(order)
+
+        /**
+         * Triggers item click callback when the user taps the order item.
+         * Passes the selected order object to the listener.
+         */
+        holder.itemView.setOnClickListener { onClick?.invoke(order) }
     }
 
     override fun getItemCount(): Int {
