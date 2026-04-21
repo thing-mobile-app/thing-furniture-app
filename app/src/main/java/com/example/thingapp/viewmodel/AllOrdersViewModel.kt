@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel that fetches and exposes all orders for the current user from Firestore.
+ */
 @HiltViewModel
 class AllOrdersViewModel @Inject constructor(
     private val firestore: FirebaseFirestore,
@@ -19,12 +22,18 @@ class AllOrdersViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _allOrders = MutableStateFlow<Resource<List<Order>>>(Resource.Unspecified())
+
+    /** StateFlow emitting the current state of the orders list. */
     val allOrders = _allOrders.asStateFlow()
 
     init {
         getAllOrders()
     }
 
+    /**
+     * Fetches all orders from the current user's Firestore "orders" sub-collection.
+     * Emits [Resource.Loading], then [Resource.Success] or [Resource.Error].
+     */
     fun getAllOrders() {
         viewModelScope.launch {
             _allOrders.emit(Resource.Loading())

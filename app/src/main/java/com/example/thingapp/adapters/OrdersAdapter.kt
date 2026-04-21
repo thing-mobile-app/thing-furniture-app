@@ -12,10 +12,21 @@ import com.example.thingapp.databinding.OrderItemBinding
 import android.graphics.drawable.ColorDrawable
 import com.example.thingapp.R
 
+/**
+ * RecyclerView adapter for displaying a list of user orders.
+ */
 class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.OrdersViewHolder>() {
 
+    /**
+     * ViewHolder that binds [Order] data to the order item layout.
+     */
     inner class OrdersViewHolder(private val binding: OrderItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        /**
+         * Binds the given [order] to the UI, setting the order ID, date,
+         * and a color indicator based on the order status.
+         */
         fun bind(order: Order) {
             binding.apply {
                 tvOrderId.text = order.orderId.toString()
@@ -58,6 +69,7 @@ class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.OrdersViewHolder>() {
         }
     }
 
+    /** Handles efficient list updates using DiffUtil. */
     val differ = AsyncListDiffer(this, diffUtil)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrdersViewHolder {
@@ -79,5 +91,6 @@ class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.OrdersViewHolder>() {
         return differ.currentList.size
     }
 
+    /** Callback triggered when an order item is clicked. */
     var onClick: ((Order) -> Unit)? = null
 }

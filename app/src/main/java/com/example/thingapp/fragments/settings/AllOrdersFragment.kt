@@ -17,6 +17,9 @@ import com.example.thingapp.viewmodel.AllOrdersViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
+/**
+ * Fragment that displays the list of all orders placed by the current user.
+ */
 @AndroidEntryPoint
 class AllOrdersFragment : Fragment() {
     private lateinit var binding: FragmentOrdersBinding
@@ -60,6 +63,7 @@ class AllOrdersFragment : Fragment() {
         }
     }
 
+    /** Sets up the orders RecyclerView with adapter and layout manager. */
     private fun setupOrdersRv() {
         binding.rvAllOrders.apply {
             adapter = allOrdersAdapter

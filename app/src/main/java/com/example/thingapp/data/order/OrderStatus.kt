@@ -1,5 +1,8 @@
 package com.example.thingapp.data.order
 
+/**
+ * Sealed class representing the possible statuses of an order.
+ */
 sealed class OrderStatus(val status: String) {
     object Ordered: OrderStatus("Ordered")
     object Canceled: OrderStatus("Canceled")
@@ -9,6 +12,10 @@ sealed class OrderStatus(val status: String) {
     object Returned: OrderStatus("Returned")
 }
 
+/**
+ * Converts a status string to its corresponding [OrderStatus] object.
+ * Defaults to [OrderStatus.Returned] if the string doesn't match any known status.
+ */
 fun getOrderStatus(status: String): OrderStatus {
     return when (status) {
         "Ordered" -> {
