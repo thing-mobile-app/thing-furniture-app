@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.thingapp.data.Address
 import com.example.thingapp.databinding.FragmentAddressBinding
 import com.example.thingapp.util.Resource
@@ -27,6 +28,7 @@ import kotlinx.coroutines.launch
 class AddressFragment : Fragment() {
     private lateinit var binding: FragmentAddressBinding
     private val viewModel by viewModels<AddressViewModel>()
+    val args by navArgs<AddressFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +41,20 @@ class AddressFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val address = args.address
+        if(address == null){
+            binding.buttonDelete.visibility = View.GONE // Hide the delete button because we are adding a new address.
+        } else{
+            binding.apply {
+                edAddressTitle.setText(address.addressTitle)
+                edFullName.setText(address.fullName)
+                edStreet.setText(address.street)
+                edPhone.setText(address.phone)
+                edCity.setText(address.city)
+                edState.setText(address.state)
+            }
+        }
 
         setupClickListeners()
         observeAddressState()

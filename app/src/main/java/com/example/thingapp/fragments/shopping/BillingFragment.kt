@@ -66,6 +66,14 @@ class BillingFragment : Fragment() {
         observeAddressState()
         observeOrderState()
 
+        if(!args.payment){
+            binding.apply {
+                buttonPlaceOrder.visibility = View.INVISIBLE
+                layoutTotal.visibility = View.INVISIBLE
+                divider.visibility = View.INVISIBLE
+            }
+        }
+
         // Bind the data received from CartFragment to the UI
         binding.tvTotalPrice.text = "$ ${String.format("%.2f", args.totalPrice)}"
         billingProductsAdapter.differ.submitList(args.products.toList())
@@ -97,6 +105,11 @@ class BillingFragment : Fragment() {
                 "Selected: ${address.addressTitle}",
                 Toast.LENGTH_SHORT
             ).show()
+
+            if(!args.payment){
+                val bundle = Bundle().apply { putParcelable("address", selectedAddress) }
+                findNavController().navigate(R.id.action_billingFragment_to_addressFragment, bundle)
+            }
         }
 
     }

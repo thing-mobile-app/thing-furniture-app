@@ -50,12 +50,17 @@ class CartFragment : Fragment() {
         observeTotalPrice()
         setupAdapterClickEvents()
 
+        binding.imageCloseCart.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         // Handle navigation to Billing screen with current data
         binding.buttonCheckout.setOnClickListener {
             val products = cartAdapter.differ.currentList.toTypedArray()
             val totalPrice = viewModel.totalPrice.value // Now correctly works as a StateFlow snapshot
 
-            val action = CartFragmentDirections.actionCartFragmentToBillingFragment(products, totalPrice)
+            // We passed true because this is going to be a payment
+            val action = CartFragmentDirections.actionCartFragmentToBillingFragment(products, totalPrice, true)
             findNavController().navigate(action)
         }
     }

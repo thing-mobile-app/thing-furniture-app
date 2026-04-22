@@ -28,7 +28,7 @@ class AddressAdapter : RecyclerView.Adapter<AddressAdapter.AddressViewHolder>() 
 
                 // Professional visual feedback for selection state
                 if (isSelected) {
-                    containerAddress.setBackgroundResource(R.color.g_blue) // Or your primary blue
+                    containerAddress.setBackgroundResource(R.color.g_black) // Or your primary blue
                     tvAddressTitle.setTextColor(Color.WHITE)
                 } else {
                     containerAddress.setBackgroundResource(R.color.g_white)

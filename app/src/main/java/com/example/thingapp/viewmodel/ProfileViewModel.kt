@@ -6,6 +6,7 @@ import com.example.thingapp.data.User
 import com.example.thingapp.util.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,6 +25,7 @@ class ProfileViewModel @Inject constructor(
 
     private val _user = MutableStateFlow<Resource<User>>(Resource.Unspecified())
     val user = _user.asStateFlow()
+    private var snapshotListener: ListenerRegistration? = null
 
     init{
         getUser()
@@ -71,6 +73,12 @@ class ProfileViewModel @Inject constructor(
      * Signs out the current user from FirebaseAuth.
      */
     fun logout(){
+        snapshotListener?.remove()
         auth.signOut()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        snapshotListener?.remove()
     }
 }

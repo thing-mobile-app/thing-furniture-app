@@ -84,7 +84,13 @@
         android:id="@+id/addressFragment"
         android:name="com.example.thingapp.fragments.shopping.AddressFragment"
         android:label="AddressFragment"
-        tools:layout="@layout/fragment_address"/>
+        tools:layout="@layout/fragment_address">
+        <argument
+            android:name="address"
+            app:argType="com.example.thingapp.data.Address"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 
     <fragment
         android:id="@+id/billingFragment"
@@ -103,6 +109,9 @@
         <action
             android:id="@+id/action_billingFragment_to_addressFragment"
             app:destination="@id/addressFragment" />
+        <argument
+            android:name="payment"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/orderDetailFragment"

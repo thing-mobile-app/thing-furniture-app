@@ -69,7 +69,8 @@ class ProfileFragment : Fragment() {
             val action = ProfileFragmentDirections.actionProfileFragmentToBillingFragment(
                 // Dummy data for demonstration purposes
                 emptyArray(),
-                0f
+                0f,
+                false // We don't need to show any info about the payment
             )
             findNavController().navigate(action)
         }
