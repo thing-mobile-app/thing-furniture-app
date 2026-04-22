@@ -4,26 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
-
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarUserAccount"
             android:layout_width="match_parent"
             android:layout_height="70dp"
+            android:fitsSystemWindows="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
 
                 <ImageView
                     android:id="@+id/imageCloseUserAccount"
@@ -36,17 +36,18 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/black" />
 
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
                     android:text="My account"
                     android:textColor="@color/black"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@id/imageCloseUserAccount"
-                    app:layout_constraintStart_toStartOf="@id/imageCloseUserAccount"
-                    app:layout_constraintTop_toTopOf="@id/imageCloseUserAccount" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.467"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.511" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
@@ -59,8 +60,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageUser"
@@ -84,7 +84,6 @@
             app:layout_constraintBottom_toBottomOf="@id/imageUser"
             app:layout_constraintEnd_toEndOf="@id/imageUser" />
 
-
         <EditText
             android:id="@+id/edFirstName"
             android:layout_width="0dp"
@@ -93,6 +92,8 @@
             android:background="@drawable/white_background"
             android:gravity="center"
             android:hint="First Name"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:singleLine="true"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
@@ -107,6 +108,8 @@
             android:background="@drawable/white_background"
             android:gravity="center"
             android:hint="Last Name"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:singleLine="true"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
@@ -121,6 +124,8 @@
             android:background="@drawable/white_background"
             android:gravity="center"
             android:hint="Email"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:singleLine="true"
             android:textColor="@color/g_gray700"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
@@ -146,11 +151,11 @@
             android:textColor="@color/white"
             android:textSize="12sp"
             android:textStyle="bold"
+            android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
             app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/tvUpdatePassword"
-            android:layout_marginBottom="20dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/tvUpdatePassword" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/leftGuideline"

@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/purple_background"
+            android:background="@drawable/black_background"
             android:fontFamily="@font/inter_18pt_medium"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
