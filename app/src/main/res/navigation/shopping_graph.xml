@@ -52,10 +52,14 @@
     </fragment>
 
     <fragment
-        android:id="@+id/allOrdersFragment"
+        android:id="@+id/AllOrdersFragment"
         android:name="com.example.thingapp.fragments.settings.AllOrdersFragment"
         android:label="AllOrdersFragment"
-        tools:layout="@layout/fragment_orders" />
+        tools:layout="@layout/fragment_orders" >
+        <action
+            android:id="@+id/action_allOrdersFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/userAccountFragment"
@@ -96,5 +100,13 @@
         <action
             android:id="@+id/action_billingFragment_to_addressFragment"
             app:destination="@id/addressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.example.thingapp.fragments.settings.OrderDetailFragment"
+        android:label="OrderDetailFragment" >
+        <argument
+            android:name="order"
+            app:argType="com.example.thingapp.data.order.Order" />
     </fragment>
 </navigation>

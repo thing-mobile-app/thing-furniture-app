@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import android.net.Uri
 import android.provider.MediaStore
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.os.Build
 import java.io.ByteArrayOutputStream
@@ -115,13 +116,13 @@ class UserAccountViewModel @Inject constructor(
                         )
                         ImageDecoder.decodeBitmap(source)
                     } else {
-                        MediaStore.Images.Media.getBitmap(
-                            getApplication<ThingApplication>().contentResolver,
-                            imageUri
-                        )
+                        getApplication<ThingApplication>().contentResolver
+                            .openInputStream(imageUri)?.use {
+                                BitmapFactory.decodeStream(it)
+                            }
                     }
                     val byteArrayOutputStream = ByteArrayOutputStream()
-                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 96, byteArrayOutputStream)
+                    imageBitmap?.compress(Bitmap.CompressFormat.JPEG, 96, byteArrayOutputStream)
                     val imageByteArray = byteArrayOutputStream.toByteArray()
                     val imageDirectory =
                         storage.child("profileImages/$uid/${UUID.randomUUID()}")

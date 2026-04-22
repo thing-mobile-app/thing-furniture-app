@@ -10,9 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.thingapp.adapters.OrdersAdapter
+import com.example.thingapp.adapters.AllOrdersAdapter
 import com.example.thingapp.databinding.FragmentOrdersBinding
 import com.example.thingapp.util.Resource
 import com.example.thingapp.viewmodel.AllOrdersViewModel
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 class AllOrdersFragment : Fragment() {
     private lateinit var binding: FragmentOrdersBinding
     val viewModel by viewModels<AllOrdersViewModel>()
-    val allOrdersAdapter by lazy { OrdersAdapter() }
+    val allOrdersAdapter by lazy { AllOrdersAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +66,17 @@ class AllOrdersFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        /**
+         * Handles order item click events.
+         *
+         * Navigates from AllOrdersFragment to OrderDetailFragment
+         * and passes the selected order using Safe Args.
+         */
+        allOrdersAdapter.onClick = {
+            val action = AllOrdersFragmentDirections.actionAllOrdersFragmentToOrderDetailFragment(it)
+            findNavController().navigate(action)
         }
     }
 
