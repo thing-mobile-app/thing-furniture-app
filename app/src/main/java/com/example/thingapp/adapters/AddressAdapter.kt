@@ -28,7 +28,7 @@ class AddressAdapter : RecyclerView.Adapter<AddressAdapter.AddressViewHolder>() 
 
                 // Professional visual feedback for selection state
                 if (isSelected) {
-                    containerAddress.setBackgroundResource(R.color.g_black) // Or your primary blue
+                    containerAddress.setBackgroundResource(R.color.g_black) 
                     tvAddressTitle.setTextColor(Color.WHITE)
                 } else {
                     containerAddress.setBackgroundResource(R.color.g_white)
@@ -40,7 +40,7 @@ class AddressAdapter : RecyclerView.Adapter<AddressAdapter.AddressViewHolder>() 
 
     private val diffUtil = object : DiffUtil.ItemCallback<Address>() {
         override fun areItemsTheSame(oldItem: Address, newItem: Address): Boolean =
-            oldItem.addressTitle == newItem.addressTitle
+            oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: Address, newItem: Address): Boolean =
             oldItem == newItem
@@ -64,9 +64,16 @@ class AddressAdapter : RecyclerView.Adapter<AddressAdapter.AddressViewHolder>() 
             notifyItemChanged(selectedAddress)
             onClick?.invoke(address)
         }
+        
+        // Handling long click for editing/deleting if that's the pattern used
+        holder.itemView.setOnLongClickListener {
+            onLongClick?.invoke(address)
+            true
+        }
     }
 
     override fun getItemCount(): Int = differ.currentList.size
 
     var onClick: ((Address) -> Unit)? = null
+    var onLongClick: ((Address) -> Unit)? = null
 }

@@ -69,7 +69,7 @@
             android:fontFamily="@font/inter_18pt_medium"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:text="See product"
+            android:text="@string/see_product"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="11sp"

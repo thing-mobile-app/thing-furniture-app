@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
  * Data class representing a user's shipping or billing address.
  * Implements [Parcelable] to allow seamless data transfer of Address objects between fragments.
  *
+ * @property id Unique identifier for the address in Firestore.
  * @property addressTitle The title of the address (e.g., "Home", "Work").
  * @property fullName The full name of the person receiving the delivery.
  * @property street The street address, including building and apartment numbers.
@@ -16,6 +17,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class Address(
+    val id: String = "",
     val addressTitle: String,
     val fullName: String,
     val street: String,
@@ -28,5 +30,5 @@ data class Address(
      * An empty (no-argument) constructor is strictly required by Firebase Firestore.
      * Without this, Firestore cannot deserialize (read and map) the document fields back into this object.
      */
-    constructor() : this("", "", "", "", "", "")
+    constructor() : this("", "", "", "", "", "", "")
 }

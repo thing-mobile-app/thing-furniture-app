@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 /**
  * ViewModel responsible for managing address-related operations.
- * Handles adding new addresses to Firestore with safety checks.
+ * Handles adding, updating and deleting addresses in Firestore with safety checks.
  */
 @HiltViewModel
 class AddressViewModel @Inject constructor(
@@ -25,24 +25,39 @@ class AddressViewModel @Inject constructor(
     private val _addNewAddress = MutableStateFlow<Resource<Address>>(Resource.Unspecified())
     val addNewAddress = _addNewAddress.asStateFlow()
 
+    private val _deleteAddress = MutableStateFlow<Resource<Unit>>(Resource.Unspecified())
+    val deleteAddress = _deleteAddress.asStateFlow()
+
     /**
-     * Adds a new address to the user's sub-collection in Firestore.
+     * Adds a new address or updates an existing one in the user's sub-collection in Firestore.
      * @param address The address data to be saved.
      */
     fun addAddress(address: Address) {
         if (validateInputs(address)) {
             viewModelScope.launch { _addNewAddress.emit(Resource.Loading()) }
 
-            // Review Fix: Avoid using '!!' by providing a safe fallback or early return
             val userId = auth.uid ?: run {
                 viewModelScope.launch { _addNewAddress.emit(Resource.Error("Authentication failed")) }
                 return
             }
 
-            firestore.collection("user").document(userId).collection("address").document()
-                .set(address)
+            val collection = firestore.collection("user").document(userId).collection("address")
+            
+            val document = if (address.id.isEmpty()) {
+                collection.document() // New document
+            } else {
+                collection.document(address.id) // Existing document
+            }
+
+            val addressToSave = if (address.id.isEmpty()) {
+                address.copy(id = document.id)
+            } else {
+                address
+            }
+
+            document.set(addressToSave)
                 .addOnSuccessListener {
-                    viewModelScope.launch { _addNewAddress.emit(Resource.Success(address)) }
+                    viewModelScope.launch { _addNewAddress.emit(Resource.Success(addressToSave)) }
                 }
                 .addOnFailureListener { e ->
                     viewModelScope.launch { _addNewAddress.emit(Resource.Error(e.message.toString())) }
@@ -52,6 +67,26 @@ class AddressViewModel @Inject constructor(
                 _addNewAddress.emit(Resource.Error("Please fill all fields correctly"))
             }
         }
+    }
+
+    /**
+     * Deletes an address from Firestore.
+     * @param address The address to be deleted.
+     */
+    fun deleteAddress(address: Address) {
+        val userId = auth.uid ?: return
+        if (address.id.isEmpty()) return
+
+        viewModelScope.launch { _deleteAddress.emit(Resource.Loading()) }
+
+        firestore.collection("user").document(userId).collection("address").document(address.id)
+            .delete()
+            .addOnSuccessListener {
+                viewModelScope.launch { _deleteAddress.emit(Resource.Success(Unit)) }
+            }
+            .addOnFailureListener { e ->
+                viewModelScope.launch { _deleteAddress.emit(Resource.Error(e.message.toString())) }
+            }
     }
 
     private fun validateInputs(address: Address): Boolean {

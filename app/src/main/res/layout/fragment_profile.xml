@@ -255,69 +255,7 @@
 
             </LinearLayout>
 
-            <!-- Notifications Section -->
-            <TextView
-                android:id="@+id/tvNotifications"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:text="NOTIFICATIONS"
-                android:fontFamily="@font/inter_18pt_bold"
-                android:textSize="11sp"
-                android:textColor="#AAAAAA"
-                android:letterSpacing="0.1"
-                app:layout_constraintStart_toStartOf="@id/guideline1"
-                app:layout_constraintTop_toBottomOf="@id/linearOrders" />
-
-            <LinearLayout
-                android:id="@+id/linearNotifications"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="vertical"
-                android:background="@drawable/card_white_background"
-                android:elevation="2dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintStart_toStartOf="@id/guideline1"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
-                app:layout_constraintTop_toBottomOf="@id/tvNotifications">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="34dp"
-                        android:layout_height="34dp"
-                        android:src="@drawable/ic_notification"
-                        android:background="@drawable/settings_items_background"
-                        android:backgroundTint="#4cd964"
-                        android:padding="8dp"
-                        app:tint="@color/white" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="14dp"
-                        android:text="Notifications"
-                        android:fontFamily="@font/inter_18pt_medium"
-                        android:textSize="14sp"
-                        android:textColor="#222222" />
-
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/switchNotification"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:buttonTint="#4cd964"
-                        android:checked="true" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Regional / Logout Section -->
+            <!-- Account Section -->
             <TextView
                 android:id="@+id/tvRegional"
                 android:layout_width="wrap_content"
@@ -329,7 +267,7 @@
                 android:textColor="#AAAAAA"
                 android:letterSpacing="0.1"
                 app:layout_constraintStart_toStartOf="@id/guideline1"
-                app:layout_constraintTop_toBottomOf="@id/linearNotifications" />
+                app:layout_constraintTop_toBottomOf="@id/linearOrders" />
 
             <LinearLayout
                 android:id="@+id/linear_regional"

@@ -17,8 +17,10 @@ import com.example.thingapp.R
 import com.example.thingapp.adapters.BestDealsAdapter
 import com.example.thingapp.adapters.BestProductsAdapter
 import com.example.thingapp.adapters.SpecialProductsAdapter
+import com.example.thingapp.data.CartProduct
 import com.example.thingapp.databinding.FragmentMainCategoryBinding
 import com.example.thingapp.util.Resource
+import com.example.thingapp.viewmodel.DetailsViewModel
 import com.example.thingapp.viewmodel.MainCategoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -35,6 +37,7 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
     private val bestProductsAdapter by lazy { BestProductsAdapter() }
 
     private val viewModel by viewModels<MainCategoryViewModel>()
+    private val detailsViewModel by viewModels<DetailsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -106,6 +109,23 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
                         }
                     }
                 }
+
+                launch {
+                    detailsViewModel.addToCart.collectLatest { 
+                        when(it){
+                            is Resource.Loading -> { }
+                            is Resource.Success -> {
+                                Toast.makeText(requireContext(), getString(R.string.add_to_cart), Toast.LENGTH_SHORT).show()
+                                detailsViewModel.resetAddToCartState()
+                            }
+                            is Resource.Error -> {
+                                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                                detailsViewModel.resetAddToCartState()
+                            }
+                            else -> Unit
+                        }
+                    }
+                }
             }
         }
         binding.nestedScrollMainCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener{ v,_,scrollY,_,_ ->
@@ -118,6 +138,10 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
         specialProductsAdapter.onClick = {
             val bundle = Bundle().apply { putParcelable("product", it) }
             findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+        
+        specialProductsAdapter.onAddToCartClick = {
+            detailsViewModel.addUpdateProductInCart(CartProduct(it, 1))
         }
 
         // Handle click on best deals to navigate to details

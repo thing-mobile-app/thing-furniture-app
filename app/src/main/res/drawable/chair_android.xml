@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="24dp"
+    android:viewportHeight="960"
+    android:viewportWidth="960"
+    android:width="24dp">
+    <!--  Sırt sol dikey  -->
+    <path android:fillColor="#000000" android:pathData="M200,120 L280,120 L280,500 L200,500 Z"/>
+    <!--  Sırt sağ dikey  -->
+    <path android:fillColor="#000000" android:pathData="M680,120 L760,120 L760,500 L680,500 Z"/>
+    <!--  Sırt üst yatay ray  -->
+    <path android:fillColor="#000000" android:pathData="M200,120 L760,120 L760,200 L200,200 Z"/>
+    <!--  Oturma yüzeyi  -->
+    <path android:fillColor="#000000" android:pathData="M160,460 L800,460 L800,560 L160,560 Z"/>
+    <!--  Ön sol bacak  -->
+    <path android:fillColor="#000000" android:pathData="M200,560 L280,560 L280,840 L200,840 Z"/>
+    <!--  Ön sağ bacak  -->
+    <path android:fillColor="#000000" android:pathData="M680,560 L760,560 L760,840 L680,840 Z"/>
+    <!--  Alt bağlantı çıtası  -->
+    <path android:fillColor="#000000" android:pathData="M200,740 L760,740 L760,800 L200,800 Z"/>
+</vector>
