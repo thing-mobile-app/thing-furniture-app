@@ -48,8 +48,14 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_profileFragment_to_userAccountFragment)
         }
 
-        binding.linearOrders.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_AllOrdersFragment)
+        binding.linearAllOrders.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToAllOrdersFragment(activeOnly = false)
+            findNavController().navigate(action)
+        }
+
+        binding.linearTrackOrder.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToAllOrdersFragment(activeOnly = true)
+            findNavController().navigate(action)
         }
 
         binding.linearBilling.setOnClickListener {
@@ -61,7 +67,11 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        binding.tvVersion.text = "Version ${BuildConfig.VERSION_NAME}"
+        binding.linearLanguage.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_languageFragment)
+        }
+
+        binding.tvVersion.text = "${getString(R.string.version)} ${BuildConfig.VERSION_NAME}"
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.user.collectLatest {

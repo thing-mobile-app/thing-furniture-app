@@ -56,6 +56,9 @@
         <action
             android:id="@+id/action_profileFragment_to_billingFragment"
             app:destination="@id/billingFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
     </fragment>
 
     <fragment
@@ -66,6 +69,10 @@
         <action
             android:id="@+id/action_allOrdersFragment_to_orderDetailFragment"
             app:destination="@id/orderDetailFragment" />
+        <argument
+            android:name="activeOnly"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
 
     <fragment
@@ -82,6 +89,11 @@
         <argument
             android:name="product"
             app:argType="com.example.thingapp.data.Product" />
+        <argument
+            android:name="cartProductToEdit"
+            app:argType="com.example.thingapp.data.CartProduct"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 
     <fragment
@@ -113,6 +125,11 @@
         <action
             android:id="@+id/action_billingFragment_to_addressFragment"
             app:destination="@id/addressFragment" />
+        <action
+            android:id="@+id/action_billingFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="payment"
             app:argType="boolean" />
@@ -125,4 +142,11 @@
             android:name="order"
             app:argType="com.example.thingapp.data.order.Order" />
     </fragment>
+
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.example.thingapp.fragments.settings.LanguageFragment"
+        android:label="LanguageFragment"
+        tools:layout="@layout/fragment_language" />
+
 </navigation>

@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="Settings"
+                android:text="@string/settings"
                 android:fontFamily="@font/inter_18pt_bold"
                 android:textSize="26sp"
                 android:textColor="#111111"
@@ -93,7 +93,7 @@
                     android:id="@+id/tv_edit_personal_details"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Edit personal details"
+                    android:text="@string/edit_personal_details"
                     android:fontFamily="@font/inter_18pt_regular"
                     android:textSize="12sp"
                     android:textColor="#888888"
@@ -120,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:text="ORDERS"
+                android:text="@string/orders"
                 android:fontFamily="@font/inter_18pt_bold"
                 android:textSize="11sp"
                 android:textColor="#AAAAAA"
@@ -163,7 +163,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="14dp"
-                        android:text="All Orders"
+                        android:text="@string/all_orders"
                         android:fontFamily="@font/inter_18pt_medium"
                         android:textSize="14sp"
                         android:textColor="#222222" />
@@ -202,7 +202,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="14dp"
-                        android:text="Track Orders"
+                        android:text="@string/track_orders"
                         android:fontFamily="@font/inter_18pt_medium"
                         android:textSize="14sp"
                         android:textColor="#222222" />
@@ -241,7 +241,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="14dp"
-                        android:text="Billing"
+                        android:text="@string/billing"
                         android:fontFamily="@font/inter_18pt_medium"
                         android:textSize="14sp"
                         android:textColor="#222222" />
@@ -261,7 +261,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:text="ACCOUNT"
+                android:text="@string/account"
                 android:fontFamily="@font/inter_18pt_bold"
                 android:textSize="11sp"
                 android:textColor="#AAAAAA"
@@ -282,6 +282,45 @@
                 app:layout_constraintStart_toStartOf="@id/guideline1"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintTop_toBottomOf="@id/tvRegional">
+
+                <LinearLayout
+                    android:id="@+id/linearLanguage"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:src="@drawable/ic_language"
+                        android:background="@drawable/settings_items_background"
+                        android:backgroundTint="#4CAF50"
+                        android:padding="8dp"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tvLanguage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:text="@string/language"
+                        android:fontFamily="@font/inter_18pt_medium"
+                        android:textSize="14sp"
+                        android:textColor="#222222" />
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/ic_arrow"
+                        app:tint="#CCCCCC" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="#EEEEEE" />
 
                 <LinearLayout
                     android:id="@+id/linearLogOut"
@@ -305,7 +344,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="14dp"
-                        android:text="Logout"
+                        android:text="@string/logout"
                         android:fontFamily="@font/inter_18pt_medium"
                         android:textSize="14sp"
                         android:textColor="#FF3B30" />

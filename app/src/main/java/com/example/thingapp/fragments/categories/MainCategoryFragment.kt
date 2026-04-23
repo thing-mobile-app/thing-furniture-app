@@ -115,7 +115,7 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
                         when(it){
                             is Resource.Loading -> { }
                             is Resource.Success -> {
-                                Toast.makeText(requireContext(), getString(R.string.add_to_cart), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), getString(R.string.item_added), Toast.LENGTH_SHORT).show()
                                 detailsViewModel.resetAddToCartState()
                             }
                             is Resource.Error -> {

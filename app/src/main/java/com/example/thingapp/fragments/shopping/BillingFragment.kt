@@ -90,7 +90,7 @@ class BillingFragment : Fragment() {
 
         binding.buttonPlaceOrder.setOnClickListener {
             if(selectedAddress == null){
-                Toast.makeText(requireContext(),"Please select an address", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.select_address), Toast.LENGTH_SHORT)
                     .show()
                 return@setOnClickListener
             }
@@ -102,7 +102,7 @@ class BillingFragment : Fragment() {
             selectedAddress = address
             Toast.makeText(
                 requireContext(),
-                "Selected: ${address.addressTitle}",
+                getString(R.string.selected_address, address.addressTitle),
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -131,13 +131,13 @@ class BillingFragment : Fragment() {
         )
 
         AlertDialog.Builder(requireContext())
-            .setTitle("Order items")
-            .setMessage("Do you want to order your cart items?")
-            .setPositiveButton("Confirm") { dialog, _ ->
+            .setTitle(getString(R.string.order_items))
+            .setMessage(getString(R.string.order_items_confirm))
+            .setPositiveButton(getString(R.string.confirm)) { dialog, _ ->
                 orderViewModel.placeOrder(order)
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel_dialog)) { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
@@ -201,24 +201,28 @@ class BillingFragment : Fragment() {
                     when (resource) {
                         is Resource.Loading -> {
                             binding.buttonPlaceOrder.isEnabled = false
-                            binding.buttonPlaceOrder.text = "Placing..."
+                            binding.buttonPlaceOrder.text = getString(R.string.placing)
                         }
                         is Resource.Success -> {
-                            binding.buttonPlaceOrder.isEnabled = true
-                            binding.buttonPlaceOrder.text = "Place Order"
+                            binding.buttonPlaceOrder.isEnabled = false
+                            binding.buttonPlaceOrder.text = getString(R.string.place_order)
                             Snackbar.make(
                                 requireView(),
-                                "Your order was placed",
+                                getString(R.string.order_placed),
                                 Snackbar.LENGTH_SHORT
                             ).show()
-                            findNavController().navigateUp()
+                            kotlinx.coroutines.delay(800L)
+                            if (isAdded) {
+                                orderViewModel.resetOrderState()
+                                findNavController().navigate(R.id.action_billingFragment_to_homeFragment)
+                            }
                         }
                         is Resource.Error -> {
                             binding.buttonPlaceOrder.isEnabled = true
-                            binding.buttonPlaceOrder.text = "Place Order"
+                            binding.buttonPlaceOrder.text = getString(R.string.place_order)
                             Toast.makeText(
                                 requireContext(),
-                                "Error ${resource.message}",
+                                getString(R.string.error, resource.message),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

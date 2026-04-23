@@ -12,6 +12,12 @@ class SizesAdapter : RecyclerView.Adapter<SizesAdapter.SizesAdapterViewHolder>()
 
     private var selectedPosition = -1
 
+    /** Pre-selects a position (used when editing an existing cart item). */
+    fun preSelectPosition(position: Int) {
+        selectedPosition = position
+        notifyItemChanged(position)
+    }
+
     inner class SizesAdapterViewHolder(private val binding : SizeRvItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(size : String, position: Int){
             // ULTIMATE mapping to ensure short letters (S, M, L, XL)

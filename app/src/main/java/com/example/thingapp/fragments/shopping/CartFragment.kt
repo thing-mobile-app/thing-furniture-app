@@ -23,6 +23,7 @@ import com.example.thingapp.viewmodel.CartViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.example.thingapp.R
 
 /**
  * Fragment that displays the user's shopping cart.
@@ -113,17 +114,20 @@ class CartFragment : Fragment() {
         }
 
         cartAdapter.onProductClick = { product ->
-            val action = CartFragmentDirections.actionCartFragmentToProductDetailsFragment(product.product)
+            val action = CartFragmentDirections.actionCartFragmentToProductDetailsFragment(
+                product.product,
+                cartProductToEdit = product
+            )
             findNavController().navigate(action)
         }
     }
 
     private fun showDeleteConfirmationDialog(cartProduct: CartProduct) {
         AlertDialog.Builder(requireContext()).apply {
-            setTitle("Delete item from cart")
-            setMessage("Do you want to delete this item from your cart?")
-            setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton("Yes") { dialog, _ ->
+            setTitle(getString(R.string.delete_item))
+            setMessage(getString(R.string.delete_item_confirm))
+            setNegativeButton(getString(R.string.cancel_dialog)) { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(getString(R.string.yes)) { dialog, _ ->
                 viewModel.deleteCartProduct(cartProduct)
                 dialog.dismiss()
             }

@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter_18pt_bold"
-            android:text="Search"
+            android:text="@string/search"
             android:textColor="@color/black"
             android:textSize="22sp" />
     </androidx.appcompat.widget.Toolbar>
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:fontFamily="@font/inter_18pt_semibold"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textColor="@color/g_black"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
@@ -76,7 +76,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="25dp"
         android:fontFamily="@font/inter_18pt_semibold"
-        android:text="Browse Categories"
+        android:text="@string/browse_categories"
         android:textColor="@color/black"
         android:textSize="@dimen/_16ssp"
         app:layout_constraintStart_toStartOf="parent"
@@ -127,7 +127,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:fontFamily="@font/inter_18pt_medium"
-                            android:text="Chairs"
+                            android:text="@string/chairs"
                             android:textColor="@color/black" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -155,7 +155,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:fontFamily="@font/inter_18pt_medium"
-                            android:text="Cupboards"
+                            android:text="@string/cupboards"
                             android:textColor="@color/black" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -189,7 +189,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:fontFamily="@font/inter_18pt_medium"
-                            android:text="Tables"
+                            android:text="@string/tables"
                             android:textColor="@color/black" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -217,7 +217,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:fontFamily="@font/inter_18pt_medium"
-                            android:text="Accessories"
+                            android:text="@string/accessories"
                             android:textColor="@color/black" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -245,7 +245,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/inter_18pt_medium"
-                        android:text="Furniture"
+                        android:text="@string/furniture"
                         android:textColor="@color/black" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

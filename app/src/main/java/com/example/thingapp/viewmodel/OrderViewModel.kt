@@ -31,6 +31,10 @@ class OrderViewModel @Inject constructor(
     /** StateFlow providing updates on the order placement status (Loading, Success, or Error). */
     val order = _order.asStateFlow()
 
+    fun resetOrderState() {
+        _order.value = Resource.Unspecified()
+    }
+
     /**
      * Processes a purchase using a Firestore batch to ensure data consistency.
      *

@@ -39,6 +39,40 @@ class DetailsViewModel @Inject constructor(
     }
 
     /**
+     * Edits an existing cart product by deleting the old entry and adding the updated one.
+     * This is triggered when the user navigates from the Cart screen to the Product Details
+     * screen to change color, size, etc.
+     */
+    fun editCartProduct(oldProduct: CartProduct, newProduct: CartProduct) {
+        viewModelScope.launch { _addToCart.emit(Resource.Loading()) }
+        firestore.collection("user").document(auth.uid!!).collection("cart")
+            .whereEqualTo("product.id", oldProduct.product.id)
+            .whereEqualTo("selectedColor", oldProduct.selectedColor)
+            .whereEqualTo("selectedsize", oldProduct.selectedsize)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.isEmpty) {
+                    // Document not found, just add as new
+                    addUpdateProductInCart(newProduct)
+                } else {
+                    val documentId = snapshot.documents.first().id
+                    firestore.collection("user").document(auth.uid!!)
+                        .collection("cart").document(documentId)
+                        .delete()
+                        .addOnSuccessListener {
+                            addUpdateProductInCart(newProduct)
+                        }
+                        .addOnFailureListener {
+                            viewModelScope.launch { _addToCart.emit(Resource.Error(it.message.toString())) }
+                        }
+                }
+            }
+            .addOnFailureListener {
+                viewModelScope.launch { _addToCart.emit(Resource.Error(it.message.toString())) }
+            }
+    }
+
+    /**
      * Orchestrates the process of adding or updating a product in the cart.
      */
     fun addUpdateProductInCart(cartProduct: CartProduct){

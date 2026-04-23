@@ -92,6 +92,8 @@ class AllOrdersAdapter : RecyclerView.Adapter<AllOrdersAdapter.OrdersViewHolder>
          * Passes the selected order object to the listener.
          */
         holder.itemView.setOnClickListener { onClick?.invoke(order) }
+        holder.itemView.findViewById<android.widget.ImageView>(com.example.thingapp.R.id.ivDeleteOrder)
+            .setOnClickListener { onDeleteClick?.invoke(order) }
     }
 
     override fun getItemCount(): Int {
@@ -100,4 +102,7 @@ class AllOrdersAdapter : RecyclerView.Adapter<AllOrdersAdapter.OrdersViewHolder>
 
     /** Callback triggered when an order item is clicked. */
     var onClick: ((Order) -> Unit)? = null
+
+    /** Callback triggered when the delete button on an order item is clicked. */
+    var onDeleteClick: ((Order) -> Unit)? = null
 }

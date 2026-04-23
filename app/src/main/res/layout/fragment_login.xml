@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="Let's login"
+            android:text="@string/lets_login"
             android:textSize="35sp"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
             app:layout_constraintBottom_toTopOf="@id/dontHaveAnAccount" />
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
-            android:text="Don't have an account? Register"
+            android:text="@string/dont_have_account"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
             app:layout_constraintBottom_toTopOf="@id/edEmailLogin" />
 
@@ -76,7 +76,7 @@
             style="@style/editText"
             android:layout_width="0dp"
             android:layout_height="@dimen/editTextHeight"
-            android:hint="Email"
+            android:hint="@string/email_hint"
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="@id/guidelineLoginRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
@@ -88,7 +88,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/editTextHeight"
             android:layout_marginTop="15dp"
-            android:hint="Password"
+            android:hint="@string/password_hint"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="@id/guidelineLoginRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
@@ -100,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="Forgot Password"
+            android:text="@string/forgot_password_login"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
             app:layout_constraintTop_toBottomOf="@id/edPasswordLogin" />
@@ -111,7 +111,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/mediumButtonHeight"
             android:layout_marginTop="20dp"
-            android:text="Login"
+            android:text="@string/login_button"
             app:layout_constraintEnd_toEndOf="@id/guidelineLoginRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
             app:layout_constraintTop_toBottomOf="@id/forgotPasswordLogin"

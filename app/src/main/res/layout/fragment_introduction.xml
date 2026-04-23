@@ -73,7 +73,7 @@
         app:layout_constraintStart_toStartOf="@+id/tvQuality"
         app:layout_constraintEnd_toEndOf="@+id/tvQuality"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Start"
+        android:text="@string/start_button"
         />
 
     <androidx.constraintlayout.widget.Guideline
