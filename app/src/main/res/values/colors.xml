@@ -17,5 +17,22 @@
     <color name="g_red">#FF0000</color>
     <color name="g_gray500">#969899</color>
     <color name="g_orange_yellow">#F8BA00</color>
-    <color name="g_green">#11FF00</color>
+    <color name="g_green">#22C55E</color>
+
+    <!-- Order status progressive palette: Clear distinction Yellow → Orange → Lime → Green -->
+    <color name="status_ordered">#EAB308</color> <!-- Strong Yellow -->
+    <color name="status_ordered_bg">#FEF9C3</color>
+    <color name="status_ordered_text">#854D0E</color>
+    <color name="status_confirmed">#EA580C</color> <!-- Deep Orange -->
+    <color name="status_confirmed_bg">#FFEDD5</color>
+    <color name="status_confirmed_text">#9A3412</color>
+    <color name="status_shipped">#3B82F6</color> <!-- Professional Blue -->
+    <color name="status_shipped_bg">#DBEAFE</color>
+    <color name="status_shipped_text">#1E40AF</color>
+    <color name="status_delivered">#15803D</color> <!-- Deep Green -->
+    <color name="status_delivered_bg">#DCFCE7</color>
+    <color name="status_delivered_text">#166534</color>
+    <color name="status_canceled">#EF4444</color> <!-- Red for Canceled -->
+    <color name="status_canceled_bg">#FEE2E2</color>
+    <color name="status_canceled_text">#991B1B</color>
 </resources>

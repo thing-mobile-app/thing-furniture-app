@@ -2,19 +2,21 @@ package com.example.thingapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.thingapp.R
 import com.example.thingapp.data.order.Order
 import com.example.thingapp.data.order.OrderStatus
 import com.example.thingapp.data.order.getOrderStatus
 import com.example.thingapp.databinding.OrderItemBinding
-import android.graphics.drawable.ColorDrawable
-import androidx.core.content.ContextCompat
-import com.example.thingapp.R
 
 /**
  * RecyclerView adapter for displaying a list of user orders.
+ *
+ * Each item shows a modern pill-shaped status badge with a progressive
+ * color scheme: Yellow (Ordered) → Orange (Confirmed) → Lime (Shipped) → Green (Delivered).
  */
 class AllOrdersAdapter : RecyclerView.Adapter<AllOrdersAdapter.OrdersViewHolder>() {
 
@@ -25,37 +27,67 @@ class AllOrdersAdapter : RecyclerView.Adapter<AllOrdersAdapter.OrdersViewHolder>
         RecyclerView.ViewHolder(binding.root) {
 
         /**
-         * Binds the given [order] to the UI, setting the order ID, date,
-         * and a color indicator based on the order status.
+         * Binds the given [order] to the UI.
+         * Sets the order ID, date, and a styled status badge (background, label, subtitle, text color)
+         * based on the progressive order status palette.
          */
         fun bind(order: Order) {
             binding.apply {
-                tvOrderId.text = order.orderId.toString()
+                tvOrderId.text = itemView.context.getString(R.string.order_id_format, order.orderId.toString())
                 tvOrderDate.text = order.date
-                val context = itemView.context
+                val ctx = itemView.context
 
-                val colorDrawable = when (getOrderStatus(order.orderStatus)) {
-                    is OrderStatus.Ordered -> {
-                        ColorDrawable(ContextCompat.getColor(context, R.color.g_orange_yellow))
-                    }
-                    is OrderStatus.Confirmed -> {
-                        ColorDrawable(ContextCompat.getColor(context, R.color.g_green))
-                    }
-                    is OrderStatus.Delivered -> {
-                        ColorDrawable(ContextCompat.getColor(context, R.color.g_green))
-                    }
-                    is OrderStatus.Shipped -> {
-                        ColorDrawable(ContextCompat.getColor(context, R.color.g_green))
-                    }
-                    is OrderStatus.Canceled -> {
-                        ColorDrawable(ContextCompat.getColor(context, R.color.g_red))
-                    }
-                    is OrderStatus.Returned -> {
-                        ColorDrawable(ContextCompat.getColor(context, R.color.g_red))
-                    }
+                data class StatusAppearance(
+                    val bgDrawable: Int,
+                    val labelText: String,
+                    val subtitleText: String,
+                    val textColor: Int
+                )
+
+                val appearance = when (getOrderStatus(order.orderStatus)) {
+                    is OrderStatus.Ordered -> StatusAppearance(
+                        bgDrawable  = R.drawable.status_badge_ordered,
+                        labelText   = ctx.getString(R.string.status_ordered),
+                        subtitleText = ctx.getString(R.string.status_sub_ordered),
+                        textColor   = ContextCompat.getColor(ctx, R.color.status_ordered_text)
+                    )
+                    is OrderStatus.Confirmed -> StatusAppearance(
+                        bgDrawable  = R.drawable.status_badge_confirmed,
+                        labelText   = ctx.getString(R.string.status_confirmed),
+                        subtitleText = ctx.getString(R.string.status_sub_confirmed),
+                        textColor   = ContextCompat.getColor(ctx, R.color.status_confirmed_text)
+                    )
+                    is OrderStatus.Shipped -> StatusAppearance(
+                        bgDrawable  = R.drawable.status_badge_shipped,
+                        labelText   = ctx.getString(R.string.status_shipped),
+                        subtitleText = ctx.getString(R.string.status_sub_shipped),
+                        textColor   = ContextCompat.getColor(ctx, R.color.status_shipped_text)
+                    )
+                    is OrderStatus.Delivered -> StatusAppearance(
+                        bgDrawable  = R.drawable.status_badge_delivered,
+                        labelText   = ctx.getString(R.string.status_delivered),
+                        subtitleText = ctx.getString(R.string.status_sub_delivered),
+                        textColor   = ContextCompat.getColor(ctx, R.color.status_delivered_text)
+                    )
+                    is OrderStatus.Canceled -> StatusAppearance(
+                        bgDrawable  = R.drawable.status_badge_canceled,
+                        labelText   = ctx.getString(R.string.status_canceled),
+                        subtitleText = ctx.getString(R.string.status_sub_canceled),
+                        textColor   = ContextCompat.getColor(ctx, R.color.status_canceled_text)
+                    )
+                    else -> StatusAppearance(
+                        bgDrawable  = R.drawable.status_badge_ordered,
+                        labelText   = order.orderStatus,
+                        subtitleText = "",
+                        textColor   = ContextCompat.getColor(ctx, R.color.status_ordered_text)
+                    )
                 }
 
-                imageOrderState.setImageDrawable(colorDrawable)
+                llStatusBadge.setBackgroundResource(appearance.bgDrawable)
+                tvStatusLabel.text = appearance.labelText
+                tvStatusLabel.setTextColor(appearance.textColor)
+                tvStatusSubtitle.text = appearance.subtitleText
+                tvStatusSubtitle.setTextColor(appearance.textColor)
             }
         }
     }
@@ -92,7 +124,7 @@ class AllOrdersAdapter : RecyclerView.Adapter<AllOrdersAdapter.OrdersViewHolder>
          * Passes the selected order object to the listener.
          */
         holder.itemView.setOnClickListener { onClick?.invoke(order) }
-        holder.itemView.findViewById<android.widget.ImageView>(com.example.thingapp.R.id.ivDeleteOrder)
+        holder.itemView.findViewById<android.widget.ImageView>(R.id.ivDeleteOrder)
             .setOnClickListener { onDeleteClick?.invoke(order) }
     }
 

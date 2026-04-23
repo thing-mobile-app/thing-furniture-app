@@ -66,14 +66,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            app:sv_selectedCircleColor="@color/black"
-            app:sv_selectedTextColor="@color/black"
+            app:sv_selectedCircleColor="@color/status_ordered"
+            app:sv_selectedTextColor="@color/status_ordered_text"
             app:sv_stepLineWidth="2dp"
             app:sv_stepPadding="8dp"
             app:sv_nextTextColor="@color/g_gray700"
-            app:sv_nextStepLineColor="@color/g_gray700"
-            app:sv_doneCircleColor="@color/black"
-            app:sv_doneStepLineColor="@color/black"
+            app:sv_nextStepLineColor="@color/g_blue_gray200"
+            app:sv_doneCircleColor="@color/status_delivered"
+            app:sv_doneStepLineColor="@color/status_delivered"
             app:sv_doneCircleRadius="12dp"
             app:sv_selectedCircleRadius="12dp"
             app:sv_selectedStepNumberColor="@color/white"
@@ -81,7 +81,25 @@
             app:sv_doneStepMarkColor="@color/white"
             app:sv_stepNumberTextSize="10sp"
             app:sv_animationType="Line"
-            app:sv_doneTextColor="@color/black" />
+            app:sv_doneTextColor="@color/status_delivered_text" />
+
+        <TextView
+            android:id="@+id/tvCanceledStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/status_badge_canceled"
+            android:fontFamily="@font/inter_18pt_bold"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="@string/status_canceled"
+            android:textColor="@color/status_canceled_text"
+            android:textSize="16sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
     </LinearLayout>
 
     <TextView
