@@ -76,8 +76,7 @@
             tools:listitem="@android:layout/simple_list_item_1"
             app:layout_constraintTop_toBottomOf="@id/tvBestProducts"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/bestProductsProgressBar"
