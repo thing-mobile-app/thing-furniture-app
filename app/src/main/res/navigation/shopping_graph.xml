@@ -59,6 +59,9 @@
         <action
             android:id="@+id/action_profileFragment_to_languageFragment"
             app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
     </fragment>
 
     <fragment
@@ -148,5 +151,11 @@
         android:name="com.example.thingapp.fragments.settings.LanguageFragment"
         android:label="LanguageFragment"
         tools:layout="@layout/fragment_language" />
+
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.example.thingapp.fragments.settings.HelpFragment"
+        android:label="HelpFragment"
+        tools:layout="@layout/fragment_help" />
 
 </navigation>

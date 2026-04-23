@@ -92,4 +92,33 @@
     <string name="search_orders">Sipariş ara…</string>
     <string name="order_delete_confirm">Bu siparişi silmek istediğinizden emin misiniz?</string>
     <string name="order_deleted">Sipariş silindi</string>
+
+    <!-- Help / FAQ Fragment -->
+    <string name="help">Yardım</string>
+    <string name="help_subtitle">Uygulama hakkında en sık sorulan soruların yanıtlarını burada bulabilirsiniz.</string>
+    <string name="faq_label">SIK SORULAN SORULAR</string>
+    <string name="help_close_desc">Yardım ekranını kapat</string>
+
+    <string name="faq_q1">Ürünlere nasıl göz atabilirim?</string>
+    <string name="faq_a1">Alt navigasyon çubuğundan Ana Sayfa sekmesini açın. Ürün kategorileri arasında kaydırabilir (Ana, Sandalye, Dolap, Masa, Aksesuar) veya belirli ürünleri ada ya da kategoriye göre bulmak için Arama sekmesini kullanabilirsiniz.</string>
+
+    <string name="faq_q2">Sepete nasıl ürün eklerim?</string>
+    <string name="faq_a2">Herhangi bir ürüne dokunarak detay sayfasını açın. Tercih ettiğiniz rengi ve bedeni seçtikten sonra "Sepete Ekle" düğmesine basın. Ekranın altında bir onay mesajı göreceksiniz.</string>
+
+    <string name="faq_q3">Nasıl sipariş veririm?</string>
+    <string name="faq_a3">Sepetinize gidin, ürünleri inceleyin ve "Ödeme Yap" düğmesine dokunun. Fatura ekranında bir teslimat adresi seçin ve onaylayın. Siparişler kapıda ödeme ile teslim edilir; çevrimiçi ödeme gerekmez.</string>
+
+    <string name="faq_q4">Siparişlerimi nerede görebilirim?</string>
+    <string name="faq_a4">Tüm siparişlerinizi görmek için Profil → Tüm Siparişler bölümüne gidin. Yalnızca aktif (Sipariş Alındı / Onaylandı / Kargoya Verildi) siparişlerinizi görüntülemek ve sipariş ID veya tarihe göre arama yapmak için Profil → Siparişleri Takip Et seçeneğini kullanın.</string>
+
+    <string name="faq_q6">Profilimi nasıl güncellerim?</string>
+    <string name="faq_a6">Profil sekmesine gidin ve üstteki adınıza dokunun. Hesabım ekranında adınızı, soyadınızı, e-posta adresinizi ve profil fotoğrafınızı güncelleyebilirsiniz.</string>
+
+    <string name="faq_q7">Şifremi unuttum, ne yapabilirim?</string>
+    <string name="faq_a7">Giriş ekranında "Şifremi Unuttum" seçeneğine dokunun. Kayıtlı e-posta adresinizi girin; size bir şifre sıfırlama bağlantısı gönderilecektir. Giriş yaptıktan sonra Profil → Hesabım üzerinden de şifrenizi değiştirebilirsiniz.</string>
+
+    <string name="faq_q8">Hangi diller destekleniyor?</string>
+    <string name="faq_a8">Uygulama İngilizce ve Türkçe dillerini desteklemektedir. Dil değiştirmek için Profil → Dil bölümüne gidin. Uygulama, yeni dili uygulamak için otomatik olarak yeniden başlar.</string>
+
+
 </resources>

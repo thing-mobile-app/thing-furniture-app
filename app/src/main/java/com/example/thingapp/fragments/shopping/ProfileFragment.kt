@@ -71,6 +71,10 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_profileFragment_to_languageFragment)
         }
 
+        binding.linearHelp.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_helpFragment)
+        }
+
         binding.tvVersion.text = "${getString(R.string.version)} ${BuildConfig.VERSION_NAME}"
 
         viewLifecycleOwner.lifecycleScope.launch {
