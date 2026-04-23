@@ -76,19 +76,25 @@ class OrderDetailFragment : Fragment() {
                 )
             )
 
-            val currentOrderState = when(getOrderStatus(order.orderStatus)){
+            val status = getOrderStatus(order.orderStatus)
+            val currentOrderState = when(status){
                 is OrderStatus.Ordered -> 0
                 is OrderStatus.Confirmed -> 1
                 is OrderStatus.Shipped -> 2
                 is OrderStatus.Delivered -> 3
-                else -> 0
+                is OrderStatus.Canceled -> -1
             }
 
-            stepView.go(currentOrderState,false)
-
-            // In the stepview documentation we must do this, if you are in the last step ( for example in our project Delivered )
-            if(currentOrderState == 3){
-                stepView.done(true)
+            if (status is OrderStatus.Canceled) {
+                stepView.visibility = View.GONE
+                tvCanceledStatus.visibility = View.VISIBLE
+            } else {
+                stepView.visibility = View.VISIBLE
+                tvCanceledStatus.visibility = View.GONE
+                stepView.go(currentOrderState, false)
+                if (currentOrderState == 3) {
+                    stepView.done(true)
+                }
             }
 
             tvFullName.text = order.address.fullName

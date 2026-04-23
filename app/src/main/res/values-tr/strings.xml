@@ -56,6 +56,13 @@
     <string name="status_confirmed">Onaylandı</string>
     <string name="status_shipped">Kargoya Verildi</string>
     <string name="status_delivered">Teslim Edildi</string>
+    <string name="status_canceled">İptal Edildi</string>
+    <string name="status_sub_ordered">Sipariş Alındı</string>
+    <string name="status_sub_confirmed">Onaylandı</string>
+    <string name="status_sub_shipped">Yolda</string>
+    <string name="status_sub_delivered">Teslim Edildi</string>
+    <string name="status_sub_canceled">Sipariş İptal Edildi</string>
+    <string name="order_id_format">#%s</string>
     <string name="no_orders">Sipariş bulunmuyor</string>
     <string name="ordered_products">Siparişteki Ürünler</string>
     <string name="delete_item">Sepetten Sil</string>
