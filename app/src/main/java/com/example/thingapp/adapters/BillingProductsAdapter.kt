@@ -1,6 +1,9 @@
 package com.example.thingapp.adapters
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -22,7 +25,7 @@ class BillingProductsAdapter : RecyclerView.Adapter<BillingProductsAdapter.Billi
         fun bind(billingProduct: CartProduct) {
             binding.apply {
                 // Load the primary product image using Glide
-                Glide.with(itemView).load(billingProduct.product.images[0]).into(imageCartProduct)
+                Glide.with(itemView).load(billingProduct.product.images.getOrNull(0)).into(imageCartProduct)
 
                 tvProductBillingName.text = billingProduct.product.name
                 tvBillingProductQuantity.text = "Qty: ${billingProduct.quantity}"
@@ -34,13 +37,40 @@ class BillingProductsAdapter : RecyclerView.Adapter<BillingProductsAdapter.Billi
                 } ?: billingProduct.product.price
 
                 tvProductBillingPrice.text = "$ ${String.format("%.2f", priceAfterPercentage)}"
+
+                // Bind selected color
+                if (billingProduct.selectedColor != null) {
+                    imageCartProductColor.visibility = View.VISIBLE
+                    imageCartProductColor.setImageDrawable(ColorDrawable(billingProduct.selectedColor))
+                } else {
+                    imageCartProductColor.visibility = View.GONE
+                }
+
+                // Bind selected size
+                if (billingProduct.selectedsize != null) {
+                    imageCartProductSize.visibility = View.VISIBLE
+                    tvCartProductSize.visibility = View.VISIBLE
+                    
+                    // Robust mapping to short letters for the billing circle
+                    val displaySize = when(billingProduct.selectedsize.uppercase().trim()) {
+                        "SMALL", "S" -> "S"
+                        "MEDIUM", "M" -> "M"
+                        "LARGE", "L" -> "L"
+                        "EXTRA LARGE", "XL", "BIG", "EXTRA-LARGE" -> "XL"
+                        else -> if (billingProduct.selectedsize.length > 2) billingProduct.selectedsize.substring(0, 1).uppercase() else billingProduct.selectedsize.uppercase()
+                    }
+                    tvCartProductSize.text = displaySize
+                } else {
+                    imageCartProductSize.visibility = View.GONE
+                    tvCartProductSize.visibility = View.GONE
+                }
             }
         }
     }
 
     private val diffUtil = object : DiffUtil.ItemCallback<CartProduct>() {
         override fun areItemsTheSame(oldItem: CartProduct, newItem: CartProduct): Boolean {
-            return oldItem.product.id == newItem.product.id
+            return oldItem.product.id == newItem.product.id && oldItem.selectedColor == newItem.selectedColor && oldItem.selectedsize == newItem.selectedsize
         }
 
         override fun areContentsTheSame(oldItem: CartProduct, newItem: CartProduct): Boolean {

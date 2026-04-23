@@ -15,41 +15,24 @@ import com.example.thingapp.helper.getProductPrice
 
 /**
  * Adapter class for managing and displaying a list of [CartProduct] items in the shopping cart.
- * * This adapter handles real-time updates via [AsyncListDiffer], item visibility based on
- * user selections (color/size), and provides callbacks for quantity adjustments and navigation.
  */
 class CartProductAdapter : RecyclerView.Adapter<CartProductAdapter.CartProductsViewHolder>() {
 
-    /**
-     * ViewHolder for cart items.
-     * Responsible for binding product data, calculating discounted prices, and managing attribute visibility.
-     */
     inner class CartProductsViewHolder(val binding: CartProductItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        /**
-         * Binds the [CartProduct] data to the layout views.
-         * * @param cartProduct The data object containing product details, selected attributes, and quantity.
-         */
         fun bind(cartProduct: CartProduct) {
             binding.apply {
-                // Load product image efficiently using Glide
                 Glide.with(itemView)
                     .load(cartProduct.product.images.getOrNull(0))
                     .into(imageCartProduct)
 
-                // Display basic product information
                 tvProductCartName.text = cartProduct.product.name
                 tvCartProductQuantity.text = cartProduct.quantity.toString()
 
-                /**
-                 * Price calculation considering the offer percentage.
-                 * Formula used: $P_{final} = P_{original} \times (1 - offer)$
-                 */
                 val priceAfterPercentage = cartProduct.product.offerPercentage.getProductPrice(cartProduct.product.price)
                 tvProductCartPrice.text = "$ ${String.format("%.2f", priceAfterPercentage)}"
 
-                // Manage Color Indicator visibility
                 if (cartProduct.selectedColor != null) {
                     imageCartProductColor.visibility = View.VISIBLE
                     imageCartProductColor.setImageDrawable(ColorDrawable(cartProduct.selectedColor))
@@ -57,14 +40,19 @@ class CartProductAdapter : RecyclerView.Adapter<CartProductAdapter.CartProductsV
                     imageCartProductColor.visibility = View.GONE
                 }
 
-                /**
-                 * Manage Size Indicator visibility.
-                 * Note: Using 'selectedsize' as defined in the Data Class.
-                 */
                 if (cartProduct.selectedsize != null) {
                     tvCartProductSize.visibility = View.VISIBLE
                     imageCartProductSize.visibility = View.VISIBLE
-                    tvCartProductSize.text = cartProduct.selectedsize
+                    
+                    // Robust mapping to short letters for the cart circle
+                    val displaySize = when(cartProduct.selectedsize.uppercase().trim()) {
+                        "SMALL", "S" -> "S"
+                        "MEDIUM", "M" -> "M"
+                        "LARGE", "L" -> "L"
+                        "EXTRA LARGE", "XL", "BIG", "EXTRA-LARGE" -> "XL"
+                        else -> if (cartProduct.selectedsize.length > 2) cartProduct.selectedsize.substring(0, 1).uppercase() else cartProduct.selectedsize.uppercase()
+                    }
+                    tvCartProductSize.text = displaySize
                 } else {
                     tvCartProductSize.visibility = View.GONE
                     imageCartProductSize.visibility = View.GONE
@@ -73,12 +61,9 @@ class CartProductAdapter : RecyclerView.Adapter<CartProductAdapter.CartProductsV
         }
     }
 
-    /**
-     * DiffUtil callback implementation to optimize list updates by identifying changes.
-     */
     private val diffCallback = object : DiffUtil.ItemCallback<CartProduct>() {
         override fun areItemsTheSame(oldItem: CartProduct, newItem: CartProduct): Boolean {
-            return oldItem.product.id == newItem.product.id
+            return oldItem.product.id == newItem.product.id && oldItem.selectedColor == newItem.selectedColor && oldItem.selectedsize == newItem.selectedsize
         }
 
         override fun areContentsTheSame(oldItem: CartProduct, newItem: CartProduct): Boolean {
@@ -86,9 +71,6 @@ class CartProductAdapter : RecyclerView.Adapter<CartProductAdapter.CartProductsV
         }
     }
 
-    /**
-     * Public access to the AsyncListDiffer for submitting new lists.
-     */
     val differ = AsyncListDiffer(this, diffCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartProductsViewHolder {
@@ -101,17 +83,14 @@ class CartProductAdapter : RecyclerView.Adapter<CartProductAdapter.CartProductsV
         val cartProduct = differ.currentList[position]
         holder.bind(cartProduct)
 
-        // Navigation to product details
         holder.itemView.setOnClickListener {
             onProductClick?.invoke(cartProduct)
         }
 
-        // Increase quantity listener
         holder.binding.imagePlus.setOnClickListener {
             onPlusClick?.invoke(cartProduct)
         }
 
-        // Decrease quantity listener
         holder.binding.imageMinus.setOnClickListener {
             onMinusClick?.invoke(cartProduct)
         }
@@ -119,12 +98,7 @@ class CartProductAdapter : RecyclerView.Adapter<CartProductAdapter.CartProductsV
 
     override fun getItemCount(): Int = differ.currentList.size
 
-    /** Callback triggered when the entire product item is clicked. */
     var onProductClick: ((CartProduct) -> Unit)? = null
-
-    /** Callback triggered when the plus (+) button is clicked. */
     var onPlusClick: ((CartProduct) -> Unit)? = null
-
-    /** Callback triggered when the minus (-) button is clicked. */
     var onMinusClick: ((CartProduct) -> Unit)? = null
 }

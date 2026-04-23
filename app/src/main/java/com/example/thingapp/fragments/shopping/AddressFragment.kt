@@ -44,7 +44,7 @@ class AddressFragment : Fragment() {
 
         val address = args.address
         if(address == null){
-            binding.buttonDelete.visibility = View.GONE // Hide the delete button because we are adding a new address.
+            binding.buttonDelete.visibility = View.GONE 
         } else{
             binding.apply {
                 edAddressTitle.setText(address.addressTitle)
@@ -53,6 +53,7 @@ class AddressFragment : Fragment() {
                 edPhone.setText(address.phone)
                 edCity.setText(address.city)
                 edState.setText(address.state)
+                buttonDelete.visibility = View.VISIBLE
             }
         }
 
@@ -60,57 +61,76 @@ class AddressFragment : Fragment() {
         observeAddressState()
     }
 
-    /**
-     * Initializes click listeners for UI components.
-     * Handles address saving, deletion (UI only), and navigation.
-     */
     private fun setupClickListeners() {
         binding.imageAddressClose.setOnClickListener {
             findNavController().navigateUp()
         }
 
         binding.buttonSave.setOnClickListener {
-            val address = Address(
-                binding.edAddressTitle.text.toString(),
-                binding.edFullName.text.toString(),
-                binding.edStreet.text.toString(),
-                binding.edPhone.text.toString(),
-                binding.edCity.text.toString(),
-                binding.edState.text.toString()
+            val title = binding.edAddressTitle.text.toString()
+            val fullName = binding.edFullName.text.toString()
+            val street = binding.edStreet.text.toString()
+            val phone = binding.edPhone.text.toString()
+            val city = binding.edCity.text.toString()
+            val state = binding.edState.text.toString()
+
+            val addressToSave = Address(
+                id = args.address?.id ?: "", 
+                addressTitle = title,
+                fullName = fullName,
+                street = street,
+                phone = phone,
+                city = city,
+                state = state
             )
-            viewModel.addAddress(address)
+            viewModel.addAddress(addressToSave)
         }
 
-        // Delete button is visible for UI consistency.
-        // Backend logic will be implemented in the management phase.
-        binding.buttonDelete.visibility = View.VISIBLE
         binding.buttonDelete.setOnClickListener {
-            Toast.makeText(requireContext(), "Delete feature will be available soon", Toast.LENGTH_SHORT).show()
+            args.address?.let {
+                viewModel.deleteAddress(it)
+            }
         }
     }
 
-    /**
-     * Observes the StateFlow from ViewModel using a lifecycle-aware collector.
-     * Replaces deprecated launchWhenStarted with repeatOnLifecycle for better resource management.
-     */
     private fun observeAddressState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            // Collection starts only when the lifecycle is in STARTED state and stops in STOPPED.
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.addNewAddress.collectLatest { resource ->
-                    when (resource) {
-                        is Resource.Loading -> {
-                            binding.progressbarAddress.visibility = View.VISIBLE
+                launch {
+                    viewModel.addNewAddress.collectLatest { resource ->
+                        when (resource) {
+                            is Resource.Loading -> {
+                                binding.progressbarAddress.visibility = View.VISIBLE
+                            }
+                            is Resource.Success -> {
+                                binding.progressbarAddress.visibility = View.INVISIBLE
+                                findNavController().navigateUp()
+                            }
+                            is Resource.Error -> {
+                                binding.progressbarAddress.visibility = View.INVISIBLE
+                                Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                            }
+                            else -> Unit
                         }
-                        is Resource.Success -> {
-                            binding.progressbarAddress.visibility = View.INVISIBLE
-                            findNavController().navigateUp()
+                    }
+                }
+
+                launch {
+                    viewModel.deleteAddress.collectLatest { resource ->
+                        when (resource) {
+                            is Resource.Loading -> {
+                                binding.progressbarAddress.visibility = View.VISIBLE
+                            }
+                            is Resource.Success -> {
+                                binding.progressbarAddress.visibility = View.INVISIBLE
+                                findNavController().navigateUp()
+                            }
+                            is Resource.Error -> {
+                                binding.progressbarAddress.visibility = View.INVISIBLE
+                                Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                            }
+                            else -> Unit
                         }
-                        is Resource.Error -> {
-                            binding.progressbarAddress.visibility = View.INVISIBLE
-                            Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
-                        }
-                        else -> Unit
                     }
                 }
             }

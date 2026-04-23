@@ -1,6 +1,7 @@
 package com.example.thingapp.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -18,10 +19,14 @@ class SpecialProductsAdapter : RecyclerView.Adapter<SpecialProductsAdapter.Speci
             binding.apply {
 
                 // Use getOrNull(0) to avoid crashes when the product has no images
-                Glide.with(itemView).load(product.images.getOrNull(0)).into(binding.imgAd)
+                Glide.with(itemView).load(product.images.getOrNull(0)).into(imgAd)
 
                 tvAdName.text = product.name
-                tvAdPrice.text = product.price.toString()
+                tvAdPrice.text = "$ ${product.price}"
+                
+                btnAddToCart.setOnClickListener {
+                    onAddToCartClick?.invoke(product)
+                }
             }
         }
     }
@@ -58,4 +63,5 @@ class SpecialProductsAdapter : RecyclerView.Adapter<SpecialProductsAdapter.Speci
     }
 
     var onClick: ((Product) -> Unit)? = null
+    var onAddToCartClick: ((Product) -> Unit)? = null
 }

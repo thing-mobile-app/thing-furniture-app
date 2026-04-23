@@ -63,48 +63,76 @@ class ProductDetailsFragment: Fragment() {
         hideBottomNavigationView()
 
         val product = args.product
+        val cartProductToEdit = args.cartProductToEdit
 
         setupSizesRv()
         setupColorsRv()
         setupViewpager()
 
-        sizesAdapter.onItemClick = {
-            selectedSize = it
+        // Pre-select color and size when opening in Edit Mode
+        if (cartProductToEdit != null) {
+            binding.buttonAddToCart.text = getString(R.string.update_cart)
+
+            cartProductToEdit.selectedColor?.let { prevColor ->
+                val colorIdx = product.colors?.indexOf(prevColor) ?: -1
+                if (colorIdx >= 0) {
+                    selectedColor = prevColor
+                    colorsAdapter.preSelectPosition(colorIdx)
+                }
+            }
+            cartProductToEdit.selectedsize?.let { prevSize ->
+                val sizeIdx = product.sizes?.indexOf(prevSize) ?: -1
+                if (sizeIdx >= 0) {
+                    selectedSize = prevSize
+                    sizesAdapter.preSelectPosition(sizeIdx)
+                }
+            }
         }
 
-        colorsAdapter.onItemClick = {
-            selectedColor = it
-        }
+        sizesAdapter.onItemClick = { selectedSize = it }
+        colorsAdapter.onItemClick = { selectedColor = it }
 
         binding.buttonAddToCart.setOnClickListener {
-            viewModel.addUpdateProductInCart(CartProduct(product,1,selectedColor,selectedSize))
+            if (!product.colors.isNullOrEmpty() && selectedColor == null) {
+                Toast.makeText(requireContext(), getString(R.string.select_color_first), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (!product.sizes.isNullOrEmpty() && selectedSize == null) {
+                Toast.makeText(requireContext(), getString(R.string.select_size_first), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val newCartProduct = CartProduct(product, cartProductToEdit?.quantity ?: 1, selectedColor, selectedSize)
+            if (cartProductToEdit != null) {
+                viewModel.editCartProduct(cartProductToEdit, newCartProduct)
+            } else {
+                viewModel.addUpdateProductInCart(newCartProduct)
+            }
         }
 
-
-        // Collect flow only when UI is started
-        // Replaced deprecated launchWhenStarted with repeatOnLifecycle
-        viewLifecycleOwner.lifecycleScope.launch{
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.addToCart.collectLatest {
-                    when(it){
-                        is Resource.Loading ->{
+                    when (it) {
+                        is Resource.Loading -> {
                             binding.buttonAddToCart.startAnimation()
                         }
-                        is Resource.Success ->{
+                        is Resource.Success -> {
                             binding.buttonAddToCart.revertAnimation()
-                            // Replaced deprecated getColor with ContextCompat
                             binding.buttonAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.black))
+                            if (cartProductToEdit != null) {
+                                viewModel.resetAddToCartState()
+                                findNavController().navigateUp()
+                            }
                         }
-                        is Resource.Error ->{
+                        is Resource.Error -> {
                             binding.buttonAddToCart.stopAnimation()
-                            Toast.makeText(requireContext(),it.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                         }
                         else -> Unit
                     }
                 }
             }
         }
-
 
         binding.apply {
             tvProductName.text = product.name

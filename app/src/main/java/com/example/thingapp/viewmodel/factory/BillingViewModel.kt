@@ -31,6 +31,7 @@ class BillingViewModel @Inject constructor(
 
     /**
      * Retrieves the list of addresses for the currently authenticated user.
+     * Maps Firestore document IDs to the Address object to ensure update/delete operations work.
      */
     fun getUserAddresses() {
         val userId = auth.uid ?: run {
@@ -47,7 +48,11 @@ class BillingViewModel @Inject constructor(
                     return@addSnapshotListener
                 }
 
-                val addressList = value?.toObjects(Address::class.java) ?: emptyList()
+                // Map documents manually to ensure the 'id' field in the data class matches the Firestore document ID
+                val addressList = value?.documents?.mapNotNull { doc ->
+                    doc.toObject(Address::class.java)?.copy(id = doc.id)
+                } ?: emptyList()
+
                 viewModelScope.launch { _address.emit(Resource.Success(addressList)) }
             }
     }

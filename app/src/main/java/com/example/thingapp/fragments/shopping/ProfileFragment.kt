@@ -24,33 +24,21 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-/**
- * Fragment representing the user's profile screen.
- * Handles navigation to various user-specific sections like Addresses, Orders, etc.
- */
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private val viewModel by viewModels<ProfileViewModel>()
 
-    /**
-     * Inflates the fragment layout using ViewBinding.
-     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment using ViewBinding
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    /**
-     * Sets click listeners, observes user state,
-     * and initializes profile screen UI.
-     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,22 +48,30 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_profileFragment_to_userAccountFragment)
         }
 
-        binding.linearOrders.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_AllOrdersFragment)
+        binding.linearAllOrders.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToAllOrdersFragment(activeOnly = false)
+            findNavController().navigate(action)
         }
 
-        // We are passing arguments so we must use another way : action
+        binding.linearTrackOrder.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToAllOrdersFragment(activeOnly = true)
+            findNavController().navigate(action)
+        }
+
         binding.linearBilling.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToBillingFragment(
-                // Dummy data for demonstration purposes
                 emptyArray(),
                 0f,
-                false // We don't need to show any info about the payment
+                false
             )
             findNavController().navigate(action)
         }
 
-        binding.tvVersion.text = "Version ${BuildConfig.VERSION_NAME}"
+        binding.linearLanguage.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_languageFragment)
+        }
+
+        binding.tvVersion.text = "${getString(R.string.version)} ${BuildConfig.VERSION_NAME}"
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.user.collectLatest {
@@ -98,32 +94,20 @@ class ProfileFragment : Fragment() {
 
                     else -> Unit
                 }
-
-
             }
         }
-
     }
 
-    /**
-     * Handles logout button click and navigates
-     * to LoginRegisterActivity while clearing back stack.
-     */
     private fun onLogoutClick() {
         binding.linearLogOut.setOnClickListener {
             viewModel.logout()
-
             val intent = Intent(requireContext(), LoginRegisterActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
-
             requireActivity().finish()
         }
     }
 
-    /**
-     * Shows bottom navigation when fragment becomes visible.
-     */
     override fun onResume() {
         super.onResume()
         showBottomNavigationView()

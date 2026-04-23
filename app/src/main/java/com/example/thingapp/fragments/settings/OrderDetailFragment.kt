@@ -13,6 +13,7 @@ import com.example.thingapp.adapters.BillingProductsAdapter
 import com.example.thingapp.data.order.OrderStatus
 import com.example.thingapp.data.order.getOrderStatus
 import com.example.thingapp.databinding.FragmentOrderDetailBinding
+import com.example.thingapp.R
 import com.example.thingapp.util.VerticalItemDecoration
 
 /**
@@ -68,10 +69,10 @@ class OrderDetailFragment : Fragment() {
 
             stepView.setSteps(
                 mutableListOf(
-                    OrderStatus.Ordered.status,
-                    OrderStatus.Confirmed.status,
-                    OrderStatus.Shipped.status,
-                    OrderStatus.Delivered.status,
+                    getString(R.string.status_ordered),
+                    getString(R.string.status_confirmed),
+                    getString(R.string.status_shipped),
+                    getString(R.string.status_delivered)
                 )
             )
 

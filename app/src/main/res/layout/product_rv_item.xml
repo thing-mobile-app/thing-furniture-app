@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/img_product"
             android:layout_width="0dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

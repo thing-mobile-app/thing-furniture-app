@@ -26,6 +26,10 @@ class AllOrdersViewModel @Inject constructor(
     /** StateFlow emitting the current state of the orders list. */
     val allOrders = _allOrders.asStateFlow()
 
+    private val _deleteOrder = MutableStateFlow<Resource<Order>>(Resource.Unspecified())
+    /** StateFlow emitting the result of a delete operation. */
+    val deleteOrder = _deleteOrder.asStateFlow()
+
     init {
         getAllOrders()
     }
@@ -53,6 +57,38 @@ class AllOrdersViewModel @Inject constructor(
                 }
         } ?: viewModelScope.launch {
             _allOrders.emit(Resource.Error("User not authenticated"))
+        }
+    }
+
+    /**
+     * Deletes an order from Firestore by matching orderId.
+     * After success, refreshes the orders list automatically.
+     */
+    fun deleteOrder(order: Order) {
+        viewModelScope.launch { _deleteOrder.emit(Resource.Loading()) }
+        auth.uid?.let { uid ->
+            firestore.collection("user").document(uid).collection("orders")
+                .whereEqualTo("orderId", order.orderId)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    if (snapshot.isEmpty) {
+                        viewModelScope.launch { _deleteOrder.emit(Resource.Error("Order not found")) }
+                        return@addOnSuccessListener
+                    }
+                    snapshot.documents.first().reference.delete()
+                        .addOnSuccessListener {
+                            viewModelScope.launch {
+                                _deleteOrder.emit(Resource.Success(order))
+                            }
+                            getAllOrders() // refresh list
+                        }
+                        .addOnFailureListener {
+                            viewModelScope.launch { _deleteOrder.emit(Resource.Error(it.message.toString())) }
+                        }
+                }
+                .addOnFailureListener {
+                    viewModelScope.launch { _deleteOrder.emit(Resource.Error(it.message.toString())) }
+                }
         }
     }
 }
