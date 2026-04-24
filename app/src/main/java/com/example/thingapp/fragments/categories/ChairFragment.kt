@@ -92,11 +92,11 @@ class ChairFragment : BaseCategoryFragment() {
     }
 
     override fun onBestProductsPagingRequest() {
-
+        viewModel.fetchBestProducts()
     }
 
     override fun onOfferPagingRequest() {
-
+        viewModel.fetchOfferProducts()
     }
 
 }

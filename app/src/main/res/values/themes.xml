@@ -1,8 +1,15 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Base.Theme.ThingApp" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="colorSurface">@android:color/white</item>
+
+        <item name="colorSecondaryContainer">#F0F0F0</item>
+
+        <item name="colorError">#FF3B30</item>
+    </style>
+
+    <style name="MyBadgeStyle" parent="Widget.Material3.Badge">
+        <item name="backgroundColor">#FF3B30</item> <item name="badgeTextColor">@android:color/white</item>
     </style>
 
     <style name="Theme.ThingApp" parent="Base.Theme.ThingApp" />

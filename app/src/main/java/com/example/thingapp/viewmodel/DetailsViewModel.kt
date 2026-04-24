@@ -15,13 +15,6 @@ import javax.inject.Inject
 
 /**
  * ViewModel responsible for managing product details and cart-related operations.
- *
- * This class interacts with Firestore to check for existing products in the user's cart
- * and coordinates with [FirebaseCommon] to perform add or update operations.
- *
- * @property firestore Instance of [FirebaseFirestore] to query the user's cart.
- * @property auth Instance of [FirebaseAuth] to retrieve the current user's unique ID.
- * @property firebaseCommon Utility class to execute standardized cart database operations.
  */
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
@@ -32,19 +25,55 @@ class DetailsViewModel @Inject constructor(
 
     private val _addToCart = MutableStateFlow<Resource<CartProduct>>(Resource.Unspecified())
     /**
-     * StateFlow that emits the current status of the cart operation (Loading, Success, or Error).
+     * StateFlow that emits the current status of the cart operation.
      */
     val addToCart = _addToCart.asStateFlow()
 
     /**
+     * Resets the add to cart state to Unspecified.
+     * Use this after handling the result (e.g., showing a Toast) to prevent
+     * re-triggering the UI event on configuration changes or navigation.
+     */
+    fun resetAddToCartState() {
+        _addToCart.value = Resource.Unspecified()
+    }
+
+    /**
+     * Edits an existing cart product by deleting the old entry and adding the updated one.
+     * This is triggered when the user navigates from the Cart screen to the Product Details
+     * screen to change color, size, etc.
+     */
+    fun editCartProduct(oldProduct: CartProduct, newProduct: CartProduct) {
+        viewModelScope.launch { _addToCart.emit(Resource.Loading()) }
+        firestore.collection("user").document(auth.uid!!).collection("cart")
+            .whereEqualTo("product.id", oldProduct.product.id)
+            .whereEqualTo("selectedColor", oldProduct.selectedColor)
+            .whereEqualTo("selectedsize", oldProduct.selectedsize)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.isEmpty) {
+                    // Document not found, just add as new
+                    addUpdateProductInCart(newProduct)
+                } else {
+                    val documentId = snapshot.documents.first().id
+                    firestore.collection("user").document(auth.uid!!)
+                        .collection("cart").document(documentId)
+                        .delete()
+                        .addOnSuccessListener {
+                            addUpdateProductInCart(newProduct)
+                        }
+                        .addOnFailureListener {
+                            viewModelScope.launch { _addToCart.emit(Resource.Error(it.message.toString())) }
+                        }
+                }
+            }
+            .addOnFailureListener {
+                viewModelScope.launch { _addToCart.emit(Resource.Error(it.message.toString())) }
+            }
+    }
+
+    /**
      * Orchestrates the process of adding or updating a product in the cart.
-     *
-     * It first checks if the product already exists in the Firestore "cart" collection.
-     * - If it doesn't exist, it calls [addNewProduct].
-     * - If it exists and attributes (like color/size) match, it calls [increaseQuantity].
-     * - If it exists but attributes differ, it treats it as a new entry via [addNewProduct].
-     *
-     * @param cartProduct The product information to be added or updated.
      */
     fun addUpdateProductInCart(cartProduct: CartProduct){
         viewModelScope.launch { _addToCart.emit(Resource.Loading()) }
@@ -69,11 +98,6 @@ class DetailsViewModel @Inject constructor(
             }
     }
 
-    /**
-     * Saves a new [CartProduct] entry to the database.
-     *
-     * @param cartProduct The new product object to save.
-     */
     private fun addNewProduct(cartProduct: CartProduct){
         firebaseCommon.addProductToCart(cartProduct){ addedProduct, e ->
             viewModelScope.launch {
@@ -85,12 +109,6 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Increases the quantity of an existing product document.
-     *
-     * @param documentId The unique Firestore document ID of the item in the cart.
-     * @param cartProduct The original product object to return in the [Resource.Success] state.
-     */
     private fun increaseQuantity(documentId: String,cartProduct: CartProduct){
         firebaseCommon.increaseQuantity(documentId){ _, e ->
             viewModelScope.launch {

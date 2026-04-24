@@ -15,6 +15,12 @@ class ColorsAdapter : RecyclerView.Adapter<ColorsAdapter.ColorsAdapterViewHolder
     // Keeps track of the position
     private var selectedPosition = -1
 
+    /** Pre-selects a position (used when editing an existing cart item). */
+    fun preSelectPosition(position: Int) {
+        selectedPosition = position
+        notifyItemChanged(position)
+    }
+
 
     // ViewHolder for each color item
     inner class ColorsAdapterViewHolder(private val binding : ColorRvItemBinding) : RecyclerView.ViewHolder(binding.root){

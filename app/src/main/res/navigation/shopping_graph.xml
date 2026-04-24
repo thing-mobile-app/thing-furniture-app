@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_homeFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <argument
+            android:name="tabIndex"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 
     <fragment
@@ -29,13 +33,56 @@
         android:id="@+id/cartFragment"
         android:name="com.example.thingapp.fragments.shopping.CartFragment"
         android:label="CartFragment"
-        tools:layout="@layout/fragment_cart"/>
+        tools:layout="@layout/fragment_cart">
+        <action
+            android:id="@+id/action_cartFragment_to_billingFragment"
+            app:destination="@id/billingFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.thingapp.fragments.shopping.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile"/>
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_userAccountFragment"
+            app:destination="@id/userAccountFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_AllOrdersFragment"
+            app:destination="@id/AllOrdersFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_billingFragment"
+            app:destination="@id/billingFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/AllOrdersFragment"
+        android:name="com.example.thingapp.fragments.settings.AllOrdersFragment"
+        android:label="AllOrdersFragment"
+        tools:layout="@layout/fragment_orders" >
+        <action
+            android:id="@+id/action_allOrdersFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
+        <argument
+            android:name="activeOnly"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userAccountFragment"
+        android:name="com.example.thingapp.fragments.settings.UserAccountFragment"
+        android:label="UserAccountFragment"
+        tools:layout="@layout/fragment_user_account" />
 
     <fragment
         android:id="@+id/productDetailsFragment"
@@ -45,5 +92,70 @@
         <argument
             android:name="product"
             app:argType="com.example.thingapp.data.Product" />
+        <argument
+            android:name="cartProductToEdit"
+            app:argType="com.example.thingapp.data.CartProduct"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
+
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.example.thingapp.fragments.shopping.AddressFragment"
+        android:label="AddressFragment"
+        tools:layout="@layout/fragment_address">
+        <argument
+            android:name="address"
+            app:argType="com.example.thingapp.data.Address"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/billingFragment"
+        android:name="com.example.thingapp.fragments.shopping.BillingFragment"
+        android:label="BillingFragment"
+        tools:layout="@layout/fragment_billing">
+
+        <argument
+            android:name="products"
+            app:argType="com.example.thingapp.data.CartProduct[]" />
+
+        <argument
+            android:name="totalPrice"
+            app:argType="float" />
+
+        <action
+            android:id="@+id/action_billingFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+        <action
+            android:id="@+id/action_billingFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="payment"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.example.thingapp.fragments.settings.OrderDetailFragment"
+        android:label="OrderDetailFragment" >
+        <argument
+            android:name="order"
+            app:argType="com.example.thingapp.data.order.Order" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.example.thingapp.fragments.settings.LanguageFragment"
+        android:label="LanguageFragment"
+        tools:layout="@layout/fragment_language" />
+
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.example.thingapp.fragments.settings.HelpFragment"
+        android:label="HelpFragment"
+        tools:layout="@layout/fragment_help" />
+
 </navigation>

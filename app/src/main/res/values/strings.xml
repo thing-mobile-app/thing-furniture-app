@@ -2,4 +2,134 @@
     <string name="app_name">thingApp</string>
     <string name="rightAddress">The Perfect Place\nFor Better\nFurniture</string>
     <string name="quality">Furniture may be just a thing —\nbut it\'s the thing\nthat turns a house into a home.</string>
+
+    <!-- Search Fragment -->
+    <string name="search">Search</string>
+    <string name="search_now">Search now</string>
+    <string name="cancel">Cancel</string>
+    <string name="browse_categories">Browse Categories</string>
+    <string name="chairs">Chairs</string>
+    <string name="cupboards">Cupboards</string>
+    <string name="tables">Tables</string>
+    <string name="accessories">Accessories</string>
+    <string name="furniture">Furniture</string>
+
+    <!-- Profile Fragment -->
+    <string name="settings">Settings</string>
+    <string name="edit_personal_details">Edit personal details</string>
+    <string name="orders">Orders</string>
+    <string name="all_orders">All Orders</string>
+    <string name="track_orders">Track Orders</string>
+    <string name="billing">Billing</string>
+    <string name="language">Language</string>
+    <string name="account">Account</string>
+    <string name="logout">Logout</string>
+    <string name="version">Version</string>
+
+    <!-- Home Fragment -->
+    <string name="best_deals">Best Deals</string>
+    <string name="best_products">Best Products</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="see_product">See product</string>
+    <string name="main">Main</string>
+    <string name="chair">Chair</string>
+    <string name="cupboard">Cupboard</string>
+    <string name="table">Table</string>
+    <string name="accessory">Accessory</string>
+
+    <!-- Product Details -->
+    <string name="colors">Colors</string>
+    <string name="size">Size</string>
+
+    <!-- Cart Fragment -->
+    <string name="my_cart">My Cart</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="checkout">Check out</string>
+    <string name="english">English</string>
+    <string name="turkish">Türkçe</string>
+    <string name="payment_methods">Payment Methods</string>
+    <string name="payment_note">This app does not support virtual payments. You can pay when you receive your order.</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="total">Total</string>
+    <string name="place_order">Place Order</string>
+    <string name="placing">Placing...</string>
+    <string name="order_placed">Your order was placed</string>
+    <string name="item_added">Item added to cart</string>
+    <string name="empty_cart">Your shopping cart is empty</string>
+    <string name="status_ordered">Ordered</string>
+    <string name="status_confirmed">Confirmed</string>
+    <string name="status_shipped">Shipped</string>
+    <string name="status_delivered">Delivered</string>
+    <string name="status_canceled">Canceled</string>
+    <string name="status_sub_ordered">Order Received</string>
+    <string name="status_sub_confirmed">Confirmed</string>
+    <string name="status_sub_shipped">In Transit</string>
+    <string name="status_sub_delivered">Delivered</string>
+    <string name="status_sub_canceled">Order Canceled</string>
+    <string name="order_id_format">#%s</string>
+    <string name="no_orders">No orders to show</string>
+    <string name="ordered_products">Ordered Products</string>
+    <string name="delete_item">Delete item from cart</string>
+    <string name="my_account">My account</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email_hint">Email</string>
+    <string name="forgot_password">Forgot/Change password</string>
+    <string name="save">Save</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="reset_password_text">Don\'t worry! We\'ll send you a link to reset your password.</string>
+    <string name="send">Send</string>
+    <string name="lets_login">Let\'s login</string>
+    <string name="dont_have_account">Don\'t have an account? Register</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Login</string>
+    <string name="lets_register">Let\'s register</string>
+    <string name="have_account">Do you have an account? Log in</string>
+    <string name="register_button">Register</string>
+    <string name="forgot_password_login">Forgot Password</string>
+    <string name="start_button">Start</string>
+    <string name="select_color_first">Please select a color first</string>
+    <string name="select_size_first">Please select a size first</string>
+    <string name="delete_item_confirm">Do you want to delete this item from your cart?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel_dialog">Cancel</string>
+    <string name="order_items">Order items</string>
+    <string name="order_items_confirm">Do you want to order your cart items?</string>
+    <string name="confirm">Confirm</string>
+    <string name="select_address">Please select an address</string>
+    <string name="selected_address">Selected: %s</string>
+    <string name="error">Error %s</string>
+    <string name="update_cart">Update Cart</string>
+    <string name="search_orders">Search orders…</string>
+    <string name="order_delete_confirm">Are you sure you want to delete this order?</string>
+    <string name="order_deleted">Order deleted</string>
+
+    <!-- Help / FAQ Fragment -->
+    <string name="help">Help</string>
+    <string name="help_subtitle">Find answers to the most common questions about the app.</string>
+    <string name="faq_label">FREQUENTLY ASKED QUESTIONS</string>
+    <string name="help_close_desc">Close help screen</string>
+
+    <string name="faq_q1">How do I browse products?</string>
+    <string name="faq_a1">Open the Home tab from the bottom navigation bar. You can swipe between product categories (Main, Chair, Cupboard, Table, Accessory) or use the Search tab to find specific items by name or category.</string>
+
+    <string name="faq_q2">How do I add items to cart?</string>
+    <string name="faq_a2">Tap any product to open its detail page. Select your preferred color and size, then tap "Add to Cart". You will see a confirmation message at the bottom of the screen.</string>
+
+    <string name="faq_q3">How do I place an order?</string>
+    <string name="faq_a3">Go to your Cart, review the items, then tap "Check out". On the Billing screen, choose a shipping address and confirm. Orders are paid on delivery — no online payment is required.</string>
+
+    <string name="faq_q4">Where can I see my orders?</string>
+    <string name="faq_a4">Go to Profile → All Orders to see every order you have placed. Use Profile → Track Orders to view only your active (Ordered / Confirmed / Shipped) orders and search by order ID or date.</string>
+
+    <string name="faq_q6">How do I update my profile?</string>
+    <string name="faq_a6">Go to Profile and tap your name at the top. On the My Account screen you can update your first name, last name, email, and profile photo.</string>
+
+    <string name="faq_q7">I forgot my password, what can I do?</string>
+    <string name="faq_a7">On the Login screen tap "Forgot Password". Enter your registered email address and we will send you a password reset link. You can also change your password from Profile → My Account after logging in.</string>
+
+    <string name="faq_q8">Which languages are supported?</string>
+    <string name="faq_a8">The app supports English and Turkish (Türkçe). Go to Profile → Language to switch between them. The app restarts automatically to apply the new language.</string>
+
+
 </resources>

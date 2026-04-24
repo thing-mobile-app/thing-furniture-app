@@ -40,6 +40,10 @@ class BestDealsAdapter : RecyclerView.Adapter<BestDealsAdapter.BestDealsViewHold
                     tvNewPrice.visibility = View.INVISIBLE
                     tvOldPrice.paintFlags = tvOldPrice.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 }
+
+                btnSeeProduct.setOnClickListener {
+                    onClick?.invoke(product)
+                }
             }
         }
     }

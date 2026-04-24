@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_linear"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="14dp"
+    android:paddingBottom="14dp"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Order info: ID and date -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvOrderId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_18pt_regular"
+                android:textColor="#1C1C1E"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.005"
+                tools:text="Order #123456" />
+
+            <TextView
+                android:id="@+id/tvOrderDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textSize="12sp"
+                android:textColor="@color/g_gray700"
+                android:fontFamily="@font/inter_18pt_regular"
+                tools:text="23 April 2026" />
+
+        </LinearLayout>
+
+        <!-- Status badge chip -->
+        <LinearLayout
+            android:id="@+id/llStatusBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/status_badge_ordered"
+            android:duplicateParentState="true"
+            tools:background="@drawable/status_badge_ordered">
+
+            <TextView
+                android:id="@+id/tvStatusLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.01"
+                android:gravity="center"
+                android:fontFamily="@font/inter_18pt_regular"
+                android:textColor="@color/status_ordered_text"
+                tools:text="Ordered" />
+
+            <TextView
+                android:id="@+id/tvStatusSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize="10sp"
+                android:gravity="center"
+                android:fontFamily="@font/inter_18pt_regular"
+                android:textColor="@color/status_ordered_text"
+                android:alpha="0.75"
+                tools:text="Order Received" />
+
+        </LinearLayout>
+
+        <!-- Delete icon -->
+        <ImageView
+            android:id="@+id/ivDeleteOrder"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="6dp"
+            android:layout_marginStart="6dp"
+            android:src="@drawable/ic_delete"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/g_red" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/ic_arrow" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="14dp"
+        android:background="@color/g_blue_gray200"
+        android:alpha="0.35" />
+
+</LinearLayout>

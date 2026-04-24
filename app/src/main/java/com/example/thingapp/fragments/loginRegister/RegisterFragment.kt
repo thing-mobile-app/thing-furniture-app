@@ -75,11 +75,13 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         is Resource.Success -> {
                             Log.d("test", it.data.toString())
                             binding.buttonRegisterRegister.revertAnimation()
+                            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
                         }
 
                         is Resource.Error -> {
                             Log.e(TAG, it.message.toString())
                             binding.buttonRegisterRegister.revertAnimation()
+                            android.widget.Toast.makeText(requireContext(), it.message.toString(), android.widget.Toast.LENGTH_LONG).show()
                         }
 
                         else -> Unit

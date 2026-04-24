@@ -8,41 +8,39 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thingapp.databinding.SizeRvItemBinding
 
-// Adapter for displaying selectable size options in a RecyclerView
-// Same concept as ColorsAdapter.kt but for sizes we use string instead of Int
 class SizesAdapter : RecyclerView.Adapter<SizesAdapter.SizesAdapterViewHolder>() {
 
     private var selectedPosition = -1
 
+    /** Pre-selects a position (used when editing an existing cart item). */
+    fun preSelectPosition(position: Int) {
+        selectedPosition = position
+        notifyItemChanged(position)
+    }
 
     inner class SizesAdapterViewHolder(private val binding : SizeRvItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(size : String, position: Int){
-            binding.tvSize.text = size
-            // Size is selected
-            if(position == selectedPosition){
-                binding.apply {
-                    imageShadow.visibility = View.VISIBLE
-                }
+            // ULTIMATE mapping to ensure short letters (S, M, L, XL)
+            val displaySize = when(size.uppercase().trim()) {
+                "S", "SMALL" -> "S"
+                "M", "MEDIUM" -> "M"
+                "L", "LARGE" -> "L"
+                "XL", "EXTRA LARGE", "BIG", "EXTRA-LARGE" -> "XL"
+                else -> size.take(1).uppercase() // Fallback to first letter
             }
-            // Size is not selected
-            else{
-                binding.apply {
-                    imageShadow.visibility = View.INVISIBLE
-                }
+            binding.tvSize.text = displaySize
+            
+            if(position == selectedPosition){
+                binding.imageShadow.visibility = View.VISIBLE
+            } else{
+                binding.imageShadow.visibility = View.INVISIBLE
             }
         }
-
     }
 
-    private val diffCallBack = object : DiffUtil.ItemCallback<String>(){ // Sizes are String
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem == newItem
-        }
-
+    private val diffCallBack = object : DiffUtil.ItemCallback<String>(){
+        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean = oldItem == newItem
+        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean = oldItem == newItem
     }
 
     val differ = AsyncListDiffer(this, diffCallBack)
@@ -52,7 +50,7 @@ class SizesAdapter : RecyclerView.Adapter<SizesAdapter.SizesAdapterViewHolder>()
         viewType: Int
     ): SizesAdapterViewHolder {
         return SizesAdapterViewHolder(
-            SizeRvItemBinding.inflate(LayoutInflater.from(parent.context))
+            SizeRvItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -64,20 +62,14 @@ class SizesAdapter : RecyclerView.Adapter<SizesAdapter.SizesAdapterViewHolder>()
         holder.bind(size, position)
 
         holder.itemView.setOnClickListener {
-            if(selectedPosition >= 0){
-                notifyItemChanged(selectedPosition) // Used to unselect the selected item
-            }
-            // We will select the new item by these two lines
+            if(selectedPosition >= 0) notifyItemChanged(selectedPosition)
             selectedPosition = holder.adapterPosition
-            notifyItemChanged(position)
+            notifyItemChanged(selectedPosition)
             onItemClick?.invoke(size)
         }
     }
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
+    override fun getItemCount(): Int = differ.currentList.size
 
     var onItemClick:((String) -> Unit)? = null
-
 }

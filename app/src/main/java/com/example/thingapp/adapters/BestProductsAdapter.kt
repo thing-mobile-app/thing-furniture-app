@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.thingapp.data.Product
 import com.example.thingapp.databinding.ProductRvItemBinding
+import com.example.thingapp.helper.getProductPrice
 
 class BestProductsAdapter : RecyclerView.Adapter<BestProductsAdapter.BestProductsViewHolder>() {
 
@@ -33,8 +34,7 @@ class BestProductsAdapter : RecyclerView.Adapter<BestProductsAdapter.BestProduct
                     // Show the new price if there is a discount
                     tvNewPrice.visibility = View.VISIBLE
 
-                    val remainingPricePercentage = 1f - product.offerPercentage!!
-                    val priceAfterOffer = remainingPricePercentage * product.price
+                    val priceAfterOffer = product.offerPercentage.getProductPrice(product.price)
                     tvNewPrice.text = "$ ${String.format("%.2f", priceAfterOffer)}"
 
                     // strikethrough effect on the original price

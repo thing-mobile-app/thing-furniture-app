@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/white"
+    android:clipToPadding="false"
+    android:paddingTop="54dp"> <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarOrderDetails"
+        android:layout_width="0dp"
+        android:layout_height="?actionBarSize"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageCloseOrder"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_close"
+                android:scaleType="centerInside"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black" />
+
+            <TextView
+                android:id="@+id/tvOrderId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/inter_18pt_bold"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:text="#1234567"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageCloseOrder"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/linearStepView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintTop_toBottomOf="@id/toolbarOrderDetails">
+
+        <com.shuhart.stepview.StepView
+            android:id="@+id/stepView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            app:sv_selectedCircleColor="@color/status_ordered"
+            app:sv_selectedTextColor="@color/status_ordered_text"
+            app:sv_stepLineWidth="2dp"
+            app:sv_stepPadding="8dp"
+            app:sv_nextTextColor="@color/g_gray700"
+            app:sv_nextStepLineColor="@color/g_blue_gray200"
+            app:sv_doneCircleColor="@color/status_delivered"
+            app:sv_doneStepLineColor="@color/status_delivered"
+            app:sv_doneCircleRadius="12dp"
+            app:sv_selectedCircleRadius="12dp"
+            app:sv_selectedStepNumberColor="@color/white"
+            app:sv_stepViewStyle="@style/StepView"
+            app:sv_doneStepMarkColor="@color/white"
+            app:sv_stepNumberTextSize="10sp"
+            app:sv_animationType="Line"
+            app:sv_doneTextColor="@color/status_delivered_text" />
+
+        <TextView
+            android:id="@+id/tvCanceledStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/status_badge_canceled"
+            android:fontFamily="@font/inter_18pt_bold"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="@string/status_canceled"
+            android:textColor="@color/status_canceled_text"
+            android:textSize="16sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvShippingAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/shipping_address"
+        android:fontFamily="@font/inter_18pt_bold"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/linearStepView"
+        app:drawableTint="@color/black"
+        android:drawablePadding="8dp"
+        app:drawableStartCompat="@drawable/ic_location" />
+
+    <LinearLayout
+        android:id="@+id/linearAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintTop_toBottomOf="@id/tvShippingAddress">
+
+        <TextView
+            android:id="@+id/tvFullName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="John Doe"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="1234 Street, New York, USA"
+            android:textColor="@color/g_gray700"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="+1 234 567 890"
+            android:textColor="@color/g_gray700"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@id/linearAddress"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintEnd_toEndOf="@id/guideline2" />
+
+    <TextView
+        android:id="@+id/tvProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ordered_products"
+        android:fontFamily="@font/inter_18pt_bold"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/line1"
+        app:drawableTint="@color/black"
+        android:drawablePadding="8dp"
+        app:drawableStartCompat="@drawable/ic_cart" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProducts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintTop_toBottomOf="@id/tvProducts"
+        tools:listitem="@layout/billing_products_rv_item" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:padding="20dp"
+        android:background="@drawable/total_box_background"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintTop_toBottomOf="@id/rvProducts"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tvTotalLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_amount"
+            android:textSize="17sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/inter_18pt_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvTotalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/inter_18pt_bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="$120.00" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

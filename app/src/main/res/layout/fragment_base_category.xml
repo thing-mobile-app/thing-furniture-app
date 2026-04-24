@@ -1,69 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nestedScrollBaseCategory"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
-    android:id="@+id/nestedScrollBaseCategory">
+    android:clipToPadding="false"
+    android:scrollbars="none"
+    android:background="@android:color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ProgressBar
-            android:id="@+id/offerProductsProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminateTint="@color/g_blue_gray200"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/rvOffer"
-            app:layout_constraintBottom_toBottomOf="@+id/rvOffer"
-            android:visibility="gone"
-            />
-
+        <!-- Offer List -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvOffer"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
+            android:paddingBottom="8dp"
+            tools:listitem="@android:layout/simple_list_item_1"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/offerProductsProgressBar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:visibility="gone"
+            app:indicatorSize="32dp"
+            app:trackThickness="3dp"
+            app:layout_constraintTop_toTopOf="@id/rvOffer"
+            app:layout_constraintBottom_toBottomOf="@id/rvOffer"
+            app:layout_constraintStart_toStartOf="@id/rvOffer"
+            app:layout_constraintEnd_toEndOf="@id/rvOffer" />
+
+        <!-- Title -->
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvBestProducts"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="Best Products"
-            android:textColor="@color/black"
-            android:textSize="22sp"
-            android:fontFamily="@font/inter_18pt_bold"
-            app:layout_constraintStart_toStartOf="@id/rvBestProducts"
-            app:layout_constraintTop_toBottomOf="@id/rvOffer" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/best_products"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/rvOffer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- Product List -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvBestProducts"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="24dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
+            android:paddingBottom="8dp"
+            tools:listitem="@android:layout/simple_list_item_1"
             app:layout_constraintTop_toBottomOf="@id/tvBestProducts"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:overScrollMode="never" />
-
-        <ProgressBar
-            android:id="@+id/bestProductsProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminateTint="@color/g_blue_gray200"
-            app:layout_constraintTop_toBottomOf="@+id/rvBestProducts"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/bestProductsProgressBar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:visibility="gone"
-            />
+            app:indicatorSize="32dp"
+            app:trackThickness="3dp"
+            app:layout_constraintTop_toTopOf="@id/rvBestProducts"
+            app:layout_constraintBottom_toBottomOf="@id/rvBestProducts"
+            app:layout_constraintStart_toStartOf="@id/rvBestProducts"
+            app:layout_constraintEnd_toEndOf="@id/rvBestProducts" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,7 +5,6 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
     id("kotlin-kapt")
 }
 
@@ -38,6 +37,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -52,7 +52,6 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.8.6")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.0")
 
-    implementation("com.github.leandroborgesferreira:loading-button-android:2.3.0")
 
     //Navigation component
     val nav_version = "2.8.8"
@@ -90,7 +89,7 @@ dependencies {
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.55")
-    ksp("com.google.dagger:hilt-compiler:2.55")
+    kapt("com.google.dagger:hilt-compiler:2.55")
 
     // CircularButton
     implementation("com.github.leandroborgesferreira:loading-button-android:2.3.0")

@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -20,60 +19,51 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/searchBar"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/search_box_background">
-            
-            <TextView
+
+            <EditText
+                android:id="@+id/ed_search_home"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:fontFamily="@font/inter_18pt_medium"
+                android:hint="@string/search_now"
                 android:paddingStart="20dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 android:singleLine="true"
-                android:text="Search Now"
-                android:textColor="#919394"
+                android:textColor="@color/g_black"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-            
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivSearchHome" />
+
             <ImageView
+                android:id="@+id/ivSearchHome"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="18dp"
                 android:src="@drawable/ic_search"
+                android:alpha="0.55"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-            
+                app:layout_constraintEnd_toEndOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-        
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_scan"
-            android:background="@drawable/icon_background"
-            android:backgroundTint="@color/g_search_and_icons"
-            android:padding="10dp" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_microphone"
-            android:background="@drawable/icon_background"
-            android:backgroundTint="@color/g_search_and_icons"
-            android:padding="10dp" />
+            android:id="@+id/iv_close_search"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/ic_close"
+            android:visibility="gone"
+            app:tint="@color/g_gray700" />
 
     </LinearLayout>
 
@@ -83,12 +73,14 @@
         android:layout_height="wrap_content"
         app:tabRippleColor="@color/white"
         app:tabSelectedTextColor="@color/black"
+        app:tabIndicatorColor="@color/black"
+        app:tabIndicatorHeight="3dp"
         app:tabMode="scrollable"
         app:tabTextAppearance="@style/tabLayout_text"
         app:layout_constraintTop_toBottomOf="@id/homeHeader"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerHome"
@@ -97,8 +89,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tabLayout"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_home"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:visibility="gone"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/homeHeader" />
 
+    <ProgressBar
+        android:id="@+id/search_progress_bar_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/homeHeader" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

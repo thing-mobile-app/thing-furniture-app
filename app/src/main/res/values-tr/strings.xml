@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">thingApp</string>
+    <string name="rightAddress">Daha İyi Mobilyalar\nİçin\nMükemmel Adres</string>
+    <string name="quality">Mobilya belki sadece bir eşyadır —\nama bir evi yuvaya dönüştüren\ntek eşyadır.</string>
+
+    <string name="search">Arama</string>
+    <string name="search_now">Şimdi ara</string>
+    <string name="cancel">İptal</string>
+    <string name="browse_categories">Kategorilere Göz At</string>
+    <string name="chairs">Sandalyeler</string>
+    <string name="cupboards">Dolaplar</string>
+    <string name="tables">Masalar</string>
+    <string name="accessories">Aksesuarlar</string>
+    <string name="furniture">Mobilya</string>
+
+    <string name="settings">Ayarlar</string>
+    <string name="edit_personal_details">Kişisel bilgileri düzenle</string>
+    <string name="orders">Siparişler</string>
+    <string name="all_orders">Tüm Siparişler</string>
+    <string name="track_orders">Siparişleri Takip Et</string>
+    <string name="billing">Fatura</string>
+    <string name="language">Dil</string>
+    <string name="account">Hesap</string>
+    <string name="logout">Çıkış Yap</string>
+    <string name="version">Sürüm</string>
+
+    <string name="best_deals">En İyi Fırsatlar</string>
+    <string name="best_products">En İyi Ürünler</string>
+    <string name="add_to_cart">Sepete Ekle</string>
+    <string name="see_product">Ürünü gör</string>
+    <string name="main">Ana Sayfa</string>
+    <string name="chair">Sandalye</string>
+    <string name="cupboard">Dolap</string>
+    <string name="table">Masa</string>
+    <string name="accessory">Aksesuar</string>
+
+    <string name="colors">Renkler</string>
+    <string name="size">Boyut</string>
+
+    <string name="my_cart">Sepetim</string>
+    <string name="total_amount">Toplam Tutar</string>
+    <string name="checkout">Ödeme Yap</string>
+    <string name="english">İngilizce</string>
+    <string name="turkish">Türkçe</string>
+    <string name="payment_methods">Ödeme Yöntemleri</string>
+    <string name="payment_note">Bu uygulama sanal ödemeleri desteklememektedir. Siparişinizi teslim aldığınızda ödeme yapabilirsiniz.</string>
+    <string name="shipping_address">Teslimat Adresi</string>
+    <string name="total">Toplam</string>
+    <string name="place_order">Siparişi Onayla</string>
+    <string name="placing">Sipariş veriliyor...</string>
+    <string name="order_placed">Siparişiniz alındı</string>
+    <string name="item_added">Ürün sepete eklendi</string>
+    <string name="empty_cart">Alışveriş sepetiniz boş</string>
+    <string name="status_ordered">Sipariş Alındı</string>
+    <string name="status_confirmed">Onaylandı</string>
+    <string name="status_shipped">Kargoya Verildi</string>
+    <string name="status_delivered">Teslim Edildi</string>
+    <string name="status_canceled">İptal Edildi</string>
+    <string name="status_sub_ordered">Sipariş Alındı</string>
+    <string name="status_sub_confirmed">Onaylandı</string>
+    <string name="status_sub_shipped">Yolda</string>
+    <string name="status_sub_delivered">Teslim Edildi</string>
+    <string name="status_sub_canceled">Sipariş İptal Edildi</string>
+    <string name="order_id_format">#%s</string>
+    <string name="no_orders">Sipariş bulunmuyor</string>
+    <string name="ordered_products">Siparişteki Ürünler</string>
+    <string name="delete_item">Sepetten Sil</string>
+    <string name="my_account">Hesabım</string>
+    <string name="first_name">Ad</string>
+    <string name="last_name">Soyad</string>
+    <string name="email_hint">E-posta</string>
+    <string name="forgot_password">Şifremi Unuttum / Değiştir</string>
+    <string name="save">Kaydet</string>
+    <string name="reset_password">Şifremi Sıfırla</string>
+    <string name="reset_password_text">Endişelenmeyin! Şifrenizi sıfırlamanız için size bir bağlantı göndereceğiz.</string>
+    <string name="send">Gönder</string>
+    <string name="lets_login">Giriş Yapalım</string>
+    <string name="dont_have_account">Hesabınız yok mu? Kayıt Olun</string>
+    <string name="password_hint">Şifre</string>
+    <string name="login_button">Giriş Yap</string>
+    <string name="lets_register">Kayıt Olalım</string>
+    <string name="have_account">Hesabınız var mı? Giriş Yapın</string>
+    <string name="register_button">Kayıt Ol</string>
+    <string name="forgot_password_login">Şifremi Unuttum</string>
+    <string name="start_button">Başla</string>
+    <string name="select_color_first">Lütfen önce bir renk seçin</string>
+    <string name="select_size_first">Lütfen önce bir beden/ölçü seçin</string>
+    <string name="delete_item_confirm">Bu ürünü sepetten silmek istiyor musunuz?</string>
+    <string name="yes">Evet</string>
+    <string name="cancel_dialog">İptal</string>
+    <string name="order_items">Siparişi Onayla</string>
+    <string name="order_items_confirm">Sepetteki ürünleri sipariş etmek istiyor musunuz?</string>
+    <string name="confirm">Onayla</string>
+    <string name="select_address">Lütfen bir adres seçin</string>
+    <string name="selected_address">Seçilen: %s</string>
+    <string name="error">Hata %s</string>
+    <string name="update_cart">Sepeti Güncelle</string>
+    <string name="search_orders">Sipariş ara…</string>
+    <string name="order_delete_confirm">Bu siparişi silmek istediğinizden emin misiniz?</string>
+    <string name="order_deleted">Sipariş silindi</string>
+
+    <!-- Help / FAQ Fragment -->
+    <string name="help">Yardım</string>
+    <string name="help_subtitle">Uygulama hakkında en sık sorulan soruların yanıtlarını burada bulabilirsiniz.</string>
+    <string name="faq_label">SIK SORULAN SORULAR</string>
+    <string name="help_close_desc">Yardım ekranını kapat</string>
+
+    <string name="faq_q1">Ürünlere nasıl göz atabilirim?</string>
+    <string name="faq_a1">Alt navigasyon çubuğundan Ana Sayfa sekmesini açın. Ürün kategorileri arasında kaydırabilir (Ana, Sandalye, Dolap, Masa, Aksesuar) veya belirli ürünleri ada ya da kategoriye göre bulmak için Arama sekmesini kullanabilirsiniz.</string>
+
+    <string name="faq_q2">Sepete nasıl ürün eklerim?</string>
+    <string name="faq_a2">Herhangi bir ürüne dokunarak detay sayfasını açın. Tercih ettiğiniz rengi ve bedeni seçtikten sonra "Sepete Ekle" düğmesine basın. Ekranın altında bir onay mesajı göreceksiniz.</string>
+
+    <string name="faq_q3">Nasıl sipariş veririm?</string>
+    <string name="faq_a3">Sepetinize gidin, ürünleri inceleyin ve "Ödeme Yap" düğmesine dokunun. Fatura ekranında bir teslimat adresi seçin ve onaylayın. Siparişler kapıda ödeme ile teslim edilir; çevrimiçi ödeme gerekmez.</string>
+
+    <string name="faq_q4">Siparişlerimi nerede görebilirim?</string>
+    <string name="faq_a4">Tüm siparişlerinizi görmek için Profil → Tüm Siparişler bölümüne gidin. Yalnızca aktif (Sipariş Alındı / Onaylandı / Kargoya Verildi) siparişlerinizi görüntülemek ve sipariş ID veya tarihe göre arama yapmak için Profil → Siparişleri Takip Et seçeneğini kullanın.</string>
+
+    <string name="faq_q6">Profilimi nasıl güncellerim?</string>
+    <string name="faq_a6">Profil sekmesine gidin ve üstteki adınıza dokunun. Hesabım ekranında adınızı, soyadınızı, e-posta adresinizi ve profil fotoğrafınızı güncelleyebilirsiniz.</string>
+
+    <string name="faq_q7">Şifremi unuttum, ne yapabilirim?</string>
+    <string name="faq_a7">Giriş ekranında "Şifremi Unuttum" seçeneğine dokunun. Kayıtlı e-posta adresinizi girin; size bir şifre sıfırlama bağlantısı gönderilecektir. Giriş yaptıktan sonra Profil → Hesabım üzerinden de şifrenizi değiştirebilirsiniz.</string>
+
+    <string name="faq_q8">Hangi diller destekleniyor?</string>
+    <string name="faq_a8">Uygulama İngilizce ve Türkçe dillerini desteklemektedir. Dil değiştirmek için Profil → Dil bölümüne gidin. Uygulama, yeni dili uygulamak için otomatik olarak yeniden başlar.</string>
+
+
+</resources>

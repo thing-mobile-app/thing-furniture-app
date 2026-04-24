@@ -13,6 +13,7 @@ import android.content.Context.MODE_PRIVATE
 import com.example.thingapp.firebase.FirebaseCommon
 import com.example.thingapp.util.Constants.INTRODUCTION_SP
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 @Module
 // All the dependencies inside this module stay alive as long as app is alive
@@ -42,5 +43,9 @@ object AppModule {
         firebaseAuth: FirebaseAuth,
         firestore: FirebaseFirestore
     ) = FirebaseCommon(firestore,firebaseAuth)
+
+    @Provides
+    @Singleton
+    fun provideStorage() = FirebaseStorage.getInstance().reference
 
 }
